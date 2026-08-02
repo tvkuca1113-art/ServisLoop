@@ -2,7 +2,7 @@ import { NextResponse, type NextRequest } from 'next/server'
 import { createServerClient } from '@supabase/ssr'
 
 /**
- * Middleware ima dvije uloge:
+ * Proxy (u ranijim verzijama Next.js-a zvao se "middleware") ima dvije uloge:
  *
  *   1. Osvježava Supabase sesiju i upisuje obnovljene kolačiće. Serverske
  *      komponente ne smiju pisati kolačiće, pa bi bez ovoga korisnik bio
@@ -10,14 +10,14 @@ import { createServerClient } from '@supabase/ssr'
  *
  *   2. Sprječava da neprijavljeni korisnik uopšte dođe do `/app/*`.
  *      To je UDOBNOST, a ne sigurnost — prava zaštita su provjere na serveru
- *      (`requireOrgContext`) i RLS u bazi. Middleware samo štedi korisniku
+ *      (`requireOrgContext`) i RLS u bazi. Proxy samo štedi korisniku
  *      prazan ekran i preusmjerava ga na prijavu.
  */
 
 const PROTECTED_PREFIX = '/app'
 const AUTH_ROUTES = ['/prijava', '/registracija', '/zaboravljena-lozinka']
 
-export async function middleware(request: NextRequest) {
+export default async function proxy(request: NextRequest) {
   let response = NextResponse.next({ request })
 
   const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL
