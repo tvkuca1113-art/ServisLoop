@@ -1,0 +1,46 @@
+name: Prijedlog funkcije
+description: Ideja za nešto novo ili bolje
+title: '[Prijedlog]: '
+labels: ['prijedlog']
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Prije nego što pošaljete, provjerite `docs/KNOWN_LIMITATIONS.md` —
+        možda je stvar već svjesno izostavljena iz MVP-a i tamo piše zašto.
+
+  - type: textarea
+    id: problem
+    attributes:
+      label: Koji problem rješava
+      description: |
+        Opišite problem, ne rješenje. Najkorisnije prijave počinju sa
+        „Kad radim X, dešava mi se Y i gubim vrijeme na Z“.
+      placeholder: Kad kupac ne odgovori na podsjetnik, moram ručno pratiti koga da nazovem.
+    validations:
+      required: true
+
+  - type: textarea
+    id: prijedlog
+    attributes:
+      label: Kako biste to riješili
+      placeholder: Lista kupaca koji nisu odgovorili ni na jedan podsjetnik za tekući rok.
+
+  - type: dropdown
+    id: koga-pogadja
+    attributes:
+      label: Koga pogađa
+      options:
+        - Vlasnika firme
+        - Dispečera
+        - Tehničara na terenu
+        - Kupca (krajnjeg korisnika)
+        - Više njih
+    validations:
+      required: true
+
+  - type: textarea
+    id: kako-sada
+    attributes:
+      label: Kako se snalazite sada
+      description: Ako postoji zaobilazno rješenje, opišite ga — to pomaže procijeniti hitnost.

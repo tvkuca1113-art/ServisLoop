@@ -1,0 +1,186 @@
+name: CI
+
+# Provjere se pokreću na svaki push i svaki pull request prema glavnoj grani.
+# Cilj je da grana koja ne prolazi ove provjere nikad ne dođe do produkcije.
+
+on:
+  push:
+    branches: ['main', 'master', 'claude/**']
+  pull_request:
+    branches: ['main', 'master']
+
+# Novi push u istu granu prekida prethodni build — ne trošimo minute
+# na provjeru koda koji je već zamijenjen.
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+env:
+  # Vrijednosti su lažne, ali ispravnog oblika: `lib/env.ts` provjerava
+  # dužinu tajni, a build mora proći bez pristupa stvarnim ključevima.
+  NEXT_PUBLIC_APP_URL: http://localhost:3000
+  NEXT_PUBLIC_SUPABASE_URL: https://ci-placeholder.supabase.co
+  NEXT_PUBLIC_SUPABASE_ANON_KEY: ci-anon-placeholder-key
+  SUPABASE_SERVICE_ROLE_KEY: ci-service-role-placeholder-key
+  CRON_SECRET: ci-tajna-za-cron-najmanje-32-znaka-duga
+  PUBLIC_TOKEN_SECRET: ci-tajna-za-javne-tokene-najmanje-32-znaka
+  EMAIL_FROM: ServisLoop <servis@primjer.test>
+  # E-pošta se u CI-u NIKAD ne šalje stvarno.
+  EMAIL_DRY_RUN: '1'
+
+jobs:
+  # ---------------------------------------------------------------------------
+  # Statička provjera: formatiranje, stil, tipovi
+  # ---------------------------------------------------------------------------
+  static:
+    name: Format, lint i tipovi
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+          cache: 'npm'
+
+      - name: Instaliraj zavisnosti
+        run: npm ci
+
+      - name: Provjeri formatiranje
+        run: npm run format:check
+
+      - name: Provjeri stil koda
+        run: npm run lint
+
+      - name: Provjeri tipove
+        run: npm run typecheck
+
+  # ---------------------------------------------------------------------------
+  # Jedinični testovi — bez baze, brzo
+  # ---------------------------------------------------------------------------
+  unit:
+    name: Jedinični testovi
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+          cache: 'npm'
+
+      - run: npm ci
+
+      - name: Pokreni jedinične testove
+        run: npm test
+
+  # ---------------------------------------------------------------------------
+  # Integracijski testovi i provjera izolacije — protiv stvarnog PostgreSQL-a
+  # ---------------------------------------------------------------------------
+  database:
+    name: Baza, migracije i izolacija organizacija
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+
+    services:
+      postgres:
+        image: postgres:16
+        env:
+          POSTGRES_USER: postgres
+          POSTGRES_PASSWORD: postgres
+          POSTGRES_DB: servisloop_test
+        ports:
+          - 5432:5432
+        # Posao ne kreće dok baza stvarno ne odgovori.
+        options: >-
+          --health-cmd pg_isready
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+
+    env:
+      DATABASE_URL: postgresql://postgres:postgres@localhost:5432/servisloop_test
+      TEST_DATABASE_URL: postgresql://postgres:postgres@localhost:5432/servisloop_test
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+          cache: 'npm'
+
+      - run: npm ci
+
+      - name: Primijeni migracije
+        run: npm run db:migrate
+
+      - name: Provjeri da generisani tipovi odgovaraju šemi
+        run: |
+          npm run gen:types
+          if ! git diff --exit-code types/supabase.ts; then
+            echo "::error::types/supabase.ts ne odgovara šemi baze."
+            echo "::error::Pokreni 'npm run gen:types' i commitaj rezultat."
+            exit 1
+          fi
+
+      - name: Integracijski testovi
+        run: npm run test:integration
+
+      # Najvažnija provjera u cijelom CI-u: jedna firma ne smije vidjeti
+      # podatke druge. Mora proći 32 od 32.
+      - name: Provjeri izolaciju organizacija (RLS)
+        run: npm run db:verify-rls
+
+      - name: Provjeri da demo podaci prolaze
+        run: npm run db:seed -- --reset
+
+  # ---------------------------------------------------------------------------
+  # Produkcijski build
+  # ---------------------------------------------------------------------------
+  build:
+    name: Produkcijski build
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    needs: [static, unit]
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+          cache: 'npm'
+
+      - run: npm ci
+
+      - name: Build
+        run: npm run build
+
+  # ---------------------------------------------------------------------------
+  # Provjera ranjivosti u zavisnostima
+  # ---------------------------------------------------------------------------
+  audit:
+    name: Sigurnost zavisnosti
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    # Ne obara CI — nova ranjivost u tuđem paketu ne smije blokirati rad,
+    # ali mora biti vidljiva.
+    continue-on-error: true
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+          cache: 'npm'
+
+      - run: npm ci
+
+      - name: npm audit
+        run: npm audit --audit-level=high

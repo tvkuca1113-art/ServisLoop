@@ -1,0 +1,60 @@
+version: 2
+
+# Zavisnosti se ažuriraju sedmično, u jednom pull requestu po grupi.
+# Cilj je da osnivač ne dobija deset PR-ova sedmično, ali da sigurnosne
+# ispravke ne čekaju.
+
+updates:
+  - package-ecosystem: 'npm'
+    directory: '/'
+    schedule:
+      interval: 'weekly'
+      day: 'monday'
+      time: '06:00'
+      timezone: 'Europe/Sarajevo'
+    open-pull-requests-limit: 5
+    labels:
+      - 'zavisnosti'
+    commit-message:
+      prefix: 'Ažuriraj'
+    groups:
+      # Velike promjene u okviru aplikacije idu zajedno — ionako se
+      # moraju testirati zajedno.
+      okvir:
+        patterns:
+          - 'next'
+          - 'react'
+          - 'react-dom'
+          - '@types/react'
+          - '@types/react-dom'
+          - 'eslint-config-next'
+      # Sitne ispravke se skupljaju u jedan PR.
+      sitne-ispravke:
+        patterns:
+          - '*'
+        update-types:
+          - 'patch'
+      radix:
+        patterns:
+          - '@radix-ui/*'
+      trojka:
+        patterns:
+          - 'three'
+          - '@types/three'
+          - '@react-three/*'
+      alati:
+        patterns:
+          - 'vitest'
+          - '@vitest/*'
+          - '@playwright/test'
+          - 'prettier*'
+          - 'typescript-eslint'
+
+  - package-ecosystem: 'github-actions'
+    directory: '/'
+    schedule:
+      interval: 'monthly'
+    labels:
+      - 'zavisnosti'
+    commit-message:
+      prefix: 'Ažuriraj'

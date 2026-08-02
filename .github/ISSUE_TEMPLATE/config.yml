@@ -1,0 +1,11 @@
+blank_issues_enabled: false
+contact_links:
+  - name: Sigurnosni propust
+    url: https://github.com/tvkuca1113-art/servisloop/security/advisories/new
+    about: NE otvarajte javni issue za sigurnosne propuste. Prijavite ih ovdje ili na podrska@servisloop.ba.
+  - name: Pitanje o korištenju
+    url: mailto:podrska@servisloop.ba
+    about: Za pitanja o korištenju sistema pišite na podršku.
+  - name: Dokumentacija
+    url: https://github.com/tvkuca1113-art/servisloop/tree/main/docs
+    about: Uputstva za postavljanje, sigurnost, testiranje i poznata ograničenja.

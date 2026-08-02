@@ -1,0 +1,77 @@
+name: Prijava greške
+description: Nešto ne radi kako treba
+title: '[Greška]: '
+labels: ['greška']
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Hvala što prijavljujete grešku.
+
+        **Ako se radi o sigurnosnom propustu, NE otvarajte javni issue.**
+        Pišite na `podrska@servisloop.ba` — vidi `.github/SECURITY.md`.
+
+  - type: textarea
+    id: sta-se-desilo
+    attributes:
+      label: Šta se desilo
+      description: Opišite šta ste vidjeli.
+      placeholder: Nakon klika na „Pošalji podsjetnik“ stranica se ne mijenja.
+    validations:
+      required: true
+
+  - type: textarea
+    id: sta-ste-ocekivali
+    attributes:
+      label: Šta ste očekivali
+      placeholder: Očekivao sam poruku da je podsjetnik poslan.
+    validations:
+      required: true
+
+  - type: textarea
+    id: koraci
+    attributes:
+      label: Koraci za ponavljanje
+      description: Numerisano, korak po korak.
+      value: |
+        1. Otvorim …
+        2. Kliknem na …
+        3. Vidim …
+    validations:
+      required: true
+
+  - type: dropdown
+    id: gdje
+    attributes:
+      label: Gdje se desilo
+      options:
+        - Aplikacija (nakon prijave)
+        - Marketing sajt
+        - Javna stranica uređaja (QR kod)
+        - Rezervacija iz podsjetnika
+        - Servisni izvještaj (PDF)
+        - Uvoz podataka
+        - Dnevni posao / podsjetnici
+        - Nisam siguran
+    validations:
+      required: true
+
+  - type: input
+    id: oznaka-greske
+    attributes:
+      label: Oznaka greške
+      description: Ako je stranica prikazala oznaku (npr. `1a2b3c4d`), upišite je ovdje.
+
+  - type: input
+    id: preglednik
+    attributes:
+      label: Preglednik i uređaj
+      placeholder: Chrome 141 na Androidu / Safari na iPhoneu / Firefox na Windowsu
+
+  - type: checkboxes
+    id: podaci
+    attributes:
+      label: Prije slanja
+      options:
+        - label: U prijavi nema stvarnih podataka kupaca (imena, adrese, brojevi telefona)
+          required: true

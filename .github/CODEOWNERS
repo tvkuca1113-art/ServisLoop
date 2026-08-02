@@ -1,0 +1,16 @@
+# Vlasnici koda — automatski se traži njihov pregled na pull requestu.
+# Zamijenite @tvkuca1113-art stvarnim GitHub korisničkim imenima kad se
+# tim proširi.
+
+# Zadano: sve
+*                           @tvkuca1113-art
+
+# Dijelovi koje NIKAD ne bi trebalo mijenjati bez pažljivog pregleda,
+# jer greška ovdje znači curenje podataka ili duple poruke kupcima.
+/supabase/migrations/       @tvkuca1113-art
+/scripts/verify-rls.ts      @tvkuca1113-art
+/domains/reminders/         @tvkuca1113-art
+/domains/auth/              @tvkuca1113-art
+/lib/security/              @tvkuca1113-art
+/services/reminders/        @tvkuca1113-art
+/.github/workflows/         @tvkuca1113-art

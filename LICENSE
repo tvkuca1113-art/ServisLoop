@@ -1,0 +1,57 @@
+Vlasnički softver — sva prava zadržana
+Proprietary software — all rights reserved
+
+Copyright (c) 2026 ServisLoop
+
+--------------------------------------------------------------------------------
+BOSANSKI
+
+Ovaj izvorni kod je vlasništvo autora. Nije objavljen pod otvorenom licencom.
+
+Bez pisane dozvole vlasnika autorskih prava NIJE dopušteno:
+
+  • kopirati, umnožavati ili distribuirati kod ni njegove dijelove;
+  • mijenjati kod ili praviti izvedena djela;
+  • koristiti kod u komercijalne svrhe;
+  • objaviti kod javno ili ga učiniti dostupnim trećim licima.
+
+Pristup ovom repozitoriju ne daje nikakva prava korištenja osim onih koja su
+izričito dogovorena u pisanom obliku.
+
+SOFTVER SE ISPORUČUJE "TAKAV KAKAV JEST", BEZ IKAKVE GARANCIJE, IZRIČITE ILI
+PODRAZUMIJEVANE, UKLJUČUJUĆI ALI NE OGRANIČAVAJUĆI SE NA GARANCIJE
+PRODAJNOSTI, PRIKLADNOSTI ZA ODREĐENU SVRHU I NEPOVREDIVOSTI PRAVA. AUTORI
+NI VLASNICI AUTORSKIH PRAVA NI U KOJEM SLUČAJU NE ODGOVARAJU ZA BILO KAKVU
+ŠTETU NASTALU KORIŠTENJEM OVOG SOFTVERA.
+
+--------------------------------------------------------------------------------
+ENGLISH
+
+This source code is the property of its authors. It is not released under an
+open-source license.
+
+Without written permission from the copyright holder, you may NOT:
+
+  • copy, reproduce, or distribute the code or any part of it;
+  • modify the code or create derivative works;
+  • use the code for commercial purposes;
+  • publish the code or make it available to third parties.
+
+Access to this repository grants no usage rights beyond those explicitly
+agreed in writing.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY ARISING FROM THE USE OF THE SOFTWARE.
+
+--------------------------------------------------------------------------------
+NAPOMENA O KORIŠTENIM BIBLIOTEKAMA / THIRD-PARTY NOTICE
+
+Ovaj projekt koristi biblioteke otvorenog koda navedene u `package.json`.
+Svaka od njih ima vlastitu licencu, koja se nalazi u `node_modules/<paket>/`.
+Njihove licence nisu izmijenjene ovim dokumentom.
+
+Font DejaVu Sans (koristi se za PDF izvještaje) objavljen je pod Bitstream
+Vera Fonts Copyright i slobodno je redistribuiran.
