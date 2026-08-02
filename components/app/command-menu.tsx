@@ -42,8 +42,18 @@ interface QuickAction {
 }
 
 const QUICK_ACTIONS: QuickAction[] = [
-  { label: 'Novi kupac', href: '/app/kupci/novi', icon: 'UserPlus', permission: 'customers.manage' },
-  { label: 'Novi uređaj', href: '/app/uredaji/novi', icon: 'PackagePlus', permission: 'devices.manage' },
+  {
+    label: 'Novi kupac',
+    href: '/app/kupci/novi',
+    icon: 'UserPlus',
+    permission: 'customers.manage',
+  },
+  {
+    label: 'Novi uređaj',
+    href: '/app/uredaji/novi',
+    icon: 'PackagePlus',
+    permission: 'devices.manage',
+  },
   {
     label: 'Nova rezervacija',
     href: '/app/rezervacije/nova',
@@ -56,7 +66,12 @@ const QUICK_ACTIONS: QuickAction[] = [
     icon: 'ClipboardPlus',
     permission: 'work_orders.create',
   },
-  { label: 'Uvoz iz Excela ili CSV-a', href: '/app/uvoz', icon: 'Upload', permission: 'import.run' },
+  {
+    label: 'Uvoz iz Excela ili CSV-a',
+    href: '/app/uvoz',
+    icon: 'Upload',
+    permission: 'import.run',
+  },
   {
     label: 'Štampa QR naljepnica',
     href: '/app/uredaji?akcija=qr',
@@ -87,18 +102,27 @@ export function CommandMenu({
 
   const actions = QUICK_ACTIONS.filter((action) => can(role, action.permission))
 
-  // Pretraga s odgodom — ne gađamo server na svaki pritisak tipke.
+  /*
+   * Pretraga s odgodom — ne gađamo server na svaki pritisak tipke.
+   *
+   * Sav `setState` se dešava tek unutar tajmera ili nakon `fetch`-a, dakle
+   * iza asinhrone granice. Sinhroni `setState` u tijelu efekta izazvao bi
+   * kaskadni render, što React 19 s prevodiocem i prijavljuje kao grešku.
+   */
   React.useEffect(() => {
     const trimmed = query.trim()
+
     if (trimmed.length < 2) {
-      setResults([])
-      setLoading(false)
-      return
+      const clearTimer = setTimeout(() => {
+        setResults([])
+        setLoading(false)
+      }, 0)
+      return () => clearTimeout(clearTimer)
     }
 
-    setLoading(true)
     const controller = new AbortController()
     const timer = setTimeout(() => {
+      setLoading(true)
       fetch(`/api/pretraga?q=${encodeURIComponent(trimmed)}`, { signal: controller.signal })
         .then((response) => (response.ok ? response.json() : { results: [] }))
         .then((data: { results?: SearchResult[] }) => setResults(data.results ?? []))
@@ -116,37 +140,42 @@ export function CommandMenu({
     }
   }, [query])
 
-  React.useEffect(() => {
-    if (!open) setQuery('')
-  }, [open])
+  /** Zatvaranje palete briše upit — bez efekta, u samom rukovaocu. */
+  const handleOpenChange = React.useCallback(
+    (next: boolean) => {
+      if (!next) setQuery('')
+      onOpenChange(next)
+    },
+    [onOpenChange],
+  )
 
   function go(href: string) {
-    onOpenChange(false)
+    handleOpenChange(false)
     router.push(href)
   }
 
   const grouped = groupResults(results)
 
   return (
-    <Dialog open={open} onOpenChange={onOpenChange}>
+    <Dialog open={open} onOpenChange={handleOpenChange}>
       <DialogContent size="lg" hideClose className="overflow-hidden p-0">
         <DialogTitle className="sr-only">Pretraga i brze radnje</DialogTitle>
 
         <Command shouldFilter={false} loop className="w-full">
-          <div className="flex items-center gap-3 border-b border-line px-4">
-            <Icons.Search className="size-4.5 shrink-0 text-fg-subtle" aria-hidden="true" />
+          <div className="border-line flex items-center gap-3 border-b px-4">
+            <Icons.Search className="text-fg-subtle size-4.5 shrink-0" aria-hidden="true" />
             <Command.Input
               value={query}
               onValueChange={setQuery}
               placeholder="Traži kupca, uređaj, serijski broj, nalog…"
-              className="h-14 flex-1 bg-transparent text-[0.9375rem] text-fg outline-none placeholder:text-fg-subtle"
+              className="text-fg placeholder:text-fg-subtle h-14 flex-1 bg-transparent text-[0.9375rem] outline-none"
             />
             {loading ? <Spinner size="sm" label="Pretraga u toku" /> : null}
           </div>
 
-          <Command.List className="max-h-96 overflow-y-auto scroll-slim p-2">
+          <Command.List className="scroll-slim max-h-96 overflow-y-auto p-2">
             {query.trim().length >= 2 && !loading && results.length === 0 ? (
-              <Command.Empty className="px-3 py-8 text-center text-sm text-fg-muted">
+              <Command.Empty className="text-fg-muted px-3 py-8 text-center text-sm">
                 Nema rezultata za „{query.trim()}“.
               </Command.Empty>
             ) : null}
@@ -154,7 +183,7 @@ export function CommandMenu({
             {query.trim().length < 2 ? (
               <Command.Group
                 heading="Brze radnje"
-                className="[&_[cmdk-group-heading]]:px-3 [&_[cmdk-group-heading]]:py-2 [&_[cmdk-group-heading]]:text-[0.6875rem] [&_[cmdk-group-heading]]:font-semibold [&_[cmdk-group-heading]]:tracking-wide [&_[cmdk-group-heading]]:text-fg-subtle [&_[cmdk-group-heading]]:uppercase"
+                className="[&_[cmdk-group-heading]]:text-fg-subtle [&_[cmdk-group-heading]]:px-3 [&_[cmdk-group-heading]]:py-2 [&_[cmdk-group-heading]]:text-[0.6875rem] [&_[cmdk-group-heading]]:font-semibold [&_[cmdk-group-heading]]:tracking-wide [&_[cmdk-group-heading]]:uppercase"
               >
                 {actions.map((action) => {
                   const iconRecord = Icons as unknown as Record<
@@ -169,7 +198,7 @@ export function CommandMenu({
                       onSelect={() => go(action.href)}
                       className={itemClass}
                     >
-                      <Icon className="size-4 shrink-0 text-fg-subtle" />
+                      <Icon className="text-fg-subtle size-4 shrink-0" />
                       <span className="flex-1">{action.label}</span>
                     </Command.Item>
                   )
@@ -189,7 +218,7 @@ export function CommandMenu({
                 <Command.Group
                   key={type}
                   heading={meta.label}
-                  className="[&_[cmdk-group-heading]]:px-3 [&_[cmdk-group-heading]]:py-2 [&_[cmdk-group-heading]]:text-[0.6875rem] [&_[cmdk-group-heading]]:font-semibold [&_[cmdk-group-heading]]:tracking-wide [&_[cmdk-group-heading]]:text-fg-subtle [&_[cmdk-group-heading]]:uppercase"
+                  className="[&_[cmdk-group-heading]]:text-fg-subtle [&_[cmdk-group-heading]]:px-3 [&_[cmdk-group-heading]]:py-2 [&_[cmdk-group-heading]]:text-[0.6875rem] [&_[cmdk-group-heading]]:font-semibold [&_[cmdk-group-heading]]:tracking-wide [&_[cmdk-group-heading]]:uppercase"
                 >
                   {items.map((result) => (
                     <Command.Item
@@ -198,16 +227,16 @@ export function CommandMenu({
                       onSelect={() => go(result.href)}
                       className={itemClass}
                     >
-                      <Icon className="size-4 shrink-0 text-fg-subtle" />
+                      <Icon className="text-fg-subtle size-4 shrink-0" />
                       <span className="min-w-0 flex-1">
-                        <span className="block truncate text-fg">{result.title}</span>
+                        <span className="text-fg block truncate">{result.title}</span>
                         {result.subtitle ? (
-                          <span className="block truncate text-xs text-fg-muted">
+                          <span className="text-fg-muted block truncate text-xs">
                             {result.subtitle}
                           </span>
                         ) : null}
                       </span>
-                      <Icons.ArrowRight className="size-3.5 shrink-0 text-fg-subtle" />
+                      <Icons.ArrowRight className="text-fg-subtle size-3.5 shrink-0" />
                     </Command.Item>
                   ))}
                 </Command.Group>
@@ -215,13 +244,13 @@ export function CommandMenu({
             })}
           </Command.List>
 
-          <div className="flex items-center justify-between border-t border-line px-4 py-2.5 text-[0.6875rem] text-fg-subtle">
+          <div className="border-line text-fg-subtle flex items-center justify-between border-t px-4 py-2.5 text-[0.6875rem]">
             <span>
-              <kbd className="rounded border border-line px-1 py-0.5 font-mono">↑↓</kbd> kretanje ·{' '}
-              <kbd className="rounded border border-line px-1 py-0.5 font-mono">↵</kbd> otvori
+              <kbd className="border-line rounded border px-1 py-0.5 font-mono">↑↓</kbd> kretanje ·{' '}
+              <kbd className="border-line rounded border px-1 py-0.5 font-mono">↵</kbd> otvori
             </span>
             <span>
-              <kbd className="rounded border border-line px-1 py-0.5 font-mono">esc</kbd> zatvori
+              <kbd className="border-line rounded border px-1 py-0.5 font-mono">esc</kbd> zatvori
             </span>
           </div>
         </Command>

@@ -54,7 +54,10 @@ function clampToBounds(value: number, bounds: { min: number; max: number }): num
 export function normalizeRevenueInput(input: Partial<RevenueEstimateInput>): RevenueEstimateInput {
   return {
     deviceCount: Math.round(
-      clampToBounds(input.deviceCount ?? REVENUE_DEFAULTS.deviceCount, REVENUE_INPUT_BOUNDS.deviceCount),
+      clampToBounds(
+        input.deviceCount ?? REVENUE_DEFAULTS.deviceCount,
+        REVENUE_INPUT_BOUNDS.deviceCount,
+      ),
     ),
     averageServicePriceKm: clampToBounds(
       input.averageServicePriceKm ?? REVENUE_DEFAULTS.averageServicePriceKm,
@@ -129,9 +132,7 @@ export interface RevenueOpportunity {
  * sučelju se uvijek prikazuje kao „Potencijalni prihod (procjena)“, odvojeno
  * od „Rezervisano“ i „Završeno“.
  */
-export function calculateRevenueOpportunity(
-  input: RevenueOpportunityInput,
-): RevenueOpportunity {
+export function calculateRevenueOpportunity(input: RevenueOpportunityInput): RevenueOpportunity {
   let devicesWithoutPrice = 0
 
   const potentialKm = input.dueDevices.reduce((sum, device) => {

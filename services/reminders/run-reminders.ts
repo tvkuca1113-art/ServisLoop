@@ -69,9 +69,7 @@ export interface ReminderRunResult {
 
 const JOB_NAME = 'reminders'
 
-export async function runReminderJob(
-  options: ReminderRunOptions = {},
-): Promise<ReminderRunResult> {
+export async function runReminderJob(options: ReminderRunOptions = {}): Promise<ReminderRunResult> {
   const now = options.now ?? new Date()
   const startedAt = Date.now()
   const supabase = createServiceSupabase()
@@ -80,9 +78,7 @@ export async function runReminderJob(
   // SVOJ kalendarski dan iz vlastite vremenske zone.
   const jobRunDate = now.toISOString().slice(0, 10)
 
-  const emptyResult = (
-    overrides: Partial<ReminderRunResult> = {},
-  ): ReminderRunResult => ({
+  const emptyResult = (overrides: Partial<ReminderRunResult> = {}): ReminderRunResult => ({
     ok: true,
     runDate: jobRunDate,
     alreadyCompleted: false,
@@ -272,7 +268,8 @@ async function runForOrganization(input: OrganizationRunInput): Promise<Organiza
     .eq('organization_id', input.organizationId)
     .maybeSingle()
 
-  const planCode = subscription && isPlanCode(subscription.plan_code) ? subscription.plan_code : 'trial'
+  const planCode =
+    subscription && isPlanCode(subscription.plan_code) ? subscription.plan_code : 'trial'
   const subscriptionState = evaluateSubscription(
     {
       planCode,
@@ -460,9 +457,9 @@ async function runForOrganization(input: OrganizationRunInput): Promise<Organiza
     const customer = device.customers as unknown as { name: string }
     const deviceType = device.device_types as unknown as { name: string } | null
     const location = device.locations as unknown as { label: string; city: string | null } | null
-    const qrToken = (device.qr_tokens as unknown as Array<{ token_hash: string; is_active: boolean }> | null)?.find(
-      (token) => token.is_active,
-    )
+    const qrToken = (
+      device.qr_tokens as unknown as Array<{ token_hash: string; is_active: boolean }> | null
+    )?.find((token) => token.is_active)
 
     const daysUntilDue = diffInDays(today, planned.dueDate)
     const variant =
@@ -500,7 +497,9 @@ async function runForOrganization(input: OrganizationRunInput): Promise<Organiza
           manufacturer: device.manufacturer,
           model: device.model,
           installedAt: device.installed_at as PlainDate | null,
-          locationLabel: location ? [location.label, location.city].filter(Boolean).join(', ') : null,
+          locationLabel: location
+            ? [location.label, location.city].filter(Boolean).join(', ')
+            : null,
         },
         dueDate: planned.dueDate,
         daysUntilDue,
@@ -572,11 +571,14 @@ async function runForOrganization(input: OrganizationRunInput): Promise<Organiza
   }
 
   if (summary.sent > 0) {
-    await supabase.rpc('bump_usage' as never, {
-      target_org: input.organizationId,
-      metric_name: 'reminders_sent',
-      amount: summary.sent,
-    } as never)
+    await supabase.rpc(
+      'bump_usage' as never,
+      {
+        target_org: input.organizationId,
+        metric_name: 'reminders_sent',
+        amount: summary.sent,
+      } as never,
+    )
   }
 
   return summary

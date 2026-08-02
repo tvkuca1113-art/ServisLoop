@@ -26,7 +26,7 @@ const menuItemClasses = [
   'outline-none select-none transition-colors',
   'focus:bg-surface-muted data-[highlighted]:bg-surface-muted',
   'data-[disabled]:pointer-events-none data-[disabled]:opacity-50',
-  "[&_svg]:size-4 [&_svg]:shrink-0 [&_svg]:text-fg-subtle",
+  '[&_svg]:size-4 [&_svg]:shrink-0 [&_svg]:text-fg-subtle',
 ].join(' ')
 
 export const DropdownMenuContent = React.forwardRef<
@@ -75,7 +75,7 @@ export const DropdownMenuCheckboxItem = React.forwardRef<
     >
       <span className="absolute left-2.5 flex size-4 items-center justify-center">
         <DropdownMenuPrimitive.ItemIndicator>
-          <Check className="size-3.5 text-primary" />
+          <Check className="text-primary size-3.5" />
         </DropdownMenuPrimitive.ItemIndicator>
       </span>
       {children}
@@ -95,7 +95,7 @@ export const DropdownMenuRadioItem = React.forwardRef<
     >
       <span className="absolute left-2.5 flex size-4 items-center justify-center">
         <DropdownMenuPrimitive.ItemIndicator>
-          <span className="size-2 rounded-full bg-primary" />
+          <span className="bg-primary size-2 rounded-full" />
         </DropdownMenuPrimitive.ItemIndicator>
       </span>
       {children}
@@ -111,7 +111,7 @@ export const DropdownMenuLabel = React.forwardRef<
     <DropdownMenuPrimitive.Label
       ref={ref}
       className={cn(
-        'px-2.5 py-1.5 text-[0.6875rem] font-semibold tracking-wide text-fg-subtle uppercase',
+        'text-fg-subtle px-2.5 py-1.5 text-[0.6875rem] font-semibold tracking-wide uppercase',
         className,
       )}
       {...props}
@@ -126,7 +126,7 @@ export const DropdownMenuSeparator = React.forwardRef<
   return (
     <DropdownMenuPrimitive.Separator
       ref={ref}
-      className={cn('-mx-1.5 my-1.5 h-px bg-line', className)}
+      className={cn('bg-line -mx-1.5 my-1.5 h-px', className)}
       {...props}
     />
   )
@@ -169,7 +169,7 @@ export function DropdownMenuShortcut({
 }: React.HTMLAttributes<HTMLSpanElement>) {
   return (
     <span
-      className={cn('ml-auto font-mono text-[0.6875rem] tracking-wide text-fg-subtle', className)}
+      className={cn('text-fg-subtle ml-auto font-mono text-[0.6875rem] tracking-wide', className)}
       {...props}
     />
   )
@@ -195,7 +195,7 @@ export const PopoverContent = React.forwardRef<
         sideOffset={sideOffset}
         collisionPadding={12}
         className={cn(
-          'sl-pop z-50 w-72 rounded-xl border border-line bg-surface p-4 shadow-float',
+          'sl-pop border-line bg-surface shadow-float z-50 w-72 rounded-xl border p-4',
           className,
         )}
         {...props}

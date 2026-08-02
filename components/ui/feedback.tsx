@@ -37,8 +37,7 @@ const alertIconColors = {
 } as const
 
 export interface AlertProps
-  extends Omit<React.HTMLAttributes<HTMLDivElement>, 'title'>,
-    VariantProps<typeof alertVariants> {
+  extends Omit<React.HTMLAttributes<HTMLDivElement>, 'title'>, VariantProps<typeof alertVariants> {
   title?: React.ReactNode
   /** `assertive` za greške koje prekidaju rad korisnika. */
   live?: 'polite' | 'assertive' | 'off'
@@ -71,7 +70,7 @@ export function Alert({
         <div className="min-w-0 flex-1 space-y-1">
           {title ? <p className="leading-snug font-semibold">{title}</p> : null}
           {children ? (
-            <div className="leading-relaxed text-fg-muted [&_a]:text-primary [&_a]:underline [&_a]:underline-offset-2">
+            <div className="text-fg-muted [&_a]:text-primary leading-relaxed [&_a]:underline [&_a]:underline-offset-2">
               {children}
             </div>
           ) : null}
@@ -103,11 +102,7 @@ export function TableSkeleton({ rows = 6, columns = 5 }: { rows?: number; column
           style={{ gridTemplateColumns: `repeat(${columns}, minmax(0, 1fr))` }}
         >
           {Array.from({ length: columns }).map((_, colIndex) => (
-            <Skeleton
-              key={colIndex}
-              className="h-5"
-              style={{ opacity: 1 - rowIndex * 0.08 }}
-            />
+            <Skeleton key={colIndex} className="h-5" style={{ opacity: 1 - rowIndex * 0.08 }} />
           ))}
         </div>
       ))}
@@ -125,7 +120,7 @@ export function StatGridSkeleton({ count = 4 }: { count?: number }) {
     >
       <span className="sr-only">Učitavanje metrika…</span>
       {Array.from({ length: count }).map((_, i) => (
-        <div key={i} className="rounded-card border border-line bg-surface p-5">
+        <div key={i} className="rounded-card border-line bg-surface border p-5">
           <Skeleton className="h-3.5 w-24" />
           <Skeleton className="mt-3 h-8 w-20" />
           <Skeleton className="mt-3 h-3 w-32" />
@@ -151,7 +146,7 @@ export function Spinner({
   const sizeClass = { sm: 'size-4', md: 'size-5', lg: 'size-8' }[size]
   return (
     <span role="status" className={cn('inline-flex items-center gap-2', className)}>
-      <Loader2 className={cn(sizeClass, 'animate-spin text-primary')} aria-hidden="true" />
+      <Loader2 className={cn(sizeClass, 'text-primary animate-spin')} aria-hidden="true" />
       <span className="sr-only">{label}</span>
     </span>
   )
@@ -163,7 +158,7 @@ export function PageSpinner({ label = 'Učitavanje…' }: { label?: string }) {
     <div className="flex min-h-64 items-center justify-center">
       <div className="flex flex-col items-center gap-3">
         <Spinner size="lg" label={label} />
-        <p className="text-sm text-fg-muted">{label}</p>
+        <p className="text-fg-muted text-sm">{label}</p>
       </div>
     </div>
   )
@@ -202,7 +197,7 @@ export function EmptyState({
   return (
     <div
       className={cn(
-        'flex flex-col items-center justify-center rounded-card border border-dashed border-line-strong bg-surface-muted/40 text-center',
+        'rounded-card border-line-strong bg-surface-muted/40 flex flex-col items-center justify-center border border-dashed text-center',
         compact ? 'gap-2 px-6 py-8' : 'gap-3 px-6 py-14',
         className,
       )}
@@ -210,7 +205,7 @@ export function EmptyState({
       {Icon ? (
         <div
           className={cn(
-            'flex items-center justify-center rounded-full bg-surface text-fg-subtle shadow-subtle ring-1 ring-line',
+            'bg-surface text-fg-subtle shadow-subtle ring-line flex items-center justify-center rounded-full ring-1',
             compact ? 'size-10' : 'size-14',
           )}
         >
@@ -218,12 +213,12 @@ export function EmptyState({
         </div>
       ) : null}
 
-      <h3 className={cn('font-semibold text-fg', compact ? 'text-sm' : 'text-base')}>{title}</h3>
+      <h3 className={cn('text-fg font-semibold', compact ? 'text-sm' : 'text-base')}>{title}</h3>
 
       {description ? (
         <p
           className={cn(
-            'max-w-md leading-relaxed text-balance text-fg-muted',
+            'text-fg-muted max-w-md leading-relaxed text-balance',
             compact ? 'text-xs' : 'text-sm',
           )}
         >

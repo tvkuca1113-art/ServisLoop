@@ -51,7 +51,12 @@ export function SignUpForm({ disabled = false }: { disabled?: boolean }) {
 
       <FormErrorSummary errors={summaryErrors} />
 
-      <Field id="organizationName" label="Naziv firme" error={fieldErrors.organizationName} required>
+      <Field
+        id="organizationName"
+        label="Naziv firme"
+        error={fieldErrors.organizationName}
+        required
+      >
         {(field) => (
           <Input
             {...field}
@@ -112,7 +117,12 @@ export function SignUpForm({ disabled = false }: { disabled?: boolean }) {
         )}
       </Field>
 
-      <Field id="passwordConfirm" label="Ponovite lozinku" error={fieldErrors.passwordConfirm} required>
+      <Field
+        id="passwordConfirm"
+        label="Ponovite lozinku"
+        error={fieldErrors.passwordConfirm}
+        required
+      >
         {(field) => (
           <Input
             {...field}
@@ -137,7 +147,10 @@ export function SignUpForm({ disabled = false }: { disabled?: boolean }) {
               uslove korištenja
             </Link>{' '}
             i{' '}
-            <Link href="/politika-privatnosti" className="text-primary underline underline-offset-2">
+            <Link
+              href="/politika-privatnosti"
+              className="text-primary underline underline-offset-2"
+            >
               politiku privatnosti
             </Link>
             .
@@ -145,7 +158,7 @@ export function SignUpForm({ disabled = false }: { disabled?: boolean }) {
         }
       />
       {fieldErrors.acceptTerms ? (
-        <p className="text-xs font-medium text-critical">{fieldErrors.acceptTerms}</p>
+        <p className="text-critical text-xs font-medium">{fieldErrors.acceptTerms}</p>
       ) : null}
 
       <Button type="submit" block size="lg" loading={pending} disabled={disabled}>

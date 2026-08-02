@@ -24,9 +24,9 @@ export const TabsList = React.forwardRef<
       className={cn(
         'inline-flex items-center',
         variant === 'pill'
-          ? 'gap-1 rounded-xl border border-line bg-surface-muted p-1'
-          : 'gap-1 border-b border-line',
-        'max-w-full overflow-x-auto scroll-slim',
+          ? 'border-line bg-surface-muted gap-1 rounded-xl border p-1'
+          : 'border-line gap-1 border-b',
+        'scroll-slim max-w-full overflow-x-auto',
         className,
       )}
       data-variant={variant}
@@ -47,17 +47,17 @@ export const TabsTrigger = React.forwardRef<
       className={cn(
         'inline-flex items-center gap-2 text-sm font-medium whitespace-nowrap',
         'transition-colors outline-none',
-        'focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-canvas',
+        'focus-visible:ring-ring focus-visible:ring-offset-canvas focus-visible:ring-2 focus-visible:ring-offset-2',
         'disabled:pointer-events-none disabled:opacity-50',
-        "[&_svg]:size-4 [&_svg]:shrink-0",
+        '[&_svg]:size-4 [&_svg]:shrink-0',
         variant === 'pill'
           ? [
-              'rounded-lg px-3 py-1.5 text-fg-muted',
+              'text-fg-muted rounded-lg px-3 py-1.5',
               'hover:text-fg',
               'data-[state=active]:bg-surface data-[state=active]:text-fg data-[state=active]:shadow-subtle',
             ]
           : [
-              '-mb-px border-b-2 border-transparent px-3 py-2.5 text-fg-muted',
+              'text-fg-muted -mb-px border-b-2 border-transparent px-3 py-2.5',
               'hover:border-line-strong hover:text-fg',
               'data-[state=active]:border-primary data-[state=active]:text-fg',
             ],
@@ -76,7 +76,7 @@ export const TabsContent = React.forwardRef<
     <TabsPrimitive.Content
       ref={ref}
       className={cn(
-        'mt-4 outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-4',
+        'focus-visible:ring-ring mt-4 outline-none focus-visible:ring-2 focus-visible:ring-offset-4',
         className,
       )}
       {...props}
@@ -97,7 +97,7 @@ export const AccordionItem = React.forwardRef<
   return (
     <AccordionPrimitive.Item
       ref={ref}
-      className={cn('border-b border-line last:border-b-0', className)}
+      className={cn('border-line border-b last:border-b-0', className)}
       {...props}
     />
   )
@@ -113,16 +113,16 @@ export const AccordionTrigger = React.forwardRef<
         ref={ref}
         className={cn(
           'group flex flex-1 items-center justify-between gap-4 py-5 text-left',
-          'text-[0.9375rem] font-medium text-fg transition-colors',
+          'text-fg text-[0.9375rem] font-medium transition-colors',
           'hover:text-primary',
-          'focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:outline-none',
+          'focus-visible:ring-ring focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:outline-none',
           className,
         )}
         {...props}
       >
         {children}
         <ChevronDown
-          className="size-5 shrink-0 text-fg-subtle transition-transform duration-250 group-data-[state=open]:rotate-180"
+          className="text-fg-subtle size-5 shrink-0 transition-transform duration-250 group-data-[state=open]:rotate-180"
           aria-hidden="true"
         />
       </AccordionPrimitive.Trigger>
@@ -136,7 +136,7 @@ export const AccordionContent = React.forwardRef<
 >(function AccordionContent({ className, children, ...props }, ref) {
   return (
     <AccordionPrimitive.Content className="sl-accordion overflow-hidden" ref={ref} {...props}>
-      <div className={cn('pb-5 text-sm leading-relaxed text-fg-muted', className)}>{children}</div>
+      <div className={cn('text-fg-muted pb-5 text-sm leading-relaxed', className)}>{children}</div>
     </AccordionPrimitive.Content>
   )
 })

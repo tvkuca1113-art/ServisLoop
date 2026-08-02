@@ -7,7 +7,13 @@ import { LIFECYCLE_STEPS } from '@/lib/site'
 import { cn } from '@/lib/utils'
 import { useInView, useDocumentVisible } from '@/lib/hooks/use-in-view'
 import { usePrefersReducedMotion } from '@/lib/hooks/use-media-query'
-import { detectDeviceTier, isWebGLAvailable, prefersReducedData, type DeviceTier } from '@/lib/webgl'
+import {
+  detectDeviceTier,
+  isWebGLAvailable,
+  prefersReducedData,
+  type DeviceTier,
+} from '@/lib/webgl'
+import { useClientValue } from '@/lib/hooks/use-client-value'
 import { HeroFallback } from './hero-fallback'
 import { SEQUENCE_PHASES } from './lifecycle-scene'
 
@@ -23,33 +29,47 @@ const LifecycleScene = dynamic(() => import('./lifecycle-scene'), {
 
 type Readiness = 'checking' | 'unsupported' | 'loading' | 'ready'
 
+/**
+ * Može li ovaj uređaj uopšte prikazati 3D scenu.
+ *
+ * Računa se jednom, kroz `useClientValue` (nad `useSyncExternalStore`), a ne
+ * kroz `useEffect` + `setState` — time nema kaskadnog rendera ni neslaganja
+ * pri hidraciji. Na serveru je uvijek `false`, pa se prvo prikaže SVG.
+ */
+interface Capability {
+  supported: boolean
+  tier: DeviceTier
+}
+
+const SERVER_CAPABILITY: Capability = { supported: false, tier: 'low' }
+
+function detectCapability(): Capability {
+  // Kad korisnik štedi podatke, three.js se uopšte ne povlači.
+  if (!isWebGLAvailable() || prefersReducedData()) {
+    return { supported: false, tier: 'low' }
+  }
+  return { supported: true, tier: detectDeviceTier() }
+}
+
 export function HeroVisual({ className }: { className?: string }) {
   const { ref, inView } = useInView<HTMLDivElement>({ rootMargin: '200px', threshold: 0.05 })
   const documentVisible = useDocumentVisible()
   const reducedMotion = usePrefersReducedMotion()
 
-  const [readiness, setReadiness] = React.useState<Readiness>('checking')
-  const [tier, setTier] = React.useState<DeviceTier>('medium')
+  const capability = useClientValue(detectCapability, SERVER_CAPABILITY)
+  const [sceneReady, setSceneReady] = React.useState(false)
   const [hoveredIndex, setHoveredIndex] = React.useState<number | null>(null)
   const [selectedIndex, setSelectedIndex] = React.useState<number | null>(null)
   const [phaseIndex, setPhaseIndex] = React.useState(0)
 
-  // Provjera podrške radi se jednom, nakon montiranja.
-  React.useEffect(() => {
-    if (!isWebGLAvailable()) {
-      setReadiness('unsupported')
-      return
-    }
-    // Kad korisnik štedi podatke, ne povlačimo three.js uopšte.
-    if (prefersReducedData()) {
-      setReadiness('unsupported')
-      return
-    }
-    setTier(detectDeviceTier())
-    setReadiness('loading')
-  }, [])
+  const readiness: Readiness = !capability.supported
+    ? 'unsupported'
+    : sceneReady
+      ? 'ready'
+      : 'loading'
 
-  const shouldRender3D = readiness === 'loading' || readiness === 'ready'
+  const tier = capability.tier
+  const shouldRender3D = capability.supported
   const active = inView && documentVisible
 
   const detailIndex = selectedIndex ?? hoveredIndex
@@ -69,8 +89,8 @@ export function HeroVisual({ className }: { className?: string }) {
       <div
         ref={ref}
         className={cn(
-          'relative aspect-4/3 w-full overflow-hidden rounded-hero sm:aspect-16/11',
-          'border border-line bg-gradient-to-b from-ink-900/70 to-ink-950/40',
+          'rounded-hero relative aspect-4/3 w-full overflow-hidden sm:aspect-16/11',
+          'border-line from-ink-900/70 to-ink-950/40 border bg-gradient-to-b',
         )}
       >
         {/* Tehnička mreža u pozadini */}
@@ -98,7 +118,7 @@ export function HeroVisual({ className }: { className?: string }) {
               onHover={setHoveredIndex}
               onSelect={handleSelect}
               onPhaseChange={handlePhaseChange}
-              onReady={() => setReadiness('ready')}
+              onReady={() => setSceneReady(true)}
             />
           </div>
         ) : null}
@@ -113,9 +133,9 @@ export function HeroVisual({ className }: { className?: string }) {
                 animate={{ opacity: 1, y: 0 }}
                 exit={{ opacity: 0, y: -8 }}
                 transition={{ duration: 0.35, ease: [0.22, 1, 0.36, 1] }}
-                className="glass mx-auto w-fit max-w-full rounded-full px-4 py-2 text-center text-xs text-fg-muted sm:text-[0.8125rem]"
+                className="glass text-fg-muted mx-auto w-fit max-w-full rounded-full px-4 py-2 text-center text-xs sm:text-[0.8125rem]"
               >
-                <span className="mr-2 inline-block size-1.5 rounded-full bg-primary align-middle" />
+                <span className="bg-primary mr-2 inline-block size-1.5 rounded-full align-middle" />
                 {phase?.caption}
               </motion.p>
             </AnimatePresence>
@@ -124,7 +144,7 @@ export function HeroVisual({ className }: { className?: string }) {
 
         {/* Poruka kad WebGL nije dostupan */}
         {readiness === 'unsupported' ? (
-          <p className="absolute inset-x-0 bottom-0 p-4 text-center text-xs text-fg-subtle">
+          <p className="text-fg-subtle absolute inset-x-0 bottom-0 p-4 text-center text-xs">
             Prikazan je pojednostavljen dijagram jer 3D prikaz nije dostupan na ovom uređaju.
           </p>
         ) : null}
@@ -153,16 +173,16 @@ export function HeroVisual({ className }: { className?: string }) {
                   aria-pressed={isActive}
                   className={cn(
                     'w-full rounded-lg border px-3 py-2.5 text-left transition-all duration-200',
-                    'focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-canvas focus-visible:outline-none',
+                    'focus-visible:ring-ring focus-visible:ring-offset-canvas focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:outline-none',
                     isActive
                       ? 'border-primary/50 bg-primary-soft'
                       : 'border-line bg-surface/50 hover:border-line-strong',
                   )}
                 >
-                  <span className="block text-[0.6875rem] font-semibold tracking-wide text-primary">
+                  <span className="text-primary block text-[0.6875rem] font-semibold tracking-wide">
                     KORAK {step.order}
                   </span>
-                  <span className="mt-0.5 block text-[0.8125rem] leading-tight font-medium text-fg">
+                  <span className="text-fg mt-0.5 block text-[0.8125rem] leading-tight font-medium">
                     {step.label}
                   </span>
                 </button>
@@ -181,10 +201,10 @@ export function HeroVisual({ className }: { className?: string }) {
                 animate={{ opacity: 1, y: 0 }}
                 exit={{ opacity: 0, y: -6 }}
                 transition={{ duration: 0.22 }}
-                className="rounded-lg border border-line bg-surface/60 p-4"
+                className="border-line bg-surface/60 rounded-lg border p-4"
               >
-                <p className="text-sm leading-relaxed text-fg">{detailStep.description}</p>
-                <p className="mt-2 text-xs leading-relaxed text-fg-muted">{detailStep.benefit}</p>
+                <p className="text-fg text-sm leading-relaxed">{detailStep.description}</p>
+                <p className="text-fg-muted mt-2 text-xs leading-relaxed">{detailStep.benefit}</p>
               </motion.div>
             ) : (
               <motion.p
@@ -192,10 +212,10 @@ export function HeroVisual({ className }: { className?: string }) {
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}
                 exit={{ opacity: 0 }}
-                className="px-1 text-xs leading-relaxed text-fg-subtle"
+                className="text-fg-subtle px-1 text-xs leading-relaxed"
               >
-                Odaberite korak da vidite šta se u njemu tačno dešava. Scenu možete blago
-                zarotirati povlačenjem.
+                Odaberite korak da vidite šta se u njemu tačno dešava. Scenu možete blago zarotirati
+                povlačenjem.
               </motion.p>
             )}
           </AnimatePresence>

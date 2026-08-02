@@ -145,9 +145,12 @@ export async function signUp(formData: FormData): Promise<ActionResult<{ redirec
   }
 
   // Zadane vrste opreme, servisni planovi, pravila podsjetnika i čeklista.
-  await service.rpc('seed_organization_defaults' as never, {
-    target_org: organization.id,
-  } as never)
+  await service.rpc(
+    'seed_organization_defaults' as never,
+    {
+      target_org: organization.id,
+    } as never,
+  )
 
   await service.from('audit_events').insert({
     organization_id: organization.id,

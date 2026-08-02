@@ -48,8 +48,7 @@ const buttonVariants = cva(
 )
 
 export interface ButtonProps
-  extends React.ButtonHTMLAttributes<HTMLButtonElement>,
-    VariantProps<typeof buttonVariants> {
+  extends React.ButtonHTMLAttributes<HTMLButtonElement>, VariantProps<typeof buttonVariants> {
   /** Renderuje stilove na djetetu umjesto na `<button>` (npr. za `<Link>`). */
   asChild?: boolean
   /** Prikazuje spinner i onemogućava dugme. */

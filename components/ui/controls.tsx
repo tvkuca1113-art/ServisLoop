@@ -19,9 +19,9 @@ export const Checkbox = React.forwardRef<
     <CheckboxPrimitive.Root
       ref={ref}
       className={cn(
-        'peer size-4.5 shrink-0 rounded-[5px] border border-line-strong bg-surface',
+        'peer border-line-strong bg-surface size-4.5 shrink-0 rounded-[5px] border',
         'transition-colors outline-none',
-        'focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-canvas',
+        'focus-visible:ring-ring focus-visible:ring-offset-canvas focus-visible:ring-2 focus-visible:ring-offset-2',
         'data-[state=checked]:border-primary data-[state=checked]:bg-primary data-[state=checked]:text-primary-fg',
         'data-[state=indeterminate]:border-primary data-[state=indeterminate]:bg-primary data-[state=indeterminate]:text-primary-fg',
         'disabled:cursor-not-allowed disabled:opacity-50',
@@ -57,11 +57,14 @@ export function CheckboxField({
     <div className={cn('flex items-start gap-3', className)}>
       <Checkbox id={id} aria-describedby={descriptionId} className="mt-0.5" {...props} />
       <div className="min-w-0 space-y-1">
-        <label htmlFor={id} className="block cursor-pointer text-sm leading-snug font-medium text-fg">
+        <label
+          htmlFor={id}
+          className="text-fg block cursor-pointer text-sm leading-snug font-medium"
+        >
           {label}
         </label>
         {description ? (
-          <p id={descriptionId} className="text-xs leading-relaxed text-fg-muted">
+          <p id={descriptionId} className="text-fg-muted text-xs leading-relaxed">
             {description}
           </p>
         ) : null}
@@ -84,7 +87,7 @@ export const Switch = React.forwardRef<
       className={cn(
         'peer inline-flex h-6 w-11 shrink-0 cursor-pointer items-center rounded-full',
         'border-2 border-transparent transition-colors outline-none',
-        'focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-canvas',
+        'focus-visible:ring-ring focus-visible:ring-offset-canvas focus-visible:ring-2 focus-visible:ring-offset-2',
         'data-[state=checked]:bg-primary data-[state=unchecked]:bg-line-strong',
         'disabled:cursor-not-allowed disabled:opacity-50',
         className,
@@ -93,7 +96,7 @@ export const Switch = React.forwardRef<
     >
       <SwitchPrimitive.Thumb
         className={cn(
-          'pointer-events-none block size-5 rounded-full bg-white shadow-subtle ring-0',
+          'shadow-subtle pointer-events-none block size-5 rounded-full bg-white ring-0',
           'transition-transform data-[state=checked]:translate-x-5 data-[state=unchecked]:translate-x-0',
         )}
       />
@@ -117,11 +120,11 @@ export function SwitchField({
   return (
     <div className={cn('flex items-start justify-between gap-4', className)}>
       <div className="min-w-0 space-y-1">
-        <label htmlFor={id} className="block cursor-pointer text-sm font-medium text-fg">
+        <label htmlFor={id} className="text-fg block cursor-pointer text-sm font-medium">
           {label}
         </label>
         {description ? (
-          <p id={descriptionId} className="text-xs leading-relaxed text-fg-muted">
+          <p id={descriptionId} className="text-fg-muted text-xs leading-relaxed">
             {description}
           </p>
         ) : null}
@@ -150,9 +153,9 @@ export const RadioGroupItem = React.forwardRef<
     <RadioGroupPrimitive.Item
       ref={ref}
       className={cn(
-        'aspect-square size-4.5 shrink-0 rounded-full border border-line-strong bg-surface',
+        'border-line-strong bg-surface aspect-square size-4.5 shrink-0 rounded-full border',
         'transition-colors outline-none',
-        'focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-canvas',
+        'focus-visible:ring-ring focus-visible:ring-offset-canvas focus-visible:ring-2 focus-visible:ring-offset-2',
         'data-[state=checked]:border-primary',
         'disabled:cursor-not-allowed disabled:opacity-50',
         className,
@@ -160,7 +163,7 @@ export const RadioGroupItem = React.forwardRef<
       {...props}
     >
       <RadioGroupPrimitive.Indicator className="flex items-center justify-center">
-        <span className="size-2 rounded-full bg-primary" />
+        <span className="bg-primary size-2 rounded-full" />
       </RadioGroupPrimitive.Indicator>
     </RadioGroupPrimitive.Item>
   )
@@ -189,21 +192,21 @@ export function RadioCard({
     <label
       htmlFor={id}
       className={cn(
-        'group relative flex cursor-pointer items-start gap-3 rounded-card border border-line bg-surface p-4',
-        'transition-all duration-150 hover:border-line-strong hover:shadow-subtle',
+        'group rounded-card border-line bg-surface relative flex cursor-pointer items-start gap-3 border p-4',
+        'hover:border-line-strong hover:shadow-subtle transition-all duration-150',
         'has-[button[data-state=checked]]:border-primary has-[button[data-state=checked]]:bg-primary-soft',
-        'has-[button:focus-visible]:ring-2 has-[button:focus-visible]:ring-ring has-[button:focus-visible]:ring-offset-2',
+        'has-[button:focus-visible]:ring-ring has-[button:focus-visible]:ring-2 has-[button:focus-visible]:ring-offset-2',
         className,
       )}
     >
       <RadioGroupItem value={value} id={id} className="mt-0.5" />
       <div className="min-w-0 flex-1 space-y-1">
-        <span className="flex items-center gap-2 text-sm font-medium text-fg">
-          {Icon ? <Icon className="size-4 text-fg-subtle" /> : null}
+        <span className="text-fg flex items-center gap-2 text-sm font-medium">
+          {Icon ? <Icon className="text-fg-subtle size-4" /> : null}
           {title}
         </span>
         {description ? (
-          <span className="block text-xs leading-relaxed text-fg-muted">{description}</span>
+          <span className="text-fg-muted block text-xs leading-relaxed">{description}</span>
         ) : null}
       </div>
     </label>

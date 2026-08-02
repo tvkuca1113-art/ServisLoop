@@ -32,17 +32,12 @@ export function SiteNav() {
     return () => window.removeEventListener('scroll', handleScroll)
   }, [])
 
-  // Zatvori mobilni meni kad se promijeni ruta.
-  React.useEffect(() => {
-    setMobileOpen(false)
-  }, [pathname])
-
   return (
     <header
       className={cn(
         'fixed inset-x-0 top-0 z-50 transition-all duration-300',
         scrolled
-          ? 'border-b border-line bg-ink-950/85 backdrop-blur-xl'
+          ? 'border-line bg-ink-950/85 border-b backdrop-blur-xl'
           : 'border-b border-transparent bg-transparent',
       )}
     >
@@ -52,7 +47,7 @@ export function SiteNav() {
       >
         <Link
           href="/"
-          className="rounded-lg focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-4 focus-visible:ring-offset-ink-950 focus-visible:outline-none"
+          className="focus-visible:ring-ring focus-visible:ring-offset-ink-950 rounded-lg focus-visible:ring-2 focus-visible:ring-offset-4 focus-visible:outline-none"
         >
           <Logo />
         </Link>
@@ -68,7 +63,7 @@ export function SiteNav() {
                   aria-current={active ? 'page' : undefined}
                   className={cn(
                     'rounded-lg px-3 py-2 text-sm font-medium transition-colors',
-                    'focus-visible:ring-2 focus-visible:ring-ring focus-visible:outline-none',
+                    'focus-visible:ring-ring focus-visible:ring-2 focus-visible:outline-none',
                     active ? 'text-fg' : 'text-fg-muted hover:text-fg',
                   )}
                 >
@@ -96,7 +91,7 @@ export function SiteNav() {
             </Button>
           </SheetTrigger>
           <SheetContent side="right" className="flex flex-col gap-0 p-0">
-            <div className="border-b border-line px-6 py-5">
+            <div className="border-line border-b px-6 py-5">
               <SheetTitle className="text-left">
                 <Logo />
               </SheetTitle>
@@ -111,7 +106,7 @@ export function SiteNav() {
                       aria-current={pathname === item.href ? 'page' : undefined}
                       className={cn(
                         'block rounded-lg px-3 py-3 text-[0.9375rem] font-medium transition-colors',
-                        'focus-visible:ring-2 focus-visible:ring-ring focus-visible:outline-none',
+                        'focus-visible:ring-ring focus-visible:ring-2 focus-visible:outline-none',
                         pathname === item.href
                           ? 'bg-surface-muted text-fg'
                           : 'text-fg-muted hover:bg-surface-muted hover:text-fg',
@@ -124,7 +119,7 @@ export function SiteNav() {
               ))}
             </ul>
 
-            <div className="mt-auto space-y-2 border-t border-line p-4">
+            <div className="border-line mt-auto space-y-2 border-t p-4">
               <SheetClose asChild>
                 <Button asChild variant="secondary" block>
                   <Link href="/prijava">Prijava</Link>

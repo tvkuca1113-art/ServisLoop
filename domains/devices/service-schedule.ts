@@ -292,9 +292,7 @@ export function closeServiceCycle(input: ServiceCycleInput): ServiceCycleResult 
       )
     }
     if (!isAfter(date, input.servicedOn)) {
-      throw new InvalidOverrideError(
-        'Sljedeći servis mora biti nakon datuma obavljenog servisa.',
-      )
+      throw new InvalidOverrideError('Sljedeći servis mora biti nakon datuma obavljenog servisa.')
     }
 
     return {

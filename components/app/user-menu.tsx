@@ -40,7 +40,7 @@ export function UserMenu({ name, email, role }: { name: string; email: string; r
         <button
           type="button"
           aria-label="Korisnički meni"
-          className="rounded-full focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:outline-none"
+          className="focus-visible:ring-ring rounded-full focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:outline-none"
         >
           <Avatar name={name || email} size="sm" />
         </button>
@@ -48,8 +48,8 @@ export function UserMenu({ name, email, role }: { name: string; email: string; r
 
       <DropdownMenuContent align="end" className="w-64">
         <div className="px-2.5 py-2">
-          <p className="truncate text-sm font-medium text-fg">{name || 'Bez imena'}</p>
-          <p className="truncate text-xs text-fg-muted">{email}</p>
+          <p className="text-fg truncate text-sm font-medium">{name || 'Bez imena'}</p>
+          <p className="text-fg-muted truncate text-xs">{email}</p>
           <Badge tone="brand" size="sm" className="mt-2">
             {ROLE_LABELS[role]}
           </Badge>

@@ -12,8 +12,7 @@ const baseFieldClasses = [
   'aria-[invalid=true]:border-critical aria-[invalid=true]:ring-2 aria-[invalid=true]:ring-critical/20',
 ].join(' ')
 
-export interface InputProps
-  extends Omit<React.InputHTMLAttributes<HTMLInputElement>, 'prefix'> {
+export interface InputProps extends Omit<React.InputHTMLAttributes<HTMLInputElement>, 'prefix'> {
   /** Ikona ili oznaka lijevo unutar polja (npr. lupa, „KM“). */
   prefix?: React.ReactNode
   /** Ikona ili oznaka desno unutar polja. */
@@ -35,13 +34,7 @@ export const Input = React.forwardRef<HTMLInputElement, InputProps>(function Inp
     <input
       ref={ref}
       type={type}
-      className={cn(
-        baseFieldClasses,
-        sizeClasses,
-        prefix && 'pl-9',
-        suffix && 'pr-12',
-        className,
-      )}
+      className={cn(baseFieldClasses, sizeClasses, prefix && 'pl-9', suffix && 'pr-12', className)}
       {...props}
     />
   )
@@ -52,7 +45,7 @@ export const Input = React.forwardRef<HTMLInputElement, InputProps>(function Inp
     <div className="relative w-full">
       {prefix ? (
         <span
-          className="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3 text-fg-subtle [&_svg]:size-4"
+          className="text-fg-subtle pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3 [&_svg]:size-4"
           aria-hidden="true"
         >
           {prefix}
@@ -61,7 +54,7 @@ export const Input = React.forwardRef<HTMLInputElement, InputProps>(function Inp
       {field}
       {suffix ? (
         <span
-          className="pointer-events-none absolute inset-y-0 right-0 flex items-center pr-3 text-sm text-fg-muted [&_svg]:size-4"
+          className="text-fg-muted pointer-events-none absolute inset-y-0 right-0 flex items-center pr-3 text-sm [&_svg]:size-4"
           aria-hidden="true"
         >
           {suffix}
@@ -104,7 +97,12 @@ export const Select = React.forwardRef<
     <div className="relative w-full">
       <select
         ref={ref}
-        className={cn(baseFieldClasses, sizeClasses, 'cursor-pointer appearance-none pr-9', className)}
+        className={cn(
+          baseFieldClasses,
+          sizeClasses,
+          'cursor-pointer appearance-none pr-9',
+          className,
+        )}
         {...props}
       >
         {children}
@@ -112,7 +110,7 @@ export const Select = React.forwardRef<
       <svg
         aria-hidden="true"
         viewBox="0 0 20 20"
-        className="pointer-events-none absolute top-1/2 right-3 size-4 -translate-y-1/2 text-fg-subtle"
+        className="text-fg-subtle pointer-events-none absolute top-1/2 right-3 size-4 -translate-y-1/2"
         fill="none"
         stroke="currentColor"
         strokeWidth="1.75"

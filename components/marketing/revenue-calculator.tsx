@@ -78,56 +78,56 @@ export function RevenueCalculator() {
           </div>
         </div>
 
-        <div className="rounded-panel border border-line bg-surface/60 p-6 sm:p-8">
-          <div className="flex items-center gap-2 text-primary">
+        <div className="rounded-panel border-line bg-surface/60 border p-6 sm:p-8">
+          <div className="text-primary flex items-center gap-2">
             <Calculator className="size-4.5" aria-hidden="true" />
             <h3 className="text-sm font-semibold tracking-wide uppercase">Procjena</h3>
           </div>
 
           <dl className="mt-6 space-y-6" aria-live="polite">
             <div>
-              <dt className="text-sm text-fg-muted">Mogućih servisnih termina godišnje</dt>
-              <dd className="tabular mt-1 text-display-sm text-fg">
+              <dt className="text-fg-muted text-sm">Mogućih servisnih termina godišnje</dt>
+              <dd className="tabular text-display-sm text-fg mt-1">
                 {formatCount(result.yearlyAppointments)}
               </dd>
             </div>
 
-            <div className="border-t border-line pt-6">
-              <dt className="text-sm text-fg-muted">Mogući godišnji prihod od servisa</dt>
-              <dd className="tabular mt-1 text-display-md text-gradient-brand">
+            <div className="border-line border-t pt-6">
+              <dt className="text-fg-muted text-sm">Mogući godišnji prihod od servisa</dt>
+              <dd className="tabular text-display-md text-gradient-brand mt-1">
                 {formatCurrency(result.yearlyRevenueKm, { decimals: 0 })}
               </dd>
             </div>
 
-            <div className="grid grid-cols-2 gap-4 border-t border-line pt-6">
+            <div className="border-line grid grid-cols-2 gap-4 border-t pt-6">
               <div>
-                <dt className="text-xs text-fg-muted">Mjesečno</dt>
-                <dd className="tabular mt-1 text-lg font-semibold text-fg">
+                <dt className="text-fg-muted text-xs">Mjesečno</dt>
+                <dd className="tabular text-fg mt-1 text-lg font-semibold">
                   {formatCurrency(result.monthlyRevenueKm, { decimals: 0 })}
                 </dd>
               </div>
               <div>
-                <dt className="text-xs text-fg-muted">Po uređaju godišnje</dt>
-                <dd className="tabular mt-1 text-lg font-semibold text-fg">
+                <dt className="text-fg-muted text-xs">Po uređaju godišnje</dt>
+                <dd className="tabular text-fg mt-1 text-lg font-semibold">
                   {formatCurrency(result.revenuePerDeviceKm, { decimals: 0 })}
                 </dd>
               </div>
             </div>
           </dl>
 
-          <div className="mt-8 space-y-3 rounded-card border border-line bg-canvas/40 p-4">
-            <p className="font-mono text-[0.6875rem] leading-relaxed text-fg-subtle">
+          <div className="rounded-card border-line bg-canvas/40 mt-8 space-y-3 border p-4">
+            <p className="text-fg-subtle font-mono text-[0.6875rem] leading-relaxed">
               termini = uređaji × servisa godišnje × stopa rezervacije
               <br />
               prihod&nbsp;&nbsp;= termini × cijena servisa
             </p>
           </div>
 
-          <p className="mt-4 flex items-start gap-2 text-xs leading-relaxed text-fg-subtle">
+          <p className="text-fg-subtle mt-4 flex items-start gap-2 text-xs leading-relaxed">
             <Info className="mt-0.5 size-3.5 shrink-0" aria-hidden="true" />
             <span>
-              Ovo je procjena na osnovu vaših unosa, a ne obećanje prihoda. Stvarni rezultat
-              ovisi o kvalitetu kontakt podataka, cijeni i sposobnosti tima da odradi termine.
+              Ovo je procjena na osnovu vaših unosa, a ne obećanje prihoda. Stvarni rezultat ovisi o
+              kvalitetu kontakt podataka, cijeni i sposobnosti tima da odradi termine.
             </span>
           </p>
         </div>
@@ -158,10 +158,10 @@ function SliderField({
   return (
     <div>
       <div className="flex items-end justify-between gap-4">
-        <label htmlFor={id} className="text-sm font-medium text-fg">
+        <label htmlFor={id} className="text-fg text-sm font-medium">
           {label}
         </label>
-        <output htmlFor={id} className="tabular text-sm font-semibold text-primary">
+        <output htmlFor={id} className="tabular text-primary text-sm font-semibold">
           {format(value)}
         </output>
       </div>
@@ -177,9 +177,9 @@ function SliderField({
           aria-describedby={hintId}
           onChange={(event) => onChange(Number(event.target.value))}
           className={cn(
-            'h-1.5 flex-1 cursor-pointer appearance-none rounded-full bg-surface-muted',
+            'bg-surface-muted h-1.5 flex-1 cursor-pointer appearance-none rounded-full',
             'accent-brand-400',
-            'focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-canvas focus-visible:outline-none',
+            'focus-visible:ring-ring focus-visible:ring-offset-canvas focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:outline-none',
           )}
         />
         <Input
@@ -199,7 +199,7 @@ function SliderField({
       </div>
 
       {hint ? (
-        <p id={hintId} className="mt-2 text-xs leading-relaxed text-fg-subtle">
+        <p id={hintId} className="text-fg-subtle mt-2 text-xs leading-relaxed">
           {hint}
         </p>
       ) : null}

@@ -115,7 +115,7 @@ export function addMonths(date: PlainDate, months: number): PlainDate {
     throw new RangeError('addMonths(): broj mjeseci mora biti cijeli broj')
   const { year, month, day } = plainDateParts(date)
 
-  const totalMonths = (year * 12 + (month - 1)) + months
+  const totalMonths = year * 12 + (month - 1) + months
   const targetYear = Math.floor(totalMonths / 12)
   const targetMonth = (totalMonths % 12) + 1
 
@@ -125,7 +125,9 @@ export function addMonths(date: PlainDate, months: number): PlainDate {
 
 /** Razlika u danima: `b - a`. Pozitivno znači da je `b` kasnije. */
 export function diffInDays(a: PlainDate, b: PlainDate): number {
-  return Math.round((plainDateToUtcDate(b).getTime() - plainDateToUtcDate(a).getTime()) / MS_PER_DAY)
+  return Math.round(
+    (plainDateToUtcDate(b).getTime() - plainDateToUtcDate(a).getTime()) / MS_PER_DAY,
+  )
 }
 
 /** Poređenje: -1 ako je `a` prije `b`, 0 ako su isti, 1 ako je `a` poslije. */
@@ -272,7 +274,14 @@ export function timeZoneOffsetMinutes(instant: Date, timeZone: string): number {
   }
   // `hour` može biti 24 za ponoć u nekim runtime-ima — normalizujemo na 0.
   const hour = get('hour') % 24
-  const asUtc = Date.UTC(get('year'), get('month') - 1, get('day'), hour, get('minute'), get('second'))
+  const asUtc = Date.UTC(
+    get('year'),
+    get('month') - 1,
+    get('day'),
+    hour,
+    get('minute'),
+    get('second'),
+  )
   return Math.round((asUtc - Math.floor(instant.getTime() / 1000) * 1000) / 60_000)
 }
 
@@ -283,11 +292,7 @@ export function timeZoneOffsetMinutes(instant: Date, timeZone: string): number {
  * Koristi se za rezervacije: "15.03.2026. u 09:00 po sarajevskom vremenu".
  * Radi u dva koraka jer pomak zone ovisi o samom trenutku (ljetno računanje).
  */
-export function zonedDateTimeToInstant(
-  date: PlainDate,
-  timeOfDay: string,
-  timeZone: string,
-): Date {
+export function zonedDateTimeToInstant(date: PlainDate, timeOfDay: string, timeZone: string): Date {
   const { hours, minutes } = parseTimeOfDay(timeOfDay)
   const { year, month, day } = plainDateParts(date)
 

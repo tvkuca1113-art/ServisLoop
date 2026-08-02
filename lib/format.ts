@@ -104,9 +104,7 @@ export function formatMonthYear(date: PlainDate): string {
 /** 'srijeda' / 'sri' */
 export function formatWeekday(date: PlainDate, style: 'long' | 'short' = 'long'): string {
   const dayIndex = new Date(`${date}T00:00:00Z`).getUTCDay()
-  return style === 'long'
-    ? (WEEKDAYS_BS[dayIndex] ?? '')
-    : (WEEKDAYS_BS_SHORT[dayIndex] ?? '')
+  return style === 'long' ? (WEEKDAYS_BS[dayIndex] ?? '') : (WEEKDAYS_BS_SHORT[dayIndex] ?? '')
 }
 
 /** Trenutak → '15.03.2026 09:30' u zadanoj vremenskoj zoni. */
@@ -230,10 +228,7 @@ export function formatDayDelta(target: PlainDate, today: PlainDate): string {
 }
 
 /** 'prije 5 minuta' · 'prije 2 sata' · 'prije 3 dana' — za vremensku traku aktivnosti. */
-export function formatRelativeTime(
-  instant: Date | string,
-  now: Date = new Date(),
-): string {
+export function formatRelativeTime(instant: Date | string, now: Date = new Date()): string {
   const date = typeof instant === 'string' ? new Date(instant) : instant
   if (Number.isNaN(date.getTime())) return '—'
   const seconds = Math.round((now.getTime() - date.getTime()) / 1000)

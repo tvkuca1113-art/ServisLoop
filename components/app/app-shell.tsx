@@ -15,6 +15,7 @@ import { Button } from '@/components/ui/button'
 import { Sheet, SheetContent, SheetTitle, SheetTrigger } from '@/components/ui/dialog'
 import { Alert } from '@/components/ui/feedback'
 import { cn } from '@/lib/utils'
+import { useStoredFlag } from '@/lib/hooks/use-client-value'
 
 const SIDEBAR_STORAGE_KEY = 'servisloop:sidebar-collapsed'
 
@@ -42,35 +43,16 @@ export function AppShell({
   children,
 }: AppShellProps) {
   const pathname = usePathname()
-  const [collapsed, setCollapsed] = React.useState(false)
+  // Stanje bočne trake preživljava osvježavanje stranice.
+  const [collapsed, toggleSidebar] = useStoredFlag(SIDEBAR_STORAGE_KEY, false)
   const [commandOpen, setCommandOpen] = React.useState(false)
   const [mobileOpen, setMobileOpen] = React.useState(false)
 
-  // Stanje bočne trake preživljava osvježavanje stranice.
-  React.useEffect(() => {
-    try {
-      setCollapsed(window.localStorage.getItem(SIDEBAR_STORAGE_KEY) === '1')
-    } catch {
-      // Privatni način rada blokira localStorage — nije razlog za grešku.
-      setCollapsed(false)
-    }
-  }, [])
-
-  const toggleSidebar = React.useCallback(() => {
-    setCollapsed((current) => {
-      const next = !current
-      try {
-        window.localStorage.setItem(SIDEBAR_STORAGE_KEY, next ? '1' : '0')
-      } catch {
-        // Bez pohrane stanje vrijedi samo za trenutnu sesiju.
-      }
-      return next
-    })
-  }, [])
-
-  React.useEffect(() => {
-    setMobileOpen(false)
-  }, [pathname])
+  /*
+   * Mobilni meni se zatvara klikom na link, a ne efektom na promjenu putanje.
+   * Efekt bi značio `setState` unutar efekta — kaskadni render bez potrebe.
+   */
+  const closeMobileNav = React.useCallback(() => setMobileOpen(false), [])
 
   // Cmd/Ctrl + K otvara komandnu paletu.
   React.useEffect(() => {
@@ -87,19 +69,19 @@ export function AppShell({
   const crumbs = buildBreadcrumbs(pathname)
 
   return (
-    <div className="flex min-h-dvh bg-canvas">
+    <div className="bg-canvas flex min-h-dvh">
       <Sidebar
         role={role}
         counts={counts}
         organizationName={organizationName}
         collapsed={collapsed}
-        onToggle={toggleSidebar}
+        onToggle={() => toggleSidebar()}
       />
 
       <div className="flex min-w-0 flex-1 flex-col">
         <header
           data-app-nav
-          className="sticky top-0 z-30 border-b border-line bg-surface/85 backdrop-blur-md"
+          className="border-line bg-surface/85 sticky top-0 z-30 border-b backdrop-blur-md"
         >
           <div className="flex h-16 items-center gap-3 px-4 sm:px-6">
             {/* Mobilna navigacija */}
@@ -110,7 +92,7 @@ export function AppShell({
                 </Button>
               </SheetTrigger>
               <SheetContent side="left" className="p-0">
-                <div className="flex h-16 items-center gap-2.5 border-b border-line px-4">
+                <div className="border-line flex h-16 items-center gap-2.5 border-b px-4">
                   <LogoMark className="size-8" />
                   <SheetTitle className="text-sm">{organizationName}</SheetTitle>
                 </div>
@@ -121,7 +103,7 @@ export function AppShell({
                     return (
                       <div key={group.label ?? 'root'}>
                         {group.label ? (
-                          <p className="mb-1 px-3 text-[0.6875rem] font-semibold tracking-wide text-fg-subtle uppercase">
+                          <p className="text-fg-subtle mb-1 px-3 text-[0.6875rem] font-semibold tracking-wide uppercase">
                             {group.label}
                           </p>
                         ) : null}
@@ -139,6 +121,7 @@ export function AppShell({
                               <li key={item.href}>
                                 <Link
                                   href={item.href}
+                                  onClick={closeMobileNav}
                                   className={cn(
                                     'flex items-center gap-3 rounded-lg px-3 py-2.5 text-sm font-medium',
                                     active
@@ -167,18 +150,18 @@ export function AppShell({
                   <li key={crumb.href} className="flex min-w-0 items-center gap-1.5">
                     {index > 0 ? (
                       <Icons.ChevronRight
-                        className="size-3.5 shrink-0 text-fg-subtle"
+                        className="text-fg-subtle size-3.5 shrink-0"
                         aria-hidden="true"
                       />
                     ) : null}
                     {index === crumbs.length - 1 ? (
-                      <span aria-current="page" className="truncate font-medium text-fg">
+                      <span aria-current="page" className="text-fg truncate font-medium">
                         {crumb.label}
                       </span>
                     ) : (
                       <Link
                         href={crumb.href}
-                        className="truncate text-fg-muted transition-colors hover:text-fg"
+                        className="text-fg-muted hover:text-fg truncate transition-colors"
                       >
                         {crumb.label}
                       </Link>
@@ -193,14 +176,14 @@ export function AppShell({
                 type="button"
                 onClick={() => setCommandOpen(true)}
                 className={cn(
-                  'flex items-center gap-2 rounded-lg border border-line bg-surface-muted/60 px-3 py-2',
-                  'text-sm text-fg-subtle transition-colors hover:border-line-strong hover:text-fg-muted',
-                  'focus-visible:ring-2 focus-visible:ring-ring focus-visible:outline-none',
+                  'border-line bg-surface-muted/60 flex items-center gap-2 rounded-lg border px-3 py-2',
+                  'text-fg-subtle hover:border-line-strong hover:text-fg-muted text-sm transition-colors',
+                  'focus-visible:ring-ring focus-visible:ring-2 focus-visible:outline-none',
                 )}
               >
                 <Icons.Search className="size-4" aria-hidden="true" />
                 <span className="hidden sm:inline">Pretraži…</span>
-                <kbd className="hidden rounded border border-line bg-surface px-1.5 py-0.5 font-mono text-[0.625rem] text-fg-subtle sm:inline">
+                <kbd className="border-line bg-surface text-fg-subtle hidden rounded border px-1.5 py-0.5 font-mono text-[0.625rem] sm:inline">
                   ⌘K
                 </kbd>
               </button>
@@ -211,7 +194,7 @@ export function AppShell({
           </div>
 
           {isDemo ? (
-            <div className="border-t border-service-400/25 bg-service-400/10 px-4 py-2 text-center text-xs text-service-700 sm:px-6">
+            <div className="border-service-400/25 bg-service-400/10 text-service-700 border-t px-4 py-2 text-center text-xs sm:px-6">
               <strong className="font-semibold">Demo okruženje.</strong> Podaci su izmišljeni,
               podsjetnici se pripremaju ali se ne šalju stvarnim primaocima.
             </div>
@@ -257,7 +240,5 @@ function buildBreadcrumbs(pathname: string): Array<{ href: string; label: string
   }
 
   // Prva stavka je uvijek „Pregled“; ako je ruta baš /app/pregled, nema duplog unosa.
-  return crumbs.filter(
-    (crumb, index, all) => index === 0 || crumb.href !== all[0]?.href,
-  )
+  return crumbs.filter((crumb, index, all) => index === 0 || crumb.href !== all[0]?.href)
 }

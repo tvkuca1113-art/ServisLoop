@@ -29,7 +29,8 @@ export interface UsageSnapshot {
   emailsSentThisMonth: number
 }
 
-export type LimitKey = 'activeDevices' | 'technicians' | 'teamMembers' | 'importRows' | 'monthlyEmails'
+export type LimitKey =
+  'activeDevices' | 'technicians' | 'teamMembers' | 'importRows' | 'monthlyEmails'
 
 export interface LimitCheck {
   allowed: boolean

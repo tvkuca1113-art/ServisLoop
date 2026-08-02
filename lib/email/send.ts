@@ -140,11 +140,14 @@ export async function sendEmail(input: SendEmailInput): Promise<SendEmailResult>
 
   if (result.ok && input.organizationId) {
     // Brojač potrošnje raste samo za stvarno poslane poruke.
-    await supabase.rpc('bump_usage' as never, {
-      target_org: input.organizationId,
-      metric_name: 'emails_sent',
-      amount: 1,
-    } as never)
+    await supabase.rpc(
+      'bump_usage' as never,
+      {
+        target_org: input.organizationId,
+        metric_name: 'emails_sent',
+        amount: 1,
+      } as never,
+    )
   }
 
   return {

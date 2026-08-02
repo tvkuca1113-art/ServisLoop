@@ -3,8 +3,16 @@ import { Section, SectionIntro, DemoTag } from './section'
 import { Badge } from '@/components/ui/badge'
 
 const SCHEDULE = [
-  { offset: '30 dana ranije', purpose: 'Najava roka i prvi poziv na rezervaciju', state: 'poslano' },
-  { offset: '14 dana ranije', purpose: 'Podsjetnik kupcima koji nisu rezervisali', state: 'poslano' },
+  {
+    offset: '30 dana ranije',
+    purpose: 'Najava roka i prvi poziv na rezervaciju',
+    state: 'poslano',
+  },
+  {
+    offset: '14 dana ranije',
+    purpose: 'Podsjetnik kupcima koji nisu rezervisali',
+    state: 'poslano',
+  },
   { offset: '3 dana ranije', purpose: 'Zadnja prilika prije isteka roka', state: 'zakazano' },
   { offset: 'na dan roka', purpose: 'Obavijest da je servis dospio', state: 'zakazano' },
   { offset: '14 dana kasnije', purpose: 'Opcioni podsjetnik za kašnjenje', state: 'isključeno' },
@@ -44,19 +52,19 @@ export function ReminderJourneySection() {
 
       <div className="mt-12 grid gap-8 lg:grid-cols-[1.15fr_0.85fr] lg:gap-12">
         {/* Raspored */}
-        <div className="overflow-hidden rounded-panel border border-line bg-surface/60">
-          <div className="flex items-center justify-between gap-3 border-b border-line px-5 py-4">
-            <h3 className="text-sm font-semibold text-fg">Zadani raspored podsjetnika</h3>
+        <div className="rounded-panel border-line bg-surface/60 overflow-hidden border">
+          <div className="border-line flex items-center justify-between gap-3 border-b px-5 py-4">
+            <h3 className="text-fg text-sm font-semibold">Zadani raspored podsjetnika</h3>
             <DemoTag label="Primjer" />
           </div>
 
-          <ul className="divide-y divide-line">
+          <ul className="divide-line divide-y">
             {SCHEDULE.map((item) => (
               <li key={item.offset} className="flex items-start gap-4 px-5 py-4">
-                <span className="tabular w-32 shrink-0 text-sm font-medium text-fg">
+                <span className="tabular text-fg w-32 shrink-0 text-sm font-medium">
                   {item.offset}
                 </span>
-                <span className="min-w-0 flex-1 text-sm leading-relaxed text-fg-muted">
+                <span className="text-fg-muted min-w-0 flex-1 text-sm leading-relaxed">
                   {item.purpose}
                 </span>
                 <Badge
@@ -75,31 +83,31 @@ export function ReminderJourneySection() {
             ))}
           </ul>
 
-          <p className="border-t border-line px-5 py-4 text-xs leading-relaxed text-fg-subtle">
+          <p className="border-line text-fg-subtle border-t px-5 py-4 text-xs leading-relaxed">
             Raspored je podesiv po firmi. Možete dodati, ukloniti ili pomjeriti bilo koji korak.
           </p>
         </div>
 
         {/* Primjer poruke */}
-        <div className="overflow-hidden rounded-panel border border-line bg-surface">
-          <div className="flex items-center gap-2 border-b border-line px-5 py-4">
-            <MailCheck className="size-4 text-primary" aria-hidden="true" />
-            <h3 className="text-sm font-semibold text-fg">Poruka koju kupac dobija</h3>
+        <div className="rounded-panel border-line bg-surface overflow-hidden border">
+          <div className="border-line flex items-center gap-2 border-b px-5 py-4">
+            <MailCheck className="text-primary size-4" aria-hidden="true" />
+            <h3 className="text-fg text-sm font-semibold">Poruka koju kupac dobija</h3>
           </div>
 
           <div className="space-y-3 p-5 text-sm">
-            <p className="text-xs text-fg-subtle">
-              <span className="font-medium text-fg-muted">Predmet:</span> Servis vaše klime
+            <p className="text-fg-subtle text-xs">
+              <span className="text-fg-muted font-medium">Predmet:</span> Servis vaše klime
               dospijeva 28.03.
             </p>
-            <div className="space-y-3 rounded-card bg-canvas/50 p-4 leading-relaxed text-fg-muted">
+            <div className="rounded-card bg-canvas/50 text-fg-muted space-y-3 p-4 leading-relaxed">
               <p className="text-fg">Poštovana Amila,</p>
               <p>
                 servis vašeg uređaja <strong className="text-fg">AeroTherm ST-12</strong> ugrađenog
                 15.04.2024. dospijeva <strong className="text-fg">28.03.2027.</strong>
               </p>
               <p>Termin možete odabrati sami, bez poziva:</p>
-              <p className="rounded-lg border border-primary/30 bg-primary-soft px-3 py-2 text-center text-xs font-semibold text-primary">
+              <p className="border-primary/30 bg-primary-soft text-primary rounded-lg border px-3 py-2 text-center text-xs font-semibold">
                 Rezerviši termin servisa
               </p>
               <p className="text-xs">
@@ -114,12 +122,12 @@ export function ReminderJourneySection() {
 
       <ul className="mt-10 grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
         {GUARANTEES.map((item) => (
-          <li key={item.title} className="rounded-card border border-line bg-surface/50 p-5">
-            <span className="flex size-9 items-center justify-center rounded-lg bg-primary-soft text-primary">
+          <li key={item.title} className="rounded-card border-line bg-surface/50 border p-5">
+            <span className="bg-primary-soft text-primary flex size-9 items-center justify-center rounded-lg">
               <item.icon className="size-4.5" aria-hidden="true" />
             </span>
-            <h3 className="mt-4 text-sm font-semibold text-fg">{item.title}</h3>
-            <p className="mt-2 text-xs leading-relaxed text-fg-muted">{item.text}</p>
+            <h3 className="text-fg mt-4 text-sm font-semibold">{item.title}</h3>
+            <p className="text-fg-muted mt-2 text-xs leading-relaxed">{item.text}</p>
           </li>
         ))}
       </ul>

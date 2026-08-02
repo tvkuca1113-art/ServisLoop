@@ -1,13 +1,7 @@
 'use client'
 
 import * as React from 'react'
-import {
-  AlertTriangle,
-  CalendarDays,
-  ClipboardList,
-  LayoutDashboard,
-  Wrench,
-} from 'lucide-react'
+import { AlertTriangle, CalendarDays, ClipboardList, LayoutDashboard, Wrench } from 'lucide-react'
 import { Section, SectionIntro, DemoTag } from './section'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/disclosure'
 import { Badge } from '@/components/ui/badge'
@@ -37,15 +31,15 @@ export function ProductPreview() {
         description="Ekrani ispod su stvarni prikazi sistema. Podaci su izmišljeni i služe samo za demonstraciju."
       />
 
-      <div className="mt-10 overflow-hidden rounded-panel border border-line bg-surface/60 shadow-float">
+      <div className="rounded-panel border-line bg-surface/60 shadow-float mt-10 overflow-hidden border">
         {/* Traka prozora */}
-        <div className="flex items-center justify-between gap-4 border-b border-line bg-surface-muted/40 px-4 py-3">
+        <div className="border-line bg-surface-muted/40 flex items-center justify-between gap-4 border-b px-4 py-3">
           <div className="flex items-center gap-2" aria-hidden="true">
-            <span className="size-2.5 rounded-full bg-critical/60" />
-            <span className="size-2.5 rounded-full bg-caution/60" />
-            <span className="size-2.5 rounded-full bg-positive/60" />
+            <span className="bg-critical/60 size-2.5 rounded-full" />
+            <span className="bg-caution/60 size-2.5 rounded-full" />
+            <span className="bg-positive/60 size-2.5 rounded-full" />
           </div>
-          <p className="truncate font-mono text-[0.6875rem] text-fg-subtle">
+          <p className="text-fg-subtle truncate font-mono text-[0.6875rem]">
             app.servisloop.ba / pregled
           </p>
           <DemoTag />
@@ -78,22 +72,28 @@ export function ProductPreview() {
           <TabsContent value="pregled">
             <div className="grid gap-4 sm:grid-cols-2 xl:grid-cols-4">
               {PREVIEW_METRICS.map((metric) => (
-                <div key={metric.label} className="rounded-card border border-line bg-surface p-4">
-                  <p className="text-xs text-fg-muted">{metric.label}</p>
-                  <p className="tabular mt-2 text-2xl font-semibold text-fg">{metric.value}</p>
-                  <p className="mt-1.5 text-[0.6875rem] text-fg-subtle">{metric.caption}</p>
+                <div key={metric.label} className="rounded-card border-line bg-surface border p-4">
+                  <p className="text-fg-muted text-xs">{metric.label}</p>
+                  <p className="tabular text-fg mt-2 text-2xl font-semibold">{metric.value}</p>
+                  <p className="text-fg-subtle mt-1.5 text-[0.6875rem]">{metric.caption}</p>
                 </div>
               ))}
             </div>
 
-            <div className="mt-4 rounded-card border border-line bg-surface p-4">
-              <h3 className="text-sm font-semibold text-fg">Zahtijeva vašu pažnju</h3>
-              <ul className="mt-3 divide-y divide-line">
+            <div className="rounded-card border-line bg-surface mt-4 border p-4">
+              <h3 className="text-fg text-sm font-semibold">Zahtijeva vašu pažnju</h3>
+              <ul className="divide-line mt-3 divide-y">
                 {PREVIEW_QUEUES.map((queue) => (
                   <li key={queue.label} className="flex items-center justify-between gap-4 py-2.5">
-                    <span className="text-sm text-fg-muted">{queue.label}</span>
+                    <span className="text-fg-muted text-sm">{queue.label}</span>
                     <Badge
-                      tone={queue.tone === 'danger' ? 'danger' : queue.tone === 'warning' ? 'warning' : 'info'}
+                      tone={
+                        queue.tone === 'danger'
+                          ? 'danger'
+                          : queue.tone === 'warning'
+                            ? 'warning'
+                            : 'info'
+                      }
                       dot
                     >
                       {queue.count}
@@ -109,16 +109,16 @@ export function ProductPreview() {
               caption="Lista uređaja s rokovima servisa"
               head={['Uređaj', 'Kupac', 'Model', 'Sljedeći servis', 'Status']}
               rows={PREVIEW_DEVICES.map((device) => [
-                <span key="id" className="font-mono text-xs text-fg-subtle">
+                <span key="id" className="text-fg-subtle font-mono text-xs">
                   {device.id}
                 </span>,
                 <span key="customer">
-                  <span className="block text-fg">{device.customer}</span>
-                  <span className="block text-xs text-fg-subtle">{device.city}</span>
+                  <span className="text-fg block">{device.customer}</span>
+                  <span className="text-fg-subtle block text-xs">{device.city}</span>
                 </span>,
                 <span key="model">
-                  <span className="block text-fg">{device.model}</span>
-                  <span className="block text-xs text-fg-subtle">{device.type}</span>
+                  <span className="text-fg block">{device.model}</span>
+                  <span className="text-fg-subtle block text-xs">{device.type}</span>
                 </span>,
                 <span key="next" className="tabular">
                   {device.nextService}
@@ -147,12 +147,12 @@ export function ProductPreview() {
               caption="Zadnji servisi"
               head={['Broj', 'Uređaj', 'Tehničar', 'Datum', 'Status']}
               rows={PREVIEW_SERVICES.map((service) => [
-                <span key="id" className="font-mono text-xs text-fg-subtle">
+                <span key="id" className="text-fg-subtle font-mono text-xs">
                   {service.id}
                 </span>,
                 <span key="device">
-                  <span className="block text-fg">{service.device}</span>
-                  <span className="block text-xs text-fg-subtle">{service.customer}</span>
+                  <span className="text-fg block">{service.device}</span>
+                  <span className="text-fg-subtle block text-xs">{service.customer}</span>
                 </span>,
                 <span key="tech">{service.technician}</span>,
                 <span key="date" className="tabular">
@@ -180,12 +180,12 @@ export function ProductPreview() {
               caption="Rezervacije kupaca"
               head={['Broj', 'Kupac', 'Termin', 'Izvor', 'Status']}
               rows={PREVIEW_BOOKINGS.map((booking) => [
-                <span key="id" className="font-mono text-xs text-fg-subtle">
+                <span key="id" className="text-fg-subtle font-mono text-xs">
                   {booking.id}
                 </span>,
                 <span key="customer">
-                  <span className="block text-fg">{booking.customer}</span>
-                  <span className="block text-xs text-fg-subtle">{booking.device}</span>
+                  <span className="text-fg block">{booking.customer}</span>
+                  <span className="text-fg-subtle block text-xs">{booking.device}</span>
                 </span>,
                 <span key="slot" className="tabular">
                   {booking.slot}
@@ -205,11 +205,11 @@ export function ProductPreview() {
               caption="Radni nalozi"
               head={['Broj', 'Nalog', 'Tehničar', 'Rok', 'Status']}
               rows={PREVIEW_WORK_ORDERS.map((order) => [
-                <span key="id" className="font-mono text-xs text-fg-subtle">
+                <span key="id" className="text-fg-subtle font-mono text-xs">
                   {order.id}
                 </span>,
                 <span key="title">
-                  <span className="block text-fg">{order.title}</span>
+                  <span className="text-fg block">{order.title}</span>
                   {order.priority === 'hitno' ? (
                     <Badge tone="danger" size="sm" className="mt-1">
                       hitno
@@ -254,17 +254,17 @@ function PreviewTable({
   rows: React.ReactNode[][]
 }) {
   return (
-    <div className="overflow-x-auto scroll-slim rounded-card border border-line bg-surface">
+    <div className="scroll-slim rounded-card border-line bg-surface overflow-x-auto border">
       <table className="w-full min-w-[46rem] text-sm">
         <caption className="sr-only">{caption} — demo podaci</caption>
         <thead>
-          <tr className="border-b border-line">
+          <tr className="border-line border-b">
             {head.map((cell, index) => (
               <th
                 key={cell}
                 scope="col"
                 className={cn(
-                  'px-4 py-3 text-left text-xs font-semibold tracking-wide text-fg-subtle uppercase',
+                  'text-fg-subtle px-4 py-3 text-left text-xs font-semibold tracking-wide uppercase',
                   index === head.length - 1 && 'text-right',
                 )}
               >
@@ -273,14 +273,14 @@ function PreviewTable({
             ))}
           </tr>
         </thead>
-        <tbody className="divide-y divide-line">
+        <tbody className="divide-line divide-y">
           {rows.map((row, rowIndex) => (
-            <tr key={rowIndex} className="transition-colors hover:bg-surface-muted/40">
+            <tr key={rowIndex} className="hover:bg-surface-muted/40 transition-colors">
               {row.map((cell, cellIndex) => (
                 <td
                   key={cellIndex}
                   className={cn(
-                    'px-4 py-3 align-top text-fg-muted',
+                    'text-fg-muted px-4 py-3 align-top',
                     cellIndex === row.length - 1 && 'text-right',
                   )}
                 >

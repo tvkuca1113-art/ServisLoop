@@ -40,23 +40,23 @@ export function Toaster() {
       icons={{
         success: (
           <CheckCircle2
-            className="size-4.5 text-positive-strong dark:text-positive"
+            className="text-positive-strong dark:text-positive size-4.5"
             aria-hidden="true"
           />
         ),
         error: (
           <OctagonAlert
-            className="size-4.5 text-critical-strong dark:text-critical"
+            className="text-critical-strong dark:text-critical size-4.5"
             aria-hidden="true"
           />
         ),
         warning: (
           <AlertTriangle
-            className="size-4.5 text-caution-strong dark:text-caution"
+            className="text-caution-strong dark:text-caution size-4.5"
             aria-hidden="true"
           />
         ),
-        info: <Info className="size-4.5 text-electric-500" aria-hidden="true" />,
+        info: <Info className="text-electric-500 size-4.5" aria-hidden="true" />,
       }}
     />
   )

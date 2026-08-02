@@ -33,28 +33,27 @@ export async function QrJourneySection() {
       <div className="mt-12 grid items-start gap-8 lg:grid-cols-[0.85fr_1.15fr] lg:gap-12">
         {/* Naljepnica */}
         <div className="mx-auto w-full max-w-xs">
-          <div className="rounded-panel border border-line bg-white p-5 shadow-float">
-            <div className="flex items-center justify-between gap-2 border-b border-ink-200 pb-3">
-              <span className="text-[0.6875rem] font-bold tracking-wide text-ink-900 uppercase">
+          <div className="rounded-panel border-line shadow-float border bg-white p-5">
+            <div className="border-ink-200 flex items-center justify-between gap-2 border-b pb-3">
+              <span className="text-ink-900 text-[0.6875rem] font-bold tracking-wide uppercase">
                 {device.company}
               </span>
-              <span className="font-mono text-[0.625rem] text-ink-500">UR-0987</span>
+              <span className="text-ink-500 font-mono text-[0.625rem]">UR-0987</span>
             </div>
 
             <div className="mx-auto mt-4 aspect-square w-full max-w-44">
-              {/* eslint-disable-next-line react/no-danger */}
               <div dangerouslySetInnerHTML={{ __html: qrSvg }} />
             </div>
 
-            <p className="mt-4 text-center text-[0.8125rem] leading-tight font-semibold text-ink-900">
+            <p className="text-ink-900 mt-4 text-center text-[0.8125rem] leading-tight font-semibold">
               Skenirajte za servis i prijavu kvara
             </p>
-            <p className="mt-1.5 text-center text-[0.6875rem] leading-snug text-ink-500">
+            <p className="text-ink-500 mt-1.5 text-center text-[0.6875rem] leading-snug">
               {device.type} · {device.manufacturer} {device.model}
             </p>
           </div>
 
-          <p className="mt-4 text-center text-xs text-fg-subtle">
+          <p className="text-fg-subtle mt-4 text-center text-xs">
             Kod iznad je stvaran — skenirajte ga ili{' '}
             <Link href="/u/demo" className="text-primary underline underline-offset-2">
               otvorite demo stranicu
@@ -64,9 +63,9 @@ export async function QrJourneySection() {
         </div>
 
         {/* Stranica koju kupac vidi */}
-        <div className="overflow-hidden rounded-panel border border-line bg-surface/60">
-          <div className="flex items-center justify-between gap-3 border-b border-line bg-surface-muted/40 px-4 py-3">
-            <p className="truncate font-mono text-[0.6875rem] text-fg-subtle">
+        <div className="rounded-panel border-line bg-surface/60 overflow-hidden border">
+          <div className="border-line bg-surface-muted/40 flex items-center justify-between gap-3 border-b px-4 py-3">
+            <p className="text-fg-subtle truncate font-mono text-[0.6875rem]">
               servisloop.ba/u/••••••••
             </p>
             <DemoTag label="Primjer" />
@@ -75,11 +74,11 @@ export async function QrJourneySection() {
           <div className="space-y-5 p-5 sm:p-6">
             <div className="flex flex-wrap items-start justify-between gap-3">
               <div>
-                <p className="text-xs text-fg-muted">{device.company}</p>
-                <h3 className="mt-1 text-lg font-semibold text-fg">
+                <p className="text-fg-muted text-xs">{device.company}</p>
+                <h3 className="text-fg mt-1 text-lg font-semibold">
                   {device.type} · {device.model}
                 </h3>
-                <p className="mt-1 font-mono text-xs text-fg-subtle">
+                <p className="text-fg-subtle mt-1 font-mono text-xs">
                   Serijski: {device.maskedSerial}
                 </p>
               </div>
@@ -88,7 +87,7 @@ export async function QrJourneySection() {
               </Badge>
             </div>
 
-            <dl className="grid grid-cols-2 gap-4 border-y border-line py-4 sm:grid-cols-4">
+            <dl className="border-line grid grid-cols-2 gap-4 border-y py-4 sm:grid-cols-4">
               {[
                 { term: 'Ugrađeno', detail: device.installedAt },
                 { term: 'Garancija do', detail: device.warrantyUntil },
@@ -96,16 +95,16 @@ export async function QrJourneySection() {
                 { term: 'Sljedeći servis', detail: device.nextService },
               ].map((item) => (
                 <div key={item.term}>
-                  <dt className="text-[0.6875rem] tracking-wide text-fg-subtle uppercase">
+                  <dt className="text-fg-subtle text-[0.6875rem] tracking-wide uppercase">
                     {item.term}
                   </dt>
-                  <dd className="tabular mt-1 text-sm font-medium text-fg">{item.detail}</dd>
+                  <dd className="tabular text-fg mt-1 text-sm font-medium">{item.detail}</dd>
                 </div>
               ))}
             </dl>
 
             <div>
-              <h4 className="text-xs font-semibold tracking-wide text-fg-subtle uppercase">
+              <h4 className="text-fg-subtle text-xs font-semibold tracking-wide uppercase">
                 Historija servisa
               </h4>
               <ul className="mt-3 space-y-3">
@@ -113,13 +112,13 @@ export async function QrJourneySection() {
                   <li key={entry.date} className="flex gap-3">
                     <span
                       aria-hidden="true"
-                      className="mt-1.5 size-1.5 shrink-0 rounded-full bg-primary"
+                      className="bg-primary mt-1.5 size-1.5 shrink-0 rounded-full"
                     />
                     <div className="min-w-0">
-                      <p className="text-sm text-fg">
+                      <p className="text-fg text-sm">
                         <span className="tabular font-medium">{entry.date}</span> · {entry.label}
                       </p>
-                      <p className="text-xs text-fg-muted">{entry.note}</p>
+                      <p className="text-fg-muted text-xs">{entry.note}</p>
                     </div>
                   </li>
                 ))}
@@ -141,12 +140,12 @@ export async function QrJourneySection() {
               </Button>
             </div>
 
-            <p className="flex items-start gap-2 rounded-lg bg-surface-muted/50 p-3 text-xs leading-relaxed text-fg-muted">
-              <ShieldCheck className="mt-0.5 size-3.5 shrink-0 text-primary" aria-hidden="true" />
+            <p className="bg-surface-muted/50 text-fg-muted flex items-start gap-2 rounded-lg p-3 text-xs leading-relaxed">
+              <ShieldCheck className="text-primary mt-0.5 size-3.5 shrink-0" aria-hidden="true" />
               <span>
                 Kupac ne vidi vaše cijene, interne bilješke ni punu adresu. Serijski broj je
-                maskiran. Stranica se može isključiti ili joj se može promijeniti token u
-                svakom trenutku.
+                maskiran. Stranica se može isključiti ili joj se može promijeniti token u svakom
+                trenutku.
               </span>
             </p>
           </div>
@@ -172,12 +171,12 @@ export async function QrJourneySection() {
           },
         ].map((item) => (
           <li key={item.title} className="flex gap-3">
-            <span className="flex size-9 shrink-0 items-center justify-center rounded-lg bg-primary-soft text-primary">
+            <span className="bg-primary-soft text-primary flex size-9 shrink-0 items-center justify-center rounded-lg">
               <item.icon className="size-4.5" aria-hidden="true" />
             </span>
             <div>
-              <h3 className="text-sm font-semibold text-fg">{item.title}</h3>
-              <p className="mt-1 text-xs leading-relaxed text-fg-muted">{item.text}</p>
+              <h3 className="text-fg text-sm font-semibold">{item.title}</h3>
+              <p className="text-fg-muted mt-1 text-xs leading-relaxed">{item.text}</p>
             </div>
           </li>
         ))}

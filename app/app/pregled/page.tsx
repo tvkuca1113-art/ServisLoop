@@ -18,7 +18,14 @@ import { Card, CardBody, CardHeaderRow } from '@/components/ui/card'
 import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
 import { EmptyState } from '@/components/ui/feedback'
-import { formatCount, formatCurrency, formatDate, formatPercent, pluralize, PLURALS } from '@/lib/format'
+import {
+  formatCount,
+  formatCurrency,
+  formatDate,
+  formatPercent,
+  pluralize,
+  PLURALS,
+} from '@/lib/format'
 import { evaluateServiceDue } from '@/domains/devices/service-schedule'
 import { cn } from '@/lib/utils'
 
@@ -72,7 +79,7 @@ export default async function DashboardPage() {
         <>
           {/* Prihod */}
           <section aria-labelledby="prihod-naslov" className="space-y-4">
-            <h2 id="prihod-naslov" className="text-sm font-semibold text-fg">
+            <h2 id="prihod-naslov" className="text-fg text-sm font-semibold">
               Servisni prihod
             </h2>
 
@@ -104,7 +111,7 @@ export default async function DashboardPage() {
             </div>
 
             {data.revenue.devicesWithoutPrice > 0 ? (
-              <p className="text-xs text-fg-muted">
+              <p className="text-fg-muted text-xs">
                 Napomena: {pluralize(data.revenue.devicesWithoutPrice, PLURALS.uredaj)} nema
                 definisanu cijenu servisa, pa je u procjeni korištena zamjenska cijena od 80 KM.{' '}
                 <Link href="/app/uredaji" className="text-primary underline underline-offset-2">
@@ -117,7 +124,7 @@ export default async function DashboardPage() {
 
           {/* Operativne metrike */}
           <section aria-labelledby="metrike-naslov" className="space-y-4">
-            <h2 id="metrike-naslov" className="text-sm font-semibold text-fg">
+            <h2 id="metrike-naslov" className="text-fg text-sm font-semibold">
               Rokovi i automatika
             </h2>
 
@@ -175,28 +182,34 @@ export default async function DashboardPage() {
                     description="Nema neuspjelih podsjetnika, nedodijeljenih rezervacija ni prijava bez odgovora."
                   />
                 ) : (
-                  <ul className="divide-y divide-line">
+                  <ul className="divide-line divide-y">
                     {data.queues.map((queue) => (
                       <li key={queue.key}>
                         <Link
                           href={queue.href}
-                          className="group flex items-start gap-4 py-3 transition-colors hover:bg-surface-muted/50 focus-visible:ring-2 focus-visible:ring-ring focus-visible:outline-none"
+                          className="group hover:bg-surface-muted/50 focus-visible:ring-ring flex items-start gap-4 py-3 transition-colors focus-visible:ring-2 focus-visible:outline-none"
                         >
                           <Badge
-                            tone={queue.tone === 'danger' ? 'danger' : queue.tone === 'warning' ? 'warning' : 'info'}
+                            tone={
+                              queue.tone === 'danger'
+                                ? 'danger'
+                                : queue.tone === 'warning'
+                                  ? 'warning'
+                                  : 'info'
+                            }
                             size="lg"
                             className="tabular mt-0.5 min-w-9 justify-center"
                           >
                             {queue.count}
                           </Badge>
                           <span className="min-w-0 flex-1">
-                            <span className="block text-sm font-medium text-fg">{queue.label}</span>
-                            <span className="mt-0.5 block text-xs leading-relaxed text-fg-muted">
+                            <span className="text-fg block text-sm font-medium">{queue.label}</span>
+                            <span className="text-fg-muted mt-0.5 block text-xs leading-relaxed">
                               {queue.hint}
                             </span>
                           </span>
                           <ArrowRight
-                            className="mt-1 size-4 shrink-0 text-fg-subtle transition-transform group-hover:translate-x-0.5"
+                            className="text-fg-subtle mt-1 size-4 shrink-0 transition-transform group-hover:translate-x-0.5"
                             aria-hidden="true"
                           />
                         </Link>
@@ -227,20 +240,20 @@ export default async function DashboardPage() {
                     description="Sljedeći rokovi su dalje u budućnosti."
                   />
                 ) : (
-                  <ul className="divide-y divide-line">
+                  <ul className="divide-line divide-y">
                     {data.upcoming.map((item) => {
                       const due = evaluateServiceDue(item.nextServiceDate, data.today)
                       return (
                         <li key={item.id}>
                           <Link
                             href={`/app/uredaji/${item.id}`}
-                            className="flex items-center gap-3 py-3 transition-colors hover:bg-surface-muted/50 focus-visible:ring-2 focus-visible:ring-ring focus-visible:outline-none"
+                            className="hover:bg-surface-muted/50 focus-visible:ring-ring flex items-center gap-3 py-3 transition-colors focus-visible:ring-2 focus-visible:outline-none"
                           >
                             <span className="min-w-0 flex-1">
-                              <span className="block truncate text-sm font-medium text-fg">
+                              <span className="text-fg block truncate text-sm font-medium">
                                 {item.customerName}
                               </span>
-                              <span className="block truncate text-xs text-fg-muted">
+                              <span className="text-fg-muted block truncate text-xs">
                                 {item.deviceLabel}
                                 {item.city ? ` · ${item.city}` : ''}
                               </span>
@@ -257,7 +270,7 @@ export default async function DashboardPage() {
                                 {formatDate(item.nextServiceDate)}
                               </span>
                               {item.priceKm ? (
-                                <span className="tabular block text-xs text-fg-subtle">
+                                <span className="tabular text-fg-subtle block text-xs">
                                   {formatCurrency(item.priceKm, { decimals: 0 })}
                                 </span>
                               ) : null}

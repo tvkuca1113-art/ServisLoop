@@ -219,64 +219,66 @@ export async function loadDashboard(
   const remindersSentCount = remindersSent.count ?? 0
   const bookingsFromRemindersCount = bookingsFromReminders.count ?? 0
 
-  const queues: DashboardQueue[] = ([
-    {
-      key: 'failed_reminders',
-      label: 'Neuspjeli podsjetnici',
-      count: failedReminders.count ?? 0,
-      href: '/app/podsjetnici?status=failed',
-      tone: 'danger',
-      hint: 'Kupac NIJE obaviješten. Provjerite adresu i pošaljite ponovo.',
-    },
-    {
-      key: 'open_issues',
-      label: 'Prijave kvara bez odgovora',
-      count: openIssues.count ?? 0,
-      href: '/app/prijave-kvara',
-      tone: 'danger',
-      hint: 'Kupac čeka odgovor na prijavljeni problem.',
-    },
-    {
-      key: 'overdue_work_orders',
-      label: 'Radni nalozi koji kasne',
-      count: overdueWorkOrders.count ?? 0,
-      href: '/app/radni-nalozi?filter=overdue',
-      tone: 'danger',
-      hint: 'Zakazani termin je prošao, a nalog nije zatvoren.',
-    },
-    {
-      key: 'unassigned_bookings',
-      label: 'Rezervacije bez tehničara',
-      count: unassignedBookings.count ?? 0,
-      href: '/app/rezervacije?filter=unassigned',
-      tone: 'warning',
-      hint: 'Termin je dogovoren, ali niko nije zadužen.',
-    },
-    {
-      key: 'today_work_orders',
-      label: 'Radni nalozi za danas',
-      count: todayWorkOrders.count ?? 0,
-      href: '/app/radni-nalozi?filter=today',
-      tone: 'info',
-      hint: 'Zakazano za današnji dan.',
-    },
-    {
-      key: 'missing_contact',
-      label: 'Kupci bez kontakt podataka',
-      count: withoutContact.count ?? 0,
-      href: '/app/kupci?filter=bez-kontakta',
-      tone: 'warning',
-      hint: 'Bez e-mail adrese podsjetnik ne može otići — to je izgubljen prihod.',
-    },
-    {
-      key: 'missing_interval',
-      label: 'Uređaji bez servisnog intervala',
-      count: withoutInterval.count ?? 0,
-      href: '/app/uredaji?filter=bez-intervala',
-      tone: 'warning',
-      hint: 'Bez intervala sistem ne zna kada je sljedeći servis.',
-    },
-  ] satisfies DashboardQueue[]).filter((queue) => queue.count > 0)
+  const queues: DashboardQueue[] = (
+    [
+      {
+        key: 'failed_reminders',
+        label: 'Neuspjeli podsjetnici',
+        count: failedReminders.count ?? 0,
+        href: '/app/podsjetnici?status=failed',
+        tone: 'danger',
+        hint: 'Kupac NIJE obaviješten. Provjerite adresu i pošaljite ponovo.',
+      },
+      {
+        key: 'open_issues',
+        label: 'Prijave kvara bez odgovora',
+        count: openIssues.count ?? 0,
+        href: '/app/prijave-kvara',
+        tone: 'danger',
+        hint: 'Kupac čeka odgovor na prijavljeni problem.',
+      },
+      {
+        key: 'overdue_work_orders',
+        label: 'Radni nalozi koji kasne',
+        count: overdueWorkOrders.count ?? 0,
+        href: '/app/radni-nalozi?filter=overdue',
+        tone: 'danger',
+        hint: 'Zakazani termin je prošao, a nalog nije zatvoren.',
+      },
+      {
+        key: 'unassigned_bookings',
+        label: 'Rezervacije bez tehničara',
+        count: unassignedBookings.count ?? 0,
+        href: '/app/rezervacije?filter=unassigned',
+        tone: 'warning',
+        hint: 'Termin je dogovoren, ali niko nije zadužen.',
+      },
+      {
+        key: 'today_work_orders',
+        label: 'Radni nalozi za danas',
+        count: todayWorkOrders.count ?? 0,
+        href: '/app/radni-nalozi?filter=today',
+        tone: 'info',
+        hint: 'Zakazano za današnji dan.',
+      },
+      {
+        key: 'missing_contact',
+        label: 'Kupci bez kontakt podataka',
+        count: withoutContact.count ?? 0,
+        href: '/app/kupci?filter=bez-kontakta',
+        tone: 'warning',
+        hint: 'Bez e-mail adrese podsjetnik ne može otići — to je izgubljen prihod.',
+      },
+      {
+        key: 'missing_interval',
+        label: 'Uređaji bez servisnog intervala',
+        count: withoutInterval.count ?? 0,
+        href: '/app/uredaji?filter=bez-intervala',
+        tone: 'warning',
+        hint: 'Bez intervala sistem ne zna kada je sljedeći servis.',
+      },
+    ] satisfies DashboardQueue[]
+  ).filter((queue) => queue.count > 0)
 
   return {
     today,

@@ -30,12 +30,7 @@ export function HeroFallback({
 
   return (
     <div className={cn('relative flex h-full w-full items-center justify-center', className)}>
-      <svg
-        viewBox="0 0 520 400"
-        className="h-full w-full max-w-2xl"
-        role="img"
-        aria-label={label}
-      >
+      <svg viewBox="0 0 520 400" className="h-full w-full max-w-2xl" role="img" aria-label={label}>
         <defs>
           <linearGradient id="sl-fb-ring" x1="0" y1="0" x2="520" y2="400">
             <stop stopColor="#18C7B5" />
@@ -101,7 +96,15 @@ export function HeroFallback({
             strokeOpacity="0.55"
             strokeWidth="2"
           />
-          <circle cx="260" cy="200" r="22" fill="none" stroke="#18C7B5" strokeOpacity="0.7" strokeWidth="2" />
+          <circle
+            cx="260"
+            cy="200"
+            r="22"
+            fill="none"
+            stroke="#18C7B5"
+            strokeOpacity="0.7"
+            strokeWidth="2"
+          />
           {[0, 60, 120, 180, 240, 300].map((angle) => (
             <line
               key={angle}

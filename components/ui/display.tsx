@@ -22,7 +22,7 @@ export const Separator = React.forwardRef<
       decorative={decorative}
       orientation={orientation}
       className={cn(
-        'shrink-0 bg-line',
+        'bg-line shrink-0',
         orientation === 'horizontal' ? 'h-px w-full' : 'h-full w-px',
         className,
       )}
@@ -61,7 +61,7 @@ export function Progress({
       value={value}
       max={max}
       aria-label={label}
-      className={cn('relative h-2 w-full overflow-hidden rounded-full bg-surface-muted', className)}
+      className={cn('bg-surface-muted relative h-2 w-full overflow-hidden rounded-full', className)}
     >
       <ProgressPrimitive.Indicator
         className={cn('h-full rounded-full transition-[width] duration-500 ease-out', toneClass)}
@@ -106,17 +106,13 @@ export function Avatar({
   return (
     <AvatarPrimitive.Root
       className={cn(
-        'relative flex shrink-0 overflow-hidden rounded-full ring-1 ring-line',
+        'ring-line relative flex shrink-0 overflow-hidden rounded-full ring-1',
         sizeClass,
         className,
       )}
     >
       {src ? (
-        <AvatarPrimitive.Image
-          src={src}
-          alt=""
-          className="aspect-square size-full object-cover"
-        />
+        <AvatarPrimitive.Image src={src} alt="" className="aspect-square size-full object-cover" />
       ) : null}
       <AvatarPrimitive.Fallback
         className={cn('flex size-full items-center justify-center font-semibold', tone)}
@@ -173,7 +169,7 @@ export function StatCard({
       <div className="flex items-start justify-between gap-3">
         <div className="min-w-0 space-y-1">
           <div className="flex items-center gap-1.5">
-            <p className="truncate text-[0.8125rem] font-medium text-fg-muted">{label}</p>
+            <p className="text-fg-muted truncate text-[0.8125rem] font-medium">{label}</p>
             {help ? (
               <Tooltip content={help}>
                 <button
@@ -188,10 +184,12 @@ export function StatCard({
               </Tooltip>
             ) : null}
           </div>
-          <p className="tabular text-2xl leading-none font-semibold text-fg">{value}</p>
+          <p className="tabular text-fg text-2xl leading-none font-semibold">{value}</p>
         </div>
         {Icon ? (
-          <span className={cn('flex size-9 shrink-0 items-center justify-center rounded-lg', toneRing)}>
+          <span
+            className={cn('flex size-9 shrink-0 items-center justify-center rounded-lg', toneRing)}
+          >
             <Icon className="size-4.5" />
           </span>
         ) : null}
@@ -232,9 +230,12 @@ export function StatCard({
 
   if (href) {
     return (
-      <a href={href} className={cn(baseClass, 'block focus-visible:ring-2 focus-visible:ring-ring')}>
+      <a
+        href={href}
+        className={cn(baseClass, 'focus-visible:ring-ring block focus-visible:ring-2')}
+      >
         {content}
-        <span className="mt-3 inline-flex items-center gap-1 text-xs font-medium text-primary">
+        <span className="text-primary mt-3 inline-flex items-center gap-1 text-xs font-medium">
           Otvori listu
           <ChevronRight className="size-3.5 transition-transform group-hover:translate-x-0.5" />
         </span>
@@ -271,8 +272,8 @@ export function KeyValue({
 }) {
   return (
     <div className={cn('min-w-0 space-y-1', className)}>
-      <dt className="text-xs font-medium tracking-wide text-fg-subtle uppercase">{label}</dt>
-      <dd className={cn('text-sm break-words text-fg', mono && 'font-mono tabular')}>{children}</dd>
+      <dt className="text-fg-subtle text-xs font-medium tracking-wide uppercase">{label}</dt>
+      <dd className={cn('text-fg text-sm break-words', mono && 'tabular font-mono')}>{children}</dd>
     </div>
   )
 }
@@ -320,14 +321,14 @@ export function CopyButton({
       onClick={() => void handleCopy()}
       className={cn(
         'inline-flex items-center gap-1.5 rounded-md px-2 py-1 text-xs font-medium',
-        'text-fg-muted transition-colors hover:bg-surface-muted hover:text-fg',
-        'focus-visible:ring-2 focus-visible:ring-ring focus-visible:outline-none',
+        'text-fg-muted hover:bg-surface-muted hover:text-fg transition-colors',
+        'focus-visible:ring-ring focus-visible:ring-2 focus-visible:outline-none',
         className,
       )}
       aria-live="polite"
     >
       {copied ? (
-        <Check className="size-3.5 text-positive-strong dark:text-positive" aria-hidden="true" />
+        <Check className="text-positive-strong dark:text-positive size-3.5" aria-hidden="true" />
       ) : (
         <Copy className="size-3.5" aria-hidden="true" />
       )}
@@ -356,9 +357,9 @@ export function SectionHeading({
   return (
     <div className={cn('flex flex-wrap items-start justify-between gap-4', className)}>
       <div className="min-w-0 space-y-1">
-        <Comp className="text-lg leading-tight font-semibold text-fg">{title}</Comp>
+        <Comp className="text-fg text-lg leading-tight font-semibold">{title}</Comp>
         {description ? (
-          <p className="max-w-2xl text-sm leading-relaxed text-fg-muted">{description}</p>
+          <p className="text-fg-muted max-w-2xl text-sm leading-relaxed">{description}</p>
         ) : null}
       </div>
       {actions ? <div className="flex shrink-0 flex-wrap items-center gap-2">{actions}</div> : null}

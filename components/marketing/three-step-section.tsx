@@ -41,18 +41,18 @@ export function ThreeStepSection() {
         {STEPS.map((step) => (
           <li
             key={step.number}
-            className="relative rounded-panel border border-line bg-surface/60 p-6 transition-colors hover:border-line-strong"
+            className="rounded-panel border-line bg-surface/60 hover:border-line-strong relative border p-6 transition-colors"
           >
             <div className="flex items-center gap-3">
-              <span className="flex size-10 items-center justify-center rounded-xl bg-primary-soft text-primary">
+              <span className="bg-primary-soft text-primary flex size-10 items-center justify-center rounded-xl">
                 <step.icon className="size-5" aria-hidden="true" />
               </span>
-              <span className="font-mono text-sm tracking-wide text-fg-subtle">{step.number}</span>
+              <span className="text-fg-subtle font-mono text-sm tracking-wide">{step.number}</span>
             </div>
 
-            <h3 className="mt-5 text-lg font-semibold text-fg">{step.title}</h3>
-            <p className="mt-2.5 text-sm leading-relaxed text-fg-muted">{step.description}</p>
-            <p className="mt-4 border-t border-line pt-4 text-xs leading-relaxed text-fg-subtle">
+            <h3 className="text-fg mt-5 text-lg font-semibold">{step.title}</h3>
+            <p className="text-fg-muted mt-2.5 text-sm leading-relaxed">{step.description}</p>
+            <p className="border-line text-fg-subtle mt-4 border-t pt-4 text-xs leading-relaxed">
               {step.detail}
             </p>
           </li>

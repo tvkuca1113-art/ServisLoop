@@ -95,7 +95,7 @@ export function SignInForm({
               type="button"
               onClick={() => setShowPassword((value) => !value)}
               aria-label={showPassword ? 'Sakrij lozinku' : 'Prikaži lozinku'}
-              className="absolute inset-y-0 right-0 flex items-center px-3 text-fg-subtle transition-colors hover:text-fg focus-visible:ring-2 focus-visible:ring-ring focus-visible:outline-none"
+              className="text-fg-subtle hover:text-fg focus-visible:ring-ring absolute inset-y-0 right-0 flex items-center px-3 transition-colors focus-visible:ring-2 focus-visible:outline-none"
             >
               {showPassword ? (
                 <EyeOff className="size-4" aria-hidden="true" />
@@ -110,7 +110,7 @@ export function SignInForm({
       <div className="flex justify-end">
         <Link
           href="/zaboravljena-lozinka"
-          className="text-xs text-fg-muted underline underline-offset-4 transition-colors hover:text-fg"
+          className="text-fg-muted hover:text-fg text-xs underline underline-offset-4 transition-colors"
         >
           Zaboravili ste lozinku?
         </Link>

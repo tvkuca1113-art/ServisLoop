@@ -76,10 +76,10 @@ export function WorkflowSection() {
         {/* Vertikalna linija (desktop) */}
         <div
           aria-hidden="true"
-          className="absolute top-0 bottom-0 left-[1.4375rem] hidden w-px bg-line lg:block"
+          className="bg-line absolute top-0 bottom-0 left-[1.4375rem] hidden w-px lg:block"
         >
           <motion.div
-            className="w-px origin-top bg-gradient-to-b from-brand-400 to-electric-400"
+            className="from-brand-400 to-electric-400 w-px origin-top bg-gradient-to-b"
             style={{ scaleY: reducedMotion ? 1 : lineScale, height: '100%' }}
           />
         </div>
@@ -128,25 +128,25 @@ function FlowStep({
         style={reducedMotion ? undefined : { scale: markerScale }}
         className={cn(
           'relative z-10 flex size-11.5 shrink-0 items-center justify-center rounded-xl',
-          'border border-line bg-surface text-primary shadow-subtle',
+          'border-line bg-surface text-primary shadow-subtle border',
         )}
       >
         <step.icon className="size-5" aria-hidden="true" />
       </motion.span>
 
-      <div className="min-w-0 flex-1 rounded-card border border-line bg-surface/50 p-5 lg:p-6">
+      <div className="rounded-card border-line bg-surface/50 min-w-0 flex-1 border p-5 lg:p-6">
         <div className="flex flex-wrap items-baseline justify-between gap-x-4 gap-y-1">
-          <h3 className="text-base font-semibold text-fg">
-            <span className="mr-2 font-mono text-xs text-fg-subtle">
+          <h3 className="text-fg text-base font-semibold">
+            <span className="text-fg-subtle mr-2 font-mono text-xs">
               {String(index + 1).padStart(2, '0')}
             </span>
             {step.title}
           </h3>
-          <span className="rounded-md bg-surface-muted px-2 py-0.5 font-mono text-[0.6875rem] text-fg-muted">
+          <span className="bg-surface-muted text-fg-muted rounded-md px-2 py-0.5 font-mono text-[0.6875rem]">
             {step.meta}
           </span>
         </div>
-        <p className="mt-2 text-sm leading-relaxed text-fg-muted">{step.detail}</p>
+        <p className="text-fg-muted mt-2 text-sm leading-relaxed">{step.detail}</p>
       </div>
     </motion.li>
   )

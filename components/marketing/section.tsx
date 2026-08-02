@@ -44,35 +44,35 @@ export function SectionIntro({
   as?: 'h2' | 'h3'
 }) {
   return (
-    <div
-      className={cn(
-        'max-w-2xl',
-        align === 'center' && 'mx-auto text-center',
-        className,
-      )}
-    >
+    <div className={cn('max-w-2xl', align === 'center' && 'mx-auto text-center', className)}>
       {eyebrow ? (
-        <p className="text-xs font-semibold tracking-[0.14em] text-primary uppercase">{eyebrow}</p>
+        <p className="text-primary text-xs font-semibold tracking-[0.14em] uppercase">{eyebrow}</p>
       ) : null}
-      <Heading className="mt-3 text-display-md text-fg sm:text-display-lg">{title}</Heading>
+      <Heading className="text-display-md text-fg sm:text-display-lg mt-3">{title}</Heading>
       {description ? (
-        <p className="mt-4 text-base leading-relaxed text-fg-muted">{description}</p>
+        <p className="text-fg-muted mt-4 text-base leading-relaxed">{description}</p>
       ) : null}
     </div>
   )
 }
 
 /** Oznaka da je sadržaj primjer, a ne stvarni podatak o kupcu. */
-export function DemoTag({ className, label = 'Demo podaci' }: { className?: string; label?: string }) {
+export function DemoTag({
+  className,
+  label = 'Demo podaci',
+}: {
+  className?: string
+  label?: string
+}) {
   return (
     <span
       className={cn(
-        'inline-flex items-center gap-1.5 rounded-md border border-service-400/35 bg-service-400/12',
-        'px-2 py-0.5 text-[0.6875rem] font-semibold tracking-wide text-service-300 uppercase',
+        'border-service-400/35 bg-service-400/12 inline-flex items-center gap-1.5 rounded-md border',
+        'text-service-300 px-2 py-0.5 text-[0.6875rem] font-semibold tracking-wide uppercase',
         className,
       )}
     >
-      <span aria-hidden="true" className="size-1.5 rounded-full bg-service-400" />
+      <span aria-hidden="true" className="bg-service-400 size-1.5 rounded-full" />
       {label}
     </span>
   )

@@ -41,11 +41,7 @@ export type SignInInput = z.infer<typeof signInSchema>
 
 export const signUpSchema = z
   .object({
-    fullName: z
-      .string()
-      .trim()
-      .min(2, 'Unesite ime i prezime')
-      .max(120, 'Ime je predugačko'),
+    fullName: z.string().trim().min(2, 'Unesite ime i prezime').max(120, 'Ime je predugačko'),
     email: emailField,
     password: passwordField,
     passwordConfirm: z.string(),
@@ -54,9 +50,7 @@ export const signUpSchema = z
       .trim()
       .min(2, 'Unesite naziv firme')
       .max(120, 'Naziv firme je predugačak'),
-    acceptTerms: z
-      .boolean()
-      .refine((value) => value, 'Morate prihvatiti uslove korištenja'),
+    acceptTerms: z.boolean().refine((value) => value, 'Morate prihvatiti uslove korištenja'),
   })
   .refine((data) => data.password === data.passwordConfirm, {
     message: 'Lozinke se ne poklapaju',

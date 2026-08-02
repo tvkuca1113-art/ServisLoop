@@ -19,11 +19,16 @@ export function useInView<T extends Element>(
     const element = ref.current
     if (!element) return
 
-    // Bez podrške za IntersectionObserver pretpostavljamo da je vidljivo —
-    // bolje je prikazati sadržaj nego ga sakriti.
+    /*
+     * Bez podrške za IntersectionObserver pretpostavljamo da je vidljivo —
+     * bolje je prikazati sadržaj nego ga sakriti.
+     *
+     * Ažuriranje ide kroz tajmer, dakle iza asinhrone granice: sinhroni
+     * `setState` u tijelu efekta izazvao bi kaskadni render.
+     */
     if (typeof IntersectionObserver === 'undefined') {
-      setInView(true)
-      return
+      const timer = setTimeout(() => setInView(true), 0)
+      return () => clearTimeout(timer)
     }
 
     let cancelled = false

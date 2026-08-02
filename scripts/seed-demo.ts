@@ -93,10 +93,9 @@ async function main(): Promise<void> {
       console.log('  Brisanje postojeće demo organizacije…')
       // Kaskadno brisanje pokriva sve tenant tabele.
       await client.query(`delete from public.organizations where slug = $1`, [DEMO_ORG.slug])
-      await client.query(
-        `delete from auth.users where email = any($1::text[])`,
-        [DEMO_USERS.map((user) => user.email)],
-      )
+      await client.query(`delete from auth.users where email = any($1::text[])`, [
+        DEMO_USERS.map((user) => user.email),
+      ])
     }
 
     // --- Organizacija -------------------------------------------------------
@@ -189,7 +188,11 @@ async function main(): Promise<void> {
     )
     const deviceTypes = deviceTypeRows.filter((type) => type.code !== 'druga_oprema')
 
-    const { rows: planRows } = await client.query<{ id: string; device_type_id: string; price: string }>(
+    const { rows: planRows } = await client.query<{
+      id: string
+      device_type_id: string
+      price: string
+    }>(
       `select id, device_type_id, price from public.service_plan_templates where organization_id = $1`,
       [orgId],
     )
@@ -306,9 +309,7 @@ async function main(): Promise<void> {
                   : random.int(61, 330)
 
           const nextServiceDate = addDays(today, offsetDays)
-          const lastServiceDate = random.bool(0.72)
-            ? addMonths(nextServiceDate, -interval)
-            : null
+          const lastServiceDate = random.bool(0.72) ? addMonths(nextServiceDate, -interval) : null
 
           const { rows: deviceRows } = await client.query<{ id: string }>(
             `insert into public.devices
@@ -502,7 +503,15 @@ async function main(): Promise<void> {
           `insert into public.work_order_materials
              (organization_id, work_order_id, name, sku, quantity, unit, unit_price)
            values ($1,$2,$3,$4,$5,$6,$7)`,
-          [orgId, workOrderId, material.name, material.sku, random.int(1, 3), material.unit, material.unitPrice],
+          [
+            orgId,
+            workOrderId,
+            material.name,
+            material.sku,
+            random.int(1, 3),
+            material.unit,
+            material.unitPrice,
+          ],
         )
       }
 
@@ -649,7 +658,11 @@ async function main(): Promise<void> {
 
     // --- Podsjetnici (uključujući neuspjele) ---------------------------------
     console.log('  Kreiranje historije podsjetnika…')
-    const { rows: ruleRows } = await client.query<{ id: string; offset_days: number; template_key: string }>(
+    const { rows: ruleRows } = await client.query<{
+      id: string
+      offset_days: number
+      template_key: string
+    }>(
       `select id, offset_days, template_key from public.reminder_rules
        where organization_id = $1 and is_active order by offset_days`,
       [orgId],

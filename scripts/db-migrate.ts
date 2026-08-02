@@ -135,9 +135,7 @@ async function main(): Promise<void> {
     await ensureMigrationsTable(client)
     const applied = await appliedVersions(client)
 
-    const files = (await readdir(MIGRATIONS_DIR))
-      .filter((name) => name.endsWith('.sql'))
-      .sort()
+    const files = (await readdir(MIGRATIONS_DIR)).filter((name) => name.endsWith('.sql')).sort()
 
     if (files.length === 0) {
       console.log('  Nema migracija u supabase/migrations/')

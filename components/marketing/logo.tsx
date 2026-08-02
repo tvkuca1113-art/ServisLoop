@@ -15,7 +15,14 @@ export function LogoMark({ className }: { className?: string }) {
       focusable="false"
     >
       <defs>
-        <linearGradient id="sl-mark-ring" x1="4" y1="4" x2="28" y2="28" gradientUnits="userSpaceOnUse">
+        <linearGradient
+          id="sl-mark-ring"
+          x1="4"
+          y1="4"
+          x2="28"
+          y2="28"
+          gradientUnits="userSpaceOnUse"
+        >
           <stop stopColor="#18C7B5" />
           <stop offset="1" stopColor="#5E8BFF" />
         </linearGradient>
@@ -48,7 +55,7 @@ export function Logo({
     <span className={cn('inline-flex items-center gap-2.5', className)}>
       <LogoMark />
       {showWordmark ? (
-        <span className="text-[1.0625rem] font-semibold tracking-tight text-fg">
+        <span className="text-fg text-[1.0625rem] font-semibold tracking-tight">
           Servis<span className="text-primary">Loop</span>
         </span>
       ) : null}

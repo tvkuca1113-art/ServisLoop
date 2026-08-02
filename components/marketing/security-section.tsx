@@ -53,12 +53,12 @@ export function SecuritySection() {
             description="Evidencija opreme govori ko šta ima ugrađeno i kad nije kod kuće. Prema tim podacima se odnosimo u skladu s tim."
           />
 
-          <div className="mt-8 rounded-panel border border-caution/30 bg-caution/8 p-5">
-            <p className="text-sm leading-relaxed text-fg">
+          <div className="rounded-panel border-caution/30 bg-caution/8 mt-8 border p-5">
+            <p className="text-fg text-sm leading-relaxed">
               <strong className="font-semibold">Iskreno o usklađenosti:</strong> ServisLoop
-              primjenjuje tehničke mjere opisane ovdje, ali ne tvrdi da je time zagarantovana
-              pravna usklađenost s GDPR-om ni sa Zakonom o zaštiti ličnih podataka BiH.
-              Popis stavki koje treba pregledati pravnik nalazi se u dokumentaciji.
+              primjenjuje tehničke mjere opisane ovdje, ali ne tvrdi da je time zagarantovana pravna
+              usklađenost s GDPR-om ni sa Zakonom o zaštiti ličnih podataka BiH. Popis stavki koje
+              treba pregledati pravnik nalazi se u dokumentaciji.
             </p>
           </div>
 
@@ -74,15 +74,12 @@ export function SecuritySection() {
 
         <ul className="grid gap-6 sm:grid-cols-2">
           {MEASURES.map((measure) => (
-            <li
-              key={measure.title}
-              className="rounded-card border border-line bg-surface/50 p-5"
-            >
-              <span className="flex size-9 items-center justify-center rounded-lg bg-primary-soft text-primary">
+            <li key={measure.title} className="rounded-card border-line bg-surface/50 border p-5">
+              <span className="bg-primary-soft text-primary flex size-9 items-center justify-center rounded-lg">
                 <measure.icon className="size-4.5" aria-hidden="true" />
               </span>
-              <h3 className="mt-4 text-sm font-semibold text-fg">{measure.title}</h3>
-              <p className="mt-2 text-xs leading-relaxed text-fg-muted">{measure.description}</p>
+              <h3 className="text-fg mt-4 text-sm font-semibold">{measure.title}</h3>
+              <p className="text-fg-muted mt-2 text-xs leading-relaxed">{measure.description}</p>
             </li>
           ))}
         </ul>

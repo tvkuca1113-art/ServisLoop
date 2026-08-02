@@ -21,11 +21,11 @@ export default async function SignInPage({
   return (
     <div>
       <h1 className="text-display-sm text-fg">Prijava</h1>
-      <p className="mt-2 text-sm text-fg-muted">
+      <p className="text-fg-muted mt-2 text-sm">
         Nemate nalog?{' '}
         <Link
           href="/registracija"
-          className="font-medium text-primary underline underline-offset-4 hover:brightness-110"
+          className="text-primary font-medium underline underline-offset-4 hover:brightness-110"
         >
           Otvorite ga besplatno
         </Link>
@@ -51,7 +51,7 @@ export default async function SignInPage({
       </div>
 
       {publicEnv.NEXT_PUBLIC_DEMO_MODE ? (
-        <p className="mt-8 rounded-lg border border-line bg-surface/50 p-4 text-xs leading-relaxed text-fg-muted">
+        <p className="border-line bg-surface/50 text-fg-muted mt-8 rounded-lg border p-4 text-xs leading-relaxed">
           Želite prvo pogledati kako radi?{' '}
           <Link href="/demo" className="text-primary underline underline-offset-2">
             Otvorite demo

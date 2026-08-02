@@ -27,24 +27,24 @@ export function Hero() {
 
       <div className="container-marketing grid items-center gap-12 py-14 lg:grid-cols-[1.05fr_1fr] lg:gap-14 lg:py-20 xl:py-24">
         <div className="max-w-2xl">
-          <p className="inline-flex items-center gap-2 rounded-full border border-line bg-surface/60 px-3 py-1.5 text-xs font-medium text-fg-muted">
+          <p className="border-line bg-surface/60 text-fg-muted inline-flex items-center gap-2 rounded-full border px-3 py-1.5 text-xs font-medium">
             <span className="relative flex size-1.5">
-              <span className="absolute inline-flex size-full animate-ping rounded-full bg-brand-400 opacity-60" />
-              <span className="relative inline-flex size-1.5 rounded-full bg-brand-400" />
+              <span className="bg-brand-400 absolute inline-flex size-full animate-ping rounded-full opacity-60" />
+              <span className="bg-brand-400 relative inline-flex size-1.5 rounded-full" />
             </span>
             {SITE.tagline}
           </p>
 
-          <h1 className="mt-5 text-display-lg text-fg sm:text-display-xl">
+          <h1 className="text-display-lg text-fg sm:text-display-xl mt-5">
             Svaki uređaj koji ste ugradili može vam{' '}
             <span className="text-gradient-brand">ponovo donijeti prihod</span>.
           </h1>
 
-          <p className="mt-5 max-w-xl text-base leading-relaxed text-fg-muted sm:text-lg">
+          <p className="text-fg-muted mt-5 max-w-xl text-base leading-relaxed sm:text-lg">
             {SITE.heroSubheadline}
           </p>
 
-          <p className="mt-4 text-sm font-medium text-fg-muted">{SITE.hook}</p>
+          <p className="text-fg-muted mt-4 text-sm font-medium">{SITE.hook}</p>
 
           <div className="mt-8 flex flex-col gap-3 sm:flex-row sm:items-center">
             <Button asChild size="lg">
@@ -61,15 +61,15 @@ export function Hero() {
             </Button>
           </div>
 
-          <dl className="mt-10 grid max-w-lg grid-cols-3 gap-4 border-t border-line pt-6">
+          <dl className="border-line mt-10 grid max-w-lg grid-cols-3 gap-4 border-t pt-6">
             {[
               { term: 'Podsjetnici', detail: '30, 14 i 3 dana prije roka' },
               { term: 'Rezervacija', detail: 'bez otvaranja naloga' },
               { term: 'Izvještaj', detail: 'PDF nakon svakog servisa' },
             ].map((item) => (
               <div key={item.term}>
-                <dt className="text-[0.8125rem] font-semibold text-fg">{item.term}</dt>
-                <dd className="mt-1 text-xs leading-relaxed text-fg-muted">{item.detail}</dd>
+                <dt className="text-fg text-[0.8125rem] font-semibold">{item.term}</dt>
+                <dd className="text-fg-muted mt-1 text-xs leading-relaxed">{item.detail}</dd>
               </div>
             ))}
           </dl>

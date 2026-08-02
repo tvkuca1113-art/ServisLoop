@@ -13,9 +13,7 @@ import { getServerEnv } from '@/lib/env'
  * odgovora ne oda koliko se znakova poklapa.
  */
 
-export type CronAuthResult =
-  | { ok: true }
-  | { ok: false; status: 401 | 500; message: string }
+export type CronAuthResult = { ok: true } | { ok: false; status: 401 | 500; message: string }
 
 export function verifyCronRequest(request: NextRequest): CronAuthResult {
   let secret: string

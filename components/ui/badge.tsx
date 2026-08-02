@@ -27,8 +27,7 @@ const badgeVariants = cva(
 )
 
 export interface BadgeProps
-  extends React.HTMLAttributes<HTMLSpanElement>,
-    VariantProps<typeof badgeVariants> {
+  extends React.HTMLAttributes<HTMLSpanElement>, VariantProps<typeof badgeVariants> {
   /**
    * Tačka u boji ispred teksta. Status se NIKAD ne prenosi samo bojom —
    * tekst uvijek nosi značenje (zahtjev pristupačnosti).
@@ -40,10 +39,7 @@ export function Badge({ className, tone, size, dot = false, children, ...props }
   return (
     <span className={cn(badgeVariants({ tone, size }), className)} {...props}>
       {dot ? (
-        <span
-          aria-hidden="true"
-          className="size-1.5 shrink-0 rounded-full bg-current opacity-80"
-        />
+        <span aria-hidden="true" className="size-1.5 shrink-0 rounded-full bg-current opacity-80" />
       ) : null}
       {children}
     </span>

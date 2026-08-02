@@ -215,7 +215,11 @@ export const PREVIEW_METRICS = [
   { label: 'Servisi u narednih 30 dana', value: '38', caption: 'od 412 aktivnih uređaja' },
   { label: 'Servisi koji kasne', value: '7', caption: 'najstariji 24 dana' },
   { label: 'Rezervacije iz podsjetnika', value: '19', caption: 'ovaj mjesec' },
-  { label: 'Potencijalni prihod (procjena)', value: '4.310 KM', caption: 'dospjeli uređaji × cijena' },
+  {
+    label: 'Potencijalni prihod (procjena)',
+    value: '4.310 KM',
+    caption: 'dospjeli uređaji × cijena',
+  },
 ] as const
 
 export const PREVIEW_QUEUES = [
@@ -240,7 +244,11 @@ export const PREVIEW_PUBLIC_DEVICE = {
   lastService: '20.03.2026.',
   history: [
     { date: '20.03.2026.', label: 'Redovni servis', note: 'Filteri očišćeni, provjeren pritisak.' },
-    { date: '18.03.2025.', label: 'Redovni servis', note: 'Zamijenjen filter, izmjerena temperatura.' },
+    {
+      date: '18.03.2025.',
+      label: 'Redovni servis',
+      note: 'Zamijenjen filter, izmjerena temperatura.',
+    },
     { date: '15.04.2024.', label: 'Ugradnja', note: 'Puštanje u rad i obuka korisnika.' },
   ],
 } as const

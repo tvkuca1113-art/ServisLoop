@@ -22,7 +22,10 @@ const publicSchema = z.object({
   NEXT_PUBLIC_APP_URL: z
     .string()
     .min(1, 'NEXT_PUBLIC_APP_URL je obavezan (npr. http://localhost:3000)')
-    .refine((v) => /^https?:\/\//.test(v), 'NEXT_PUBLIC_APP_URL mora počinjati sa http:// ili https://')
+    .refine(
+      (v) => /^https?:\/\//.test(v),
+      'NEXT_PUBLIC_APP_URL mora počinjati sa http:// ili https://',
+    )
     .transform((v) => v.replace(/\/+$/, '')),
   NEXT_PUBLIC_SUPABASE_URL: z.string().min(1, 'NEXT_PUBLIC_SUPABASE_URL je obavezan'),
   NEXT_PUBLIC_SUPABASE_ANON_KEY: z.string().min(1, 'NEXT_PUBLIC_SUPABASE_ANON_KEY je obavezan'),
@@ -144,7 +147,9 @@ export function getServerEnv(): ServerEnv {
   if (cachedServerEnv) return cachedServerEnv
 
   if (typeof window !== 'undefined') {
-    throw new Error('getServerEnv() je pozvan u pregledniku. Serverske tajne nikad ne idu klijentu.')
+    throw new Error(
+      'getServerEnv() je pozvan u pregledniku. Serverske tajne nikad ne idu klijentu.',
+    )
   }
 
   const parsed = serverSchema.safeParse(process.env)

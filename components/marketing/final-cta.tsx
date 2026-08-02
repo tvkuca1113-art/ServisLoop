@@ -28,7 +28,7 @@ export function FinalCta() {
             Vaša instalirana baza je već tu.{' '}
             <span className="text-gradient-brand">Neka radi za vas.</span>
           </h2>
-          <p className="mx-auto mt-5 max-w-xl text-base leading-relaxed text-fg-muted">
+          <p className="text-fg-muted mx-auto mt-5 max-w-xl text-base leading-relaxed">
             Otvorite demo i pogledajte kako izgleda kad rokovi servisa, podsjetnici i rezervacije
             rade bez vašeg svakodnevnog nadzora.
           </p>
@@ -45,10 +45,10 @@ export function FinalCta() {
             </Button>
           </div>
 
-          <ul className="mx-auto mt-9 flex max-w-2xl flex-col items-center gap-3 text-sm text-fg-muted sm:flex-row sm:justify-center sm:gap-6">
+          <ul className="text-fg-muted mx-auto mt-9 flex max-w-2xl flex-col items-center gap-3 text-sm sm:flex-row sm:justify-center sm:gap-6">
             {POINTS.map((point) => (
               <li key={point} className="flex items-center gap-2">
-                <Check className="size-4 shrink-0 text-primary" aria-hidden="true" />
+                <Check className="text-primary size-4 shrink-0" aria-hidden="true" />
                 {point}
               </li>
             ))}

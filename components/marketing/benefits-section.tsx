@@ -1,13 +1,4 @@
-import {
-  BellRing,
-  FileText,
-  History,
-  Repeat,
-  Smartphone,
-  Timer,
-  Upload,
-  Users,
-} from 'lucide-react'
+import { BellRing, FileText, History, Repeat, Smartphone, Timer, Upload, Users } from 'lucide-react'
 import { Section, SectionIntro } from './section'
 
 const BENEFITS = [
@@ -73,13 +64,13 @@ export function BenefitsSection() {
       <ul className="mt-12 grid gap-x-8 gap-y-9 sm:grid-cols-2 lg:grid-cols-4">
         {BENEFITS.map((benefit) => (
           <li key={benefit.title}>
-            <span className="flex size-9 items-center justify-center rounded-lg border border-line bg-surface text-primary">
+            <span className="border-line bg-surface text-primary flex size-9 items-center justify-center rounded-lg border">
               <benefit.icon className="size-4.5" aria-hidden="true" />
             </span>
-            <h3 className="mt-4 text-[0.9375rem] leading-snug font-semibold text-fg">
+            <h3 className="text-fg mt-4 text-[0.9375rem] leading-snug font-semibold">
               {benefit.title}
             </h3>
-            <p className="mt-2 text-sm leading-relaxed text-fg-muted">{benefit.description}</p>
+            <p className="text-fg-muted mt-2 text-sm leading-relaxed">{benefit.description}</p>
           </li>
         ))}
       </ul>

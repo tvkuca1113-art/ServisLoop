@@ -97,9 +97,7 @@ export function makeQrSvgResponsive(svg: string, label: string): string {
 
   return svg
     .replace(/<svg([^>]*)>/, (_match, attributes: string) => {
-      const cleaned = attributes
-        .replace(/\swidth="[^"]*"/, '')
-        .replace(/\sheight="[^"]*"/, '')
+      const cleaned = attributes.replace(/\swidth="[^"]*"/, '').replace(/\sheight="[^"]*"/, '')
       return `<svg${cleaned} width="100%" height="100%" role="img" aria-label="${escapedLabel}">`
     })
     .replace(/shape-rendering="crispEdges"/g, 'shape-rendering="crispEdges"')

@@ -118,7 +118,9 @@ export function ServiceReminderEmail(props: ServiceReminderProps) {
           { label: 'Rok servisa', value: formatDate(dueDate) },
           {
             label: 'Okvirna cijena',
-            value: props.servicePriceKm ? formatCurrency(props.servicePriceKm, { decimals: 0 }) : null,
+            value: props.servicePriceKm
+              ? formatCurrency(props.servicePriceKm, { decimals: 0 })
+              : null,
           },
         ]}
       />
@@ -126,8 +128,8 @@ export function ServiceReminderEmail(props: ServiceReminderProps) {
       <EmailButton href={props.bookingUrl}>Rezerviši termin servisa</EmailButton>
 
       <EmailText muted small>
-        Klikom na dugme birate slobodan termin iz našeg kalendara. Nije potrebno otvarati
-        nalog ni instalirati aplikaciju.
+        Klikom na dugme birate slobodan termin iz našeg kalendara. Nije potrebno otvarati nalog ni
+        instalirati aplikaciju.
         {props.devicePageUrl ? (
           <>
             {' '}
@@ -185,8 +187,8 @@ export function BookingConfirmationEmail(props: BookingEmailProps) {
       <EmailButton href={props.manageUrl}>Pomjeri ili otkaži termin</EmailButton>
 
       <EmailText muted small>
-        Ako vam termin ne odgovara, koristite dugme iznad. Link je vezan samo za vašu
-        rezervaciju i ne dijelite ga s drugima.
+        Ako vam termin ne odgovara, koristite dugme iznad. Link je vezan samo za vašu rezervaciju i
+        ne dijelite ga s drugima.
       </EmailText>
     </EmailLayout>
   )
@@ -207,7 +209,10 @@ export function BookingRescheduledEmail(props: BookingEmailProps & { previousSta
       <EmailDetails
         rows={[
           { label: 'Broj rezervacije', value: props.bookingCode },
-          { label: 'Prethodni termin', value: formatDateTime(props.previousStartsAt, props.timeZone) },
+          {
+            label: 'Prethodni termin',
+            value: formatDateTime(props.previousStartsAt, props.timeZone),
+          },
           { label: 'Novi termin', value: formatDateTime(props.startsAt, props.timeZone) },
           { label: 'Uređaj', value: props.device ? deviceTitle(props.device) : null },
         ]}
@@ -280,8 +285,8 @@ export function IssueReportConfirmationEmail(props: IssueReportConfirmationProps
         <EmailNotice tone="danger">
           <strong>Važno:</strong> označili ste da postoji dim, miris plina, gorenje ili curenje
           rashladnog sredstva. Prestanite koristiti uređaj, isključite ga s napajanja ako je
-          bezbjedno, provjetrite prostoriju i odmah pozovite nadležnu službu
-          (vatrogasci 123, hitna pomoć 124, plinska služba). Ne pokušavajte popravku sami.
+          bezbjedno, provjetrite prostoriju i odmah pozovite nadležnu službu (vatrogasci 123, hitna
+          pomoć 124, plinska služba). Ne pokušavajte popravku sami.
         </EmailNotice>
       ) : null}
 
@@ -303,8 +308,8 @@ export function IssueReportConfirmationEmail(props: IssueReportConfirmationProps
       <EmailDivider />
 
       <EmailText muted small>
-        Oznaka „hitno“ pomaže nam u redoslijedu, ali ne garantuje izlazak istog dana.
-        Za opasnost po život ili imovinu pozovite nadležne službe, ne čekajte naš odgovor.
+        Oznaka „hitno“ pomaže nam u redoslijedu, ali ne garantuje izlazak istog dana. Za opasnost po
+        život ili imovinu pozovite nadležne službe, ne čekajte naš odgovor.
       </EmailText>
     </EmailLayout>
   )
@@ -383,8 +388,8 @@ export function ServiceCompletedEmail(props: ServiceCompletedProps) {
 
       <EmailText>{greeting(props.customerName)}</EmailText>
       <EmailText>
-        servis vašeg uređaja je uspješno završen {formatDateLong(props.serviceDate)}.
-        Hvala na povjerenju.
+        servis vašeg uređaja je uspješno završen {formatDateLong(props.serviceDate)}. Hvala na
+        povjerenju.
       </EmailText>
 
       <EmailDetails
@@ -424,8 +429,8 @@ export function ServiceCompletedEmail(props: ServiceCompletedProps) {
 
       {props.nextServiceDate ? (
         <EmailText muted small>
-          Sljedeći servis je zabilježen za {formatDateLong(props.nextServiceDate)}.
-          Podsjetit ćemo vas na vrijeme — ne morate pamtiti datum.
+          Sljedeći servis je zabilježen za {formatDateLong(props.nextServiceDate)}. Podsjetit ćemo
+          vas na vrijeme — ne morate pamtiti datum.
         </EmailText>
       ) : null}
     </EmailLayout>
@@ -502,8 +507,8 @@ export function TeamInvitationEmail(props: TeamInvitationProps) {
       <EmailButton href={props.acceptUrl}>Prihvati poziv</EmailButton>
 
       <EmailText muted small>
-        Poziv vrijedi do {formatDateTime(props.expiresAt, props.timeZone)}. Ako niste
-        očekivali ovu poruku, slobodno je zanemarite — bez klika na dugme ništa se ne dešava.
+        Poziv vrijedi do {formatDateTime(props.expiresAt, props.timeZone)}. Ako niste očekivali ovu
+        poruku, slobodno je zanemarite — bez klika na dugme ništa se ne dešava.
       </EmailText>
     </EmailLayout>
   )

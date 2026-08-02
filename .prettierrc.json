@@ -8,12 +8,11 @@
   "plugins": ["prettier-plugin-tailwindcss"],
   "overrides": [
     {
-      "files": "*.sql",
-      "options": { "printWidth": 120 }
-    },
-    {
       "files": "*.md",
-      "options": { "printWidth": 88, "proseWrap": "preserve" }
+      "options": {
+        "printWidth": 88,
+        "proseWrap": "preserve"
+      }
     }
   ]
 }

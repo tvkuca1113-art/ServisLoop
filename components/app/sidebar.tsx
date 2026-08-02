@@ -42,28 +42,28 @@ export function Sidebar({
     <aside
       data-app-sidebar
       className={cn(
-        'sticky top-0 hidden h-dvh shrink-0 flex-col border-r border-line bg-surface lg:flex',
+        'border-line bg-surface sticky top-0 hidden h-dvh shrink-0 flex-col border-r lg:flex',
         'transition-[width] duration-200 ease-out',
         collapsed ? 'w-16' : 'w-64',
       )}
     >
       <div
         className={cn(
-          'flex h-16 items-center border-b border-line',
+          'border-line flex h-16 items-center border-b',
           collapsed ? 'justify-center px-2' : 'gap-2.5 px-4',
         )}
       >
         <Link
           href="/app/pregled"
-          className="flex items-center gap-2.5 rounded-lg focus-visible:ring-2 focus-visible:ring-ring focus-visible:outline-none"
+          className="focus-visible:ring-ring flex items-center gap-2.5 rounded-lg focus-visible:ring-2 focus-visible:outline-none"
         >
           <LogoMark className="size-8 shrink-0" />
           {!collapsed ? (
             <span className="min-w-0">
-              <span className="block truncate text-sm leading-tight font-semibold text-fg">
+              <span className="text-fg block truncate text-sm leading-tight font-semibold">
                 {organizationName}
               </span>
-              <span className="block text-[0.6875rem] text-fg-subtle">ServisLoop</span>
+              <span className="text-fg-subtle block text-[0.6875rem]">ServisLoop</span>
             </span>
           ) : null}
         </Link>
@@ -71,7 +71,7 @@ export function Sidebar({
 
       <nav
         aria-label="Glavna navigacija aplikacije"
-        className="flex-1 space-y-6 overflow-y-auto scroll-slim px-2 py-4"
+        className="scroll-slim flex-1 space-y-6 overflow-y-auto px-2 py-4"
       >
         {APP_NAV.map((group) => {
           const visible = group.items.filter((item) => can(role, item.permission))
@@ -80,7 +80,7 @@ export function Sidebar({
           return (
             <div key={group.label ?? 'root'}>
               {group.label && !collapsed ? (
-                <p className="mb-1.5 px-3 text-[0.6875rem] font-semibold tracking-wide text-fg-subtle uppercase">
+                <p className="text-fg-subtle mb-1.5 px-3 text-[0.6875rem] font-semibold tracking-wide uppercase">
                   {group.label}
                 </p>
               ) : null}
@@ -101,7 +101,7 @@ export function Sidebar({
         })}
       </nav>
 
-      <div className="space-y-0.5 border-t border-line px-2 py-3">
+      <div className="border-line space-y-0.5 border-t px-2 py-3">
         {SETTINGS_NAV.filter((item) => can(role, item.permission))
           .slice(0, 1)
           .map((item) => (
@@ -120,8 +120,8 @@ export function Sidebar({
           aria-label={collapsed ? 'Proširi navigaciju' : 'Skupi navigaciju'}
           className={cn(
             'flex w-full items-center gap-3 rounded-lg px-3 py-2 text-sm font-medium',
-            'text-fg-muted transition-colors hover:bg-surface-muted hover:text-fg',
-            'focus-visible:ring-2 focus-visible:ring-ring focus-visible:outline-none',
+            'text-fg-muted hover:bg-surface-muted hover:text-fg transition-colors',
+            'focus-visible:ring-ring focus-visible:ring-2 focus-visible:outline-none',
             collapsed && 'justify-center px-0',
           )}
         >
@@ -162,7 +162,7 @@ function SidebarLink({
       aria-current={active ? 'page' : undefined}
       className={cn(
         'group flex items-center gap-3 rounded-lg px-3 py-2 text-sm font-medium transition-colors',
-        'focus-visible:ring-2 focus-visible:ring-ring focus-visible:outline-none',
+        'focus-visible:ring-ring focus-visible:ring-2 focus-visible:outline-none',
         active
           ? 'bg-primary-soft text-primary'
           : 'text-fg-muted hover:bg-surface-muted hover:text-fg',
@@ -185,7 +185,7 @@ function SidebarLink({
           ) : null}
         </>
       ) : count > 0 ? (
-        <span className="absolute top-1.5 right-2 size-2 rounded-full bg-critical" />
+        <span className="bg-critical absolute top-1.5 right-2 size-2 rounded-full" />
       ) : null}
     </Link>
   )

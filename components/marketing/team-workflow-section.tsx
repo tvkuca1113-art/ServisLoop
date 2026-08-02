@@ -54,23 +54,23 @@ export function TeamWorkflowSection() {
 
       <div className="mt-12 grid gap-6 lg:grid-cols-3">
         {ROLES.map((role) => (
-          <div key={role.role} className="rounded-panel border border-line bg-surface/60 p-6">
+          <div key={role.role} className="rounded-panel border-line bg-surface/60 border p-6">
             <div className="flex items-center gap-3">
-              <span className="flex size-10 items-center justify-center rounded-xl bg-primary-soft text-primary">
+              <span className="bg-primary-soft text-primary flex size-10 items-center justify-center rounded-xl">
                 <role.icon className="size-5" aria-hidden="true" />
               </span>
               <div>
-                <h3 className="text-base font-semibold text-fg">{role.role}</h3>
-                <p className="text-xs text-fg-subtle">{role.focus}</p>
+                <h3 className="text-fg text-base font-semibold">{role.role}</h3>
+                <p className="text-fg-subtle text-xs">{role.focus}</p>
               </div>
             </div>
 
             <ul className="mt-5 space-y-2">
               {role.can.map((item) => (
-                <li key={item} className="flex items-start gap-2 text-sm text-fg-muted">
+                <li key={item} className="text-fg-muted flex items-start gap-2 text-sm">
                   <span
                     aria-hidden="true"
-                    className="mt-1.5 size-1.5 shrink-0 rounded-full bg-primary"
+                    className="bg-primary mt-1.5 size-1.5 shrink-0 rounded-full"
                   />
                   <span className="leading-snug">{item}</span>
                 </li>
@@ -78,12 +78,12 @@ export function TeamWorkflowSection() {
             </ul>
 
             {role.cannot.length > 0 ? (
-              <ul className="mt-5 space-y-2 border-t border-line pt-4">
+              <ul className="border-line mt-5 space-y-2 border-t pt-4">
                 {role.cannot.map((item) => (
-                  <li key={item} className="flex items-start gap-2 text-xs text-fg-subtle">
+                  <li key={item} className="text-fg-subtle flex items-start gap-2 text-xs">
                     <span
                       aria-hidden="true"
-                      className="mt-1.5 size-1.5 shrink-0 rounded-full bg-critical/50"
+                      className="bg-critical/50 mt-1.5 size-1.5 shrink-0 rounded-full"
                     />
                     <span className="leading-snug">{item}</span>
                   </li>
@@ -94,8 +94,10 @@ export function TeamWorkflowSection() {
         ))}
       </div>
 
-      <div className="mt-8 rounded-panel border border-line bg-surface/40 p-6">
-        <h3 className="text-sm font-semibold text-fg">Tehničar na terenu, u pregledniku telefona</h3>
+      <div className="rounded-panel border-line bg-surface/40 mt-8 border p-6">
+        <h3 className="text-fg text-sm font-semibold">
+          Tehničar na terenu, u pregledniku telefona
+        </h3>
         <ol className="mt-4 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
           {[
             'Otvori nalog za danas i pokrene rad',
@@ -104,16 +106,16 @@ export function TeamWorkflowSection() {
             'Kupac potpiše, nalog se zatvara i šalje PDF',
           ].map((step, index) => (
             <li key={step} className="flex gap-3">
-              <span className="tabular flex size-6 shrink-0 items-center justify-center rounded-md bg-surface-muted text-xs font-semibold text-fg-muted">
+              <span className="tabular bg-surface-muted text-fg-muted flex size-6 shrink-0 items-center justify-center rounded-md text-xs font-semibold">
                 {index + 1}
               </span>
-              <span className="text-sm leading-snug text-fg-muted">{step}</span>
+              <span className="text-fg-muted text-sm leading-snug">{step}</span>
             </li>
           ))}
         </ol>
-        <p className="mt-5 border-t border-line pt-4 text-xs leading-relaxed text-fg-subtle">
-          Bez instalacije native aplikacije. Radi u pregledniku telefona, s velikim poljima za
-          dodir i sa što manje kucanja.
+        <p className="border-line text-fg-subtle mt-5 border-t pt-4 text-xs leading-relaxed">
+          Bez instalacije native aplikacije. Radi u pregledniku telefona, s velikim poljima za dodir
+          i sa što manje kucanja.
         </p>
       </div>
     </Section>

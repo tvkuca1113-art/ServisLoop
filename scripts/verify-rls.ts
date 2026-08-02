@@ -269,9 +269,12 @@ async function main(): Promise<void> {
       `izmijenjeno redova: ${update.rowCount}`,
     )
 
-    const remove = await attemptAs(client, orgA.ownerId, `delete from public.devices where id = $1`, [
-      orgB.deviceId,
-    ])
+    const remove = await attemptAs(
+      client,
+      orgA.ownerId,
+      `delete from public.devices where id = $1`,
+      [orgB.deviceId],
+    )
     record(
       'Vlasnik A ne može obrisati uređaj organizacije B',
       remove.rowCount === 0,
@@ -299,7 +302,11 @@ async function main(): Promise<void> {
       `select 1 from public.work_orders where id = $1`,
       [orgA.workOrderId],
     )
-    record('Tehničar vidi nalog koji mu je dodijeljen', techOwnOrders === 1, `redova: ${techOwnOrders}`)
+    record(
+      'Tehničar vidi nalog koji mu je dodijeljen',
+      techOwnOrders === 1,
+      `redova: ${techOwnOrders}`,
+    )
 
     const techOtherOrders = await countAs(
       client,
@@ -404,12 +411,7 @@ async function main(): Promise<void> {
     // -----------------------------------------------------------------------
     console.log('\n  Tajni podaci i tokeni')
     // -----------------------------------------------------------------------
-    const anonAccess = await attemptAs(
-      client,
-      orgA.ownerId,
-      `select 1 from public.rate_limits`,
-      [],
-    )
+    const anonAccess = await attemptAs(client, orgA.ownerId, `select 1 from public.rate_limits`, [])
     record(
       'Prijavljeni korisnik ne može čitati tabelu ograničenja pristupa',
       !anonAccess.ok || anonAccess.rowCount === 0,

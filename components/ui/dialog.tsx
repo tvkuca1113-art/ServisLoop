@@ -15,8 +15,7 @@ export const Dialog = DialogPrimitive.Root
 export const DialogTrigger = DialogPrimitive.Trigger
 export const DialogClose = DialogPrimitive.Close
 
-const overlayClasses =
-  'sl-overlay fixed inset-0 z-50 bg-ink-950/60 backdrop-blur-[2px]'
+const overlayClasses = 'sl-overlay fixed inset-0 z-50 bg-ink-950/60 backdrop-blur-[2px]'
 
 export const DialogContent = React.forwardRef<
   React.ComponentRef<typeof DialogPrimitive.Content>,
@@ -40,8 +39,8 @@ export const DialogContent = React.forwardRef<
         ref={ref}
         className={cn(
           'sl-pop fixed top-1/2 left-1/2 z-50 w-[calc(100vw-2rem)] -translate-x-1/2 -translate-y-1/2',
-          'max-h-[calc(100dvh-2rem)] overflow-y-auto scroll-slim',
-          'rounded-panel border border-line bg-surface shadow-float',
+          'scroll-slim max-h-[calc(100dvh-2rem)] overflow-y-auto',
+          'rounded-panel border-line bg-surface shadow-float border',
           sizeClass,
           className,
         )}
@@ -51,9 +50,9 @@ export const DialogContent = React.forwardRef<
         {!hideClose ? (
           <DialogPrimitive.Close
             className={cn(
-              'absolute top-4 right-4 rounded-md p-1.5 text-fg-subtle transition-colors',
+              'text-fg-subtle absolute top-4 right-4 rounded-md p-1.5 transition-colors',
               'hover:bg-surface-muted hover:text-fg',
-              'focus-visible:ring-2 focus-visible:ring-ring focus-visible:outline-none',
+              'focus-visible:ring-ring focus-visible:ring-2 focus-visible:outline-none',
             )}
           >
             <X className="size-4" aria-hidden="true" />
@@ -76,7 +75,7 @@ export const DialogTitle = React.forwardRef<
   return (
     <DialogPrimitive.Title
       ref={ref}
-      className={cn('pr-8 text-lg leading-tight font-semibold text-fg', className)}
+      className={cn('text-fg pr-8 text-lg leading-tight font-semibold', className)}
       {...props}
     />
   )
@@ -89,7 +88,7 @@ export const DialogDescription = React.forwardRef<
   return (
     <DialogPrimitive.Description
       ref={ref}
-      className={cn('text-sm leading-relaxed text-fg-muted', className)}
+      className={cn('text-fg-muted text-sm leading-relaxed', className)}
       {...props}
     />
   )
@@ -102,10 +101,7 @@ export function DialogBody({ className, ...props }: React.HTMLAttributes<HTMLDiv
 export function DialogFooter({ className, ...props }: React.HTMLAttributes<HTMLDivElement>) {
   return (
     <div
-      className={cn(
-        'flex flex-col-reverse gap-2 px-6 py-5 sm:flex-row sm:justify-end',
-        className,
-      )}
+      className={cn('flex flex-col-reverse gap-2 px-6 py-5 sm:flex-row sm:justify-end', className)}
       {...props}
     />
   )
@@ -138,7 +134,7 @@ export const SheetContent = React.forwardRef<
       <DialogPrimitive.Content
         ref={ref}
         className={cn(
-          'fixed z-50 overflow-y-auto scroll-slim border-line bg-surface shadow-float',
+          'scroll-slim border-line bg-surface shadow-float fixed z-50 overflow-y-auto',
           sideClasses,
           className,
         )}
@@ -148,9 +144,9 @@ export const SheetContent = React.forwardRef<
         {!hideClose ? (
           <DialogPrimitive.Close
             className={cn(
-              'absolute top-4 right-4 rounded-md p-1.5 text-fg-subtle transition-colors',
+              'text-fg-subtle absolute top-4 right-4 rounded-md p-1.5 transition-colors',
               'hover:bg-surface-muted hover:text-fg',
-              'focus-visible:ring-2 focus-visible:ring-ring focus-visible:outline-none',
+              'focus-visible:ring-ring focus-visible:ring-2 focus-visible:outline-none',
             )}
           >
             <X className="size-4" aria-hidden="true" />
@@ -210,32 +206,40 @@ export function ConfirmDialog({
   const [typed, setTyped] = React.useState('')
   const phraseOk = !confirmationPhrase || typed.trim() === confirmationPhrase
 
-  React.useEffect(() => {
-    if (!open) setTyped('')
-  }, [open])
+  /*
+   * Upisana potvrda se briše pri zatvaranju, u samom rukovaocu — ne efektom.
+   * Tako se polje ne može zateći popunjeno pri sljedećem otvaranju.
+   */
+  const handleOpenChange = React.useCallback(
+    (next: boolean) => {
+      if (!next) setTyped('')
+      onOpenChange(next)
+    },
+    [onOpenChange],
+  )
 
   return (
-    <AlertDialogPrimitive.Root open={open} onOpenChange={onOpenChange}>
+    <AlertDialogPrimitive.Root open={open} onOpenChange={handleOpenChange}>
       <AlertDialogPrimitive.Portal>
         <AlertDialogPrimitive.Overlay className={overlayClasses} />
         <AlertDialogPrimitive.Content
           className={cn(
             'sl-pop fixed top-1/2 left-1/2 z-50 w-[calc(100vw-2rem)] max-w-md',
-            '-translate-x-1/2 -translate-y-1/2 rounded-panel border border-line bg-surface p-6 shadow-float',
+            'rounded-panel border-line bg-surface shadow-float -translate-x-1/2 -translate-y-1/2 border p-6',
           )}
         >
-          <AlertDialogPrimitive.Title className="text-lg leading-tight font-semibold text-fg">
+          <AlertDialogPrimitive.Title className="text-fg text-lg leading-tight font-semibold">
             {title}
           </AlertDialogPrimitive.Title>
           <AlertDialogPrimitive.Description asChild>
-            <div className="mt-2 text-sm leading-relaxed text-fg-muted">{description}</div>
+            <div className="text-fg-muted mt-2 text-sm leading-relaxed">{description}</div>
           </AlertDialogPrimitive.Description>
 
           {confirmationPhrase ? (
             <div className="mt-4 space-y-2">
-              <label htmlFor="confirm-phrase" className="block text-sm font-medium text-fg">
+              <label htmlFor="confirm-phrase" className="text-fg block text-sm font-medium">
                 Za potvrdu upišite:{' '}
-                <span className="font-mono text-critical">{confirmationPhrase}</span>
+                <span className="text-critical font-mono">{confirmationPhrase}</span>
               </label>
               <input
                 id="confirm-phrase"
@@ -243,8 +247,8 @@ export function ConfirmDialog({
                 onChange={(event) => setTyped(event.target.value)}
                 autoComplete="off"
                 className={cn(
-                  'h-10 w-full rounded-lg border border-line bg-surface px-3 font-mono text-sm',
-                  'focus-visible:border-ring focus-visible:ring-2 focus-visible:ring-ring/25 focus-visible:outline-none',
+                  'border-line bg-surface h-10 w-full rounded-lg border px-3 font-mono text-sm',
+                  'focus-visible:border-ring focus-visible:ring-ring/25 focus-visible:ring-2 focus-visible:outline-none',
                 )}
               />
             </div>

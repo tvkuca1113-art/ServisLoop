@@ -307,8 +307,10 @@ export function slotsOverlap(
   bufferMinutes = 0,
 ): boolean {
   const buffer = bufferMinutes * 60_000
-  return a.startsAt.getTime() < b.endsAt.getTime() + buffer &&
+  return (
+    a.startsAt.getTime() < b.endsAt.getTime() + buffer &&
     b.startsAt.getTime() < a.endsAt.getTime() + buffer
+  )
 }
 
 /** Prvi dan s barem jednim slobodnim terminom — za prijedlog kupcu. */

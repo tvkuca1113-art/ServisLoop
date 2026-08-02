@@ -16,11 +16,11 @@ export default function SignUpPage() {
   return (
     <div>
       <h1 className="text-display-sm text-fg">Otvorite nalog</h1>
-      <p className="mt-2 text-sm text-fg-muted">
+      <p className="text-fg-muted mt-2 text-sm">
         Već imate nalog?{' '}
         <Link
           href="/prijava"
-          className="font-medium text-primary underline underline-offset-4 hover:brightness-110"
+          className="text-primary font-medium underline underline-offset-4 hover:brightness-110"
         >
           Prijavite se
         </Link>
@@ -37,9 +37,9 @@ export default function SignUpPage() {
         <SignUpForm disabled={!configured} />
       </div>
 
-      <p className="mt-6 text-xs leading-relaxed text-fg-subtle">
-        30 dana probnog perioda. Kartica se ne traži. Podatke možete izvesti ili obrisati
-        u svakom trenutku.
+      <p className="text-fg-subtle mt-6 text-xs leading-relaxed">
+        30 dana probnog perioda. Kartica se ne traži. Podatke možete izvesti ili obrisati u svakom
+        trenutku.
       </p>
     </div>
   )

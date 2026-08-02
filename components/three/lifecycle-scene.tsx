@@ -2,7 +2,7 @@
 
 import * as React from 'react'
 import * as THREE from 'three'
-import { Canvas, useFrame, useThree } from '@react-three/fiber'
+import { Canvas, useFrame } from '@react-three/fiber'
 import { Billboard, RoundedBox } from '@react-three/drei'
 import { LIFECYCLE_STEPS } from '@/lib/site'
 import { createLabelTexture, disposeLabelCache } from './label-texture'
@@ -257,11 +257,7 @@ function ServiceTimerRing({ animate }: { animate: boolean }) {
   })
 
   return (
-    <instancedMesh
-      ref={meshRef}
-      args={[undefined, undefined, TIMER_DOTS]}
-      frustumCulled={false}
-    >
+    <instancedMesh ref={meshRef} args={[undefined, undefined, TIMER_DOTS]} frustumCulled={false}>
       <sphereGeometry args={[0.035, 8, 6]} />
       <meshBasicMaterial toneMapped={false} transparent opacity={0.95} />
     </instancedMesh>
@@ -295,7 +291,12 @@ function LoopPath() {
   return (
     <instancedMesh ref={meshRef} args={[undefined, undefined, PATH_DOTS]} frustumCulled={false}>
       <sphereGeometry args={[0.028, 6, 5]} />
-      <meshBasicMaterial color={MATERIAL_COLOR.pathDot} toneMapped={false} transparent opacity={0.75} />
+      <meshBasicMaterial
+        color={MATERIAL_COLOR.pathDot}
+        toneMapped={false}
+        transparent
+        opacity={0.75}
+      />
     </instancedMesh>
   )
 }
@@ -496,7 +497,12 @@ function LifecycleNode({
         {label ? (
           <mesh position={[0, 0.72, 0]}>
             <planeGeometry args={[0.36 * label.aspect, 0.36]} />
-            <meshBasicMaterial map={label.texture} transparent depthWrite={false} toneMapped={false} />
+            <meshBasicMaterial
+              map={label.texture}
+              transparent
+              depthWrite={false}
+              toneMapped={false}
+            />
           </mesh>
         ) : null}
       </Billboard>
@@ -622,7 +628,7 @@ function AmbientPoints({ count, animate }: { count: number; animate: boolean }) 
     for (let i = 0; i < count; i++) {
       const golden = Math.PI * (3 - Math.sqrt(5))
       const angle = i * golden
-      const radius = 3.2 + ((i * 37) % 100) / 100 * 2.6
+      const radius = 3.2 + (((i * 37) % 100) / 100) * 2.6
       array[i * 3] = Math.cos(angle) * radius
       array[i * 3 + 1] = (((i * 61) % 100) / 100 - 0.5) * 3.4
       array[i * 3 + 2] = Math.sin(angle) * radius
@@ -660,12 +666,18 @@ function AmbientPoints({ count, animate }: { count: number; animate: boolean }) 
 // ---------------------------------------------------------------------------
 
 function CameraRig({ enabled }: { enabled: boolean }) {
-  const { camera } = useThree()
   const target = React.useMemo(() => new THREE.Vector3(0, 0, 0), [])
 
+  /*
+   * Kameru uzimamo iz `state` unutar kadra, ne iz `useThree()` u tijelu
+   * komponente. Pomjeranje kamere je mutacija objekta three.js scene —
+   * legitimna, ali je React prevodilac ne prepoznaje kao takvu ako objekt
+   * dolazi iz zatvorenja komponente.
+   */
   useFrame((state) => {
     if (!enabled) return
     // `state.pointer` je normalizovan na [-1, 1] — pomak je namjerno mali.
+    const camera = state.camera
     const targetX = state.pointer.x * 0.55
     const targetY = 1.75 + state.pointer.y * 0.3
     camera.position.x += (targetX - camera.position.x) * 0.045
@@ -684,13 +696,39 @@ function CameraRig({ enabled }: { enabled: boolean }) {
  * Dozvoljava blago okretanje scene povlačenjem, ali unutar tvrdih granica.
  * Puna slobodna orbita bi korisnika dezorijentisala i pokvarila kompoziciju,
  * pa je namjerno nema.
+ *
+ * Stanje se ne prosljeđuje kao `ref` koji dijete mijenja — dijete dobija mali
+ * API (`read`, `damp`, `nudge`). Time nema mutiranja tuđih svojstava, što React
+ * prevodilac inače prijavljuje kao grešku, a granice ostaju na jednom mjestu.
  */
+const MAX_YAW = 0.42
+const MAX_PITCH = 0.16
+
+export interface DragController {
+  read(): { yaw: number; pitch: number }
+  nudge(deltaX: number, deltaY: number): void
+  damp(factor: number): void
+}
+
 function useDragRotation(enabled: boolean) {
-  const groupRef = React.useRef<THREE.Group>(null)
   const stateRef = React.useRef({ dragging: false, lastX: 0, lastY: 0, yaw: 0, pitch: 0 })
 
-  const MAX_YAW = 0.42
-  const MAX_PITCH = 0.16
+  const controller = React.useMemo<DragController>(
+    () => ({
+      read: () => ({ yaw: stateRef.current.yaw, pitch: stateRef.current.pitch }),
+      nudge(deltaX, deltaY) {
+        const state = stateRef.current
+        state.yaw = THREE.MathUtils.clamp(state.yaw + deltaX * 0.004, -MAX_YAW, MAX_YAW)
+        state.pitch = THREE.MathUtils.clamp(state.pitch + deltaY * 0.002, -MAX_PITCH, MAX_PITCH)
+      },
+      damp(factor) {
+        const state = stateRef.current
+        state.yaw *= factor
+        state.pitch *= factor
+      },
+    }),
+    [],
+  )
 
   const handlers = React.useMemo(() => {
     if (!enabled) return {}
@@ -713,22 +751,21 @@ function useDragRotation(enabled: boolean) {
         const deltaY = event.clientY - state.lastY
         state.lastX = event.clientX
         state.lastY = event.clientY
-        state.yaw = THREE.MathUtils.clamp(state.yaw + deltaX * 0.004, -MAX_YAW, MAX_YAW)
-        state.pitch = THREE.MathUtils.clamp(state.pitch + deltaY * 0.002, -MAX_PITCH, MAX_PITCH)
+        controller.nudge(deltaX, deltaY)
       },
     }
-  }, [enabled])
+  }, [enabled, controller])
 
-  return { groupRef, stateRef, handlers }
+  return { controller, handlers }
 }
 
 function DragGroup({
   enabled,
-  stateRef,
+  controller,
   children,
 }: {
   enabled: boolean
-  stateRef: React.RefObject<{ yaw: number; pitch: number }>
+  controller: DragController
   children: React.ReactNode
 }) {
   const groupRef = React.useRef<THREE.Group>(null)
@@ -737,10 +774,10 @@ function DragGroup({
     const group = groupRef.current
     if (!group || !enabled) return
     // Kad korisnik pusti, scena se polako vraća prema neutralnom uglu.
-    stateRef.current.yaw *= 0.985
-    stateRef.current.pitch *= 0.985
-    group.rotation.y += (stateRef.current.yaw - group.rotation.y) * 0.08
-    group.rotation.x += (LOOP_TILT + stateRef.current.pitch - group.rotation.x) * 0.08
+    controller.damp(0.985)
+    const { yaw, pitch } = controller.read()
+    group.rotation.y += (yaw - group.rotation.y) * 0.08
+    group.rotation.x += (LOOP_TILT + pitch - group.rotation.x) * 0.08
   })
 
   return (
@@ -763,7 +800,7 @@ interface SceneProps {
   onSelect: (index: number) => void
   onPhaseChange: (phaseIndex: number) => void
   interactive: boolean
-  dragState: React.RefObject<{ yaw: number; pitch: number }>
+  dragController: DragController
 }
 
 function SceneContent({
@@ -775,7 +812,7 @@ function SceneContent({
   onSelect,
   onPhaseChange,
   interactive,
-  dragState,
+  dragController,
 }: SceneProps) {
   const lastPhase = React.useRef(-1)
   const highDetail = tier === 'high'
@@ -803,7 +840,7 @@ function SceneContent({
 
       <CameraRig enabled={interactive} />
 
-      <DragGroup enabled={interactive} stateRef={dragState}>
+      <DragGroup enabled={interactive} controller={dragController}>
         <ServiceDevice animate={animate} highDetail={highDetail} />
         <ServiceTimerRing animate={animate} />
         <LoopPath />
@@ -860,7 +897,7 @@ export default function LifecycleScene({
 }: LifecycleSceneProps) {
   const animate = active && !reducedMotion
   const interactive = !reducedMotion
-  const { stateRef, handlers } = useDragRotation(interactive)
+  const { controller, handlers } = useDragRotation(interactive)
 
   // Kursor se mijenja kad je pokazivač nad čvorom — signal da je klik moguć.
   React.useEffect(() => {
@@ -901,7 +938,7 @@ export default function LifecycleScene({
         onSelect={onSelect}
         onPhaseChange={onPhaseChange}
         interactive={interactive}
-        dragState={stateRef}
+        dragController={controller}
       />
     </Canvas>
   )

@@ -14,7 +14,7 @@ export const Label = React.forwardRef<
     <LabelPrimitive.Root
       ref={ref}
       className={cn(
-        'flex items-center gap-1.5 text-sm leading-none font-medium text-fg',
+        'text-fg flex items-center gap-1.5 text-sm leading-none font-medium',
         'peer-disabled:cursor-not-allowed peer-disabled:opacity-60',
         className,
       )}
@@ -60,16 +60,7 @@ export interface FieldProps {
  *     {(field) => <Input {...field} {...register('email')} />}
  *   </Field>
  */
-export function Field({
-  id,
-  label,
-  hint,
-  help,
-  error,
-  required,
-  className,
-  children,
-}: FieldProps) {
+export function Field({ id, label, hint, help, error, required, className, children }: FieldProps) {
   const hintId = hint ? `${id}-hint` : undefined
   const errorId = error ? `${id}-error` : undefined
   const describedBy = [hintId, errorId].filter(Boolean).join(' ') || undefined
@@ -84,7 +75,7 @@ export function Field({
           <Tooltip content={help}>
             <button
               type="button"
-              className="text-fg-subtle transition-colors hover:text-fg-muted"
+              className="text-fg-subtle hover:text-fg-muted transition-colors"
               aria-label={`Pomoć: ${help}`}
             >
               <HelpCircle className="size-3.5" aria-hidden="true" />
@@ -101,7 +92,7 @@ export function Field({
       })}
 
       {hint && !error ? (
-        <p id={hintId} className="text-xs leading-relaxed text-fg-muted">
+        <p id={hintId} className="text-fg-muted text-xs leading-relaxed">
           {hint}
         </p>
       ) : null}
@@ -109,7 +100,7 @@ export function Field({
       {error ? (
         <p
           id={errorId}
-          className="flex items-start gap-1.5 text-xs leading-relaxed font-medium text-critical"
+          className="text-critical flex items-start gap-1.5 text-xs leading-relaxed font-medium"
         >
           <AlertCircle className="mt-px size-3.5 shrink-0" aria-hidden="true" />
           <span>{error}</span>
@@ -139,21 +130,18 @@ export function FormErrorSummary({
     <div
       role="alert"
       tabIndex={-1}
-      className={cn(
-        'rounded-lg border border-critical/35 bg-critical/8 p-4 text-sm',
-        className,
-      )}
+      className={cn('border-critical/35 bg-critical/8 rounded-lg border p-4 text-sm', className)}
     >
-      <p className="flex items-center gap-2 font-semibold text-critical-strong dark:text-critical">
+      <p className="text-critical-strong dark:text-critical flex items-center gap-2 font-semibold">
         <AlertCircle className="size-4 shrink-0" aria-hidden="true" />
         {title}
       </p>
       <ul className="mt-2 space-y-1 pl-6">
         {errors.map((error) => (
-          <li key={error.field} className="list-disc text-fg-muted marker:text-critical">
+          <li key={error.field} className="text-fg-muted marker:text-critical list-disc">
             <a
               href={`#${error.field}`}
-              className="underline decoration-critical/40 underline-offset-2 hover:text-fg"
+              className="decoration-critical/40 hover:text-fg underline underline-offset-2"
             >
               {error.message}
             </a>
@@ -179,8 +167,8 @@ export function Fieldset({
   return (
     <fieldset className={cn('space-y-4', className)}>
       <div className="space-y-1">
-        <legend className="text-sm font-semibold text-fg">{legend}</legend>
-        {description ? <p className="text-xs text-fg-muted">{description}</p> : null}
+        <legend className="text-fg text-sm font-semibold">{legend}</legend>
+        {description ? <p className="text-fg-muted text-xs">{description}</p> : null}
       </div>
       {children}
     </fieldset>

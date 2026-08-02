@@ -28,7 +28,11 @@ import {
   normalizePrefix,
   parseDocumentNumber,
 } from '@/domains/shared/document-number'
-import { estimateRevenue, reminderConversionRate, calculateRevenueOpportunity } from '@/domains/analytics/revenue'
+import {
+  estimateRevenue,
+  reminderConversionRate,
+  calculateRevenueOpportunity,
+} from '@/domains/analytics/revenue'
 
 // ---------------------------------------------------------------------------
 // Dozvole
@@ -212,22 +216,27 @@ describe('provjera limita', () => {
   })
 
   it('uzima u obzir veličinu koraka (npr. uvoz 50 uređaja)', () => {
-    expect(checkLimit({ planCode: 'trial', key: 'activeDevices', current: 10, increment: 40 }).allowed).toBe(
-      true,
-    )
-    expect(checkLimit({ planCode: 'trial', key: 'activeDevices', current: 10, increment: 41 }).allowed).toBe(
-      false,
-    )
+    expect(
+      checkLimit({ planCode: 'trial', key: 'activeDevices', current: 10, increment: 40 }).allowed,
+    ).toBe(true)
+    expect(
+      checkLimit({ planCode: 'trial', key: 'activeDevices', current: 10, increment: 41 }).allowed,
+    ).toBe(false)
   })
 
   it('assertWithinLimit baca tipiziranu grešku', () => {
-    expect(() =>
-      assertWithinLimit({ planCode: 'trial', key: 'technicians', current: 1 }),
-    ).toThrow(PlanLimitExceededError)
+    expect(() => assertWithinLimit({ planCode: 'trial', key: 'technicians', current: 1 })).toThrow(
+      PlanLimitExceededError,
+    )
   })
 
   it('računa udio iskorištenosti za prikaz trake', () => {
-    const check = checkLimit({ planCode: 'start', key: 'activeDevices', current: 150, increment: 0 })
+    const check = checkLimit({
+      planCode: 'start',
+      key: 'activeDevices',
+      current: 150,
+      increment: 0,
+    })
     expect(check.ratio).toBeCloseTo(0.5)
   })
 })

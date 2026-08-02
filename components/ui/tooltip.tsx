@@ -39,8 +39,8 @@ export function Tooltip({
           sideOffset={6}
           collisionPadding={12}
           className={cn(
-            'sl-pop z-50 max-w-xs rounded-lg border border-line-strong bg-ink-900 px-3 py-2',
-            'text-xs leading-relaxed text-ink-50 shadow-float',
+            'sl-pop border-line-strong bg-ink-900 z-50 max-w-xs rounded-lg border px-3 py-2',
+            'text-ink-50 shadow-float text-xs leading-relaxed',
             className,
           )}
         >

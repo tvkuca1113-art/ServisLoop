@@ -48,7 +48,9 @@ export async function GET(request: NextRequest) {
       .select('id, name, company_name, email, phone, city:locations(city)')
       .eq('organization_id', context.organizationId)
       .is('deleted_at', null)
-      .or(`name.ilike.${pattern},company_name.ilike.${pattern},email.ilike.${pattern},phone.ilike.${pattern}`)
+      .or(
+        `name.ilike.${pattern},company_name.ilike.${pattern},email.ilike.${pattern},phone.ilike.${pattern}`,
+      )
       .limit(MAX_PER_TYPE)
 
     for (const row of data ?? []) {
@@ -66,7 +68,9 @@ export async function GET(request: NextRequest) {
   if (can(context.role, 'devices.view')) {
     const { data } = await supabase
       .from('devices')
-      .select('id, manufacturer, model, serial_number, next_service_date, customers(name, company_name)')
+      .select(
+        'id, manufacturer, model, serial_number, next_service_date, customers(name, company_name)',
+      )
       .eq('organization_id', context.organizationId)
       .is('deleted_at', null)
       .or(
@@ -87,7 +91,9 @@ export async function GET(request: NextRequest) {
           [
             customer ? customer.company_name || customer.name : null,
             row.serial_number ? maskSerial(row.serial_number) : null,
-            row.next_service_date ? `servis ${formatDate(row.next_service_date as PlainDate)}` : null,
+            row.next_service_date
+              ? `servis ${formatDate(row.next_service_date as PlainDate)}`
+              : null,
           ]
             .filter(Boolean)
             .join(' · ') || null,
@@ -186,8 +192,5 @@ export async function GET(request: NextRequest) {
     }
   }
 
-  return NextResponse.json(
-    { results },
-    { headers: { 'Cache-Control': 'private, no-store' } },
-  )
+  return NextResponse.json({ results }, { headers: { 'Cache-Control': 'private, no-store' } })
 }

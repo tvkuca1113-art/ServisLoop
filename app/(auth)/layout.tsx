@@ -10,9 +10,9 @@ import { SITE } from '@/lib/site'
  */
 export default function AuthLayout({ children }: { children: React.ReactNode }) {
   return (
-    <div className="dark min-h-dvh bg-canvas text-fg lg:grid lg:grid-cols-2">
+    <div className="dark bg-canvas text-fg min-h-dvh lg:grid lg:grid-cols-2">
       {/* Poruka proizvoda */}
-      <div className="relative hidden overflow-hidden border-r border-line lg:flex lg:flex-col lg:justify-between lg:p-12">
+      <div className="border-line relative hidden overflow-hidden border-r lg:flex lg:flex-col lg:justify-between lg:p-12">
         <div
           aria-hidden="true"
           className="pointer-events-none absolute inset-0"
@@ -24,13 +24,13 @@ export default function AuthLayout({ children }: { children: React.ReactNode }) 
         />
         <div className="grid-backdrop radial-fade pointer-events-none absolute inset-0 opacity-60" />
 
-        <Link href="/" className="relative rounded-lg focus-visible:ring-2 focus-visible:ring-ring">
+        <Link href="/" className="focus-visible:ring-ring relative rounded-lg focus-visible:ring-2">
           <Logo />
         </Link>
 
         <div className="relative max-w-md">
           <h2 className="text-display-sm text-fg">{SITE.heroHeadline}</h2>
-          <p className="mt-4 text-sm leading-relaxed text-fg-muted">{SITE.heroSubheadline}</p>
+          <p className="text-fg-muted mt-4 text-sm leading-relaxed">{SITE.heroSubheadline}</p>
 
           <ul className="mt-8 space-y-3">
             {[
@@ -38,15 +38,18 @@ export default function AuthLayout({ children }: { children: React.ReactNode }) 
               'Kupac rezerviše sam, bez naloga i poziva',
               'PDF izvještaj i novi rok nakon svakog servisa',
             ].map((item) => (
-              <li key={item} className="flex items-start gap-2.5 text-sm text-fg-muted">
-                <span aria-hidden="true" className="mt-1.5 size-1.5 shrink-0 rounded-full bg-primary" />
+              <li key={item} className="text-fg-muted flex items-start gap-2.5 text-sm">
+                <span
+                  aria-hidden="true"
+                  className="bg-primary mt-1.5 size-1.5 shrink-0 rounded-full"
+                />
                 {item}
               </li>
             ))}
           </ul>
         </div>
 
-        <p className="relative text-xs text-fg-subtle">
+        <p className="text-fg-subtle relative text-xs">
           © {new Date().getFullYear()} ServisLoop · {SITE.tagline}
         </p>
       </div>
@@ -56,7 +59,7 @@ export default function AuthLayout({ children }: { children: React.ReactNode }) 
         <div className="mx-auto w-full max-w-sm">
           <Link
             href="/"
-            className="mb-10 inline-block rounded-lg focus-visible:ring-2 focus-visible:ring-ring lg:hidden"
+            className="focus-visible:ring-ring mb-10 inline-block rounded-lg focus-visible:ring-2 lg:hidden"
           >
             <Logo />
           </Link>

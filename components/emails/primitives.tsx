@@ -171,10 +171,7 @@ export function EmailButton({ href, children }: { href: string; children: React.
     <table role="presentation" cellPadding={0} cellSpacing={0} style={{ margin: '8px 0 24px' }}>
       <tbody>
         <tr>
-          <td
-            align="center"
-            style={{ backgroundColor: EMAIL_COLORS.brand, borderRadius: '8px' }}
-          >
+          <td align="center" style={{ backgroundColor: EMAIL_COLORS.brand, borderRadius: '8px' }}>
             <a
               href={href}
               style={{
@@ -202,7 +199,9 @@ export function EmailDetails({
 }: {
   rows: Array<{ label: string; value: string | null | undefined }>
 }) {
-  const visible = rows.filter((row) => row.value !== null && row.value !== undefined && row.value !== '')
+  const visible = rows.filter(
+    (row) => row.value !== null && row.value !== undefined && row.value !== '',
+  )
   if (visible.length === 0) return null
 
   return (
@@ -332,12 +331,17 @@ export interface EmailBranding {
 
 export function EmailHeader({ branding }: { branding: EmailBranding }) {
   return (
-    <table role="presentation" width="100%" cellPadding={0} cellSpacing={0} style={{ marginBottom: '24px' }}>
+    <table
+      role="presentation"
+      width="100%"
+      cellPadding={0}
+      cellSpacing={0}
+      style={{ marginBottom: '24px' }}
+    >
       <tbody>
         <tr>
           <td>
             {branding.logoUrl ? (
-              // eslint-disable-next-line @next/next/no-img-element
               <img
                 src={branding.logoUrl}
                 alt={branding.companyName}
@@ -392,7 +396,10 @@ export function EmailFooter({
 
       {unsubscribeUrl ? (
         <p style={{ margin: '12px 0 0', fontSize: '12px', color: EMAIL_COLORS.muted }}>
-          <a href={unsubscribeUrl} style={{ color: EMAIL_COLORS.muted, textDecoration: 'underline' }}>
+          <a
+            href={unsubscribeUrl}
+            style={{ color: EMAIL_COLORS.muted, textDecoration: 'underline' }}
+          >
             {unsubscribeLabel}
           </a>
         </p>
