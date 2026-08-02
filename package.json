@@ -30,7 +30,8 @@
     "gen:samples": "tsx scripts/generate-samples.ts",
     "email:preview": "next dev",
     "verify": "npm run format:check && npm run lint && npm run typecheck && npm run test && npm run build",
-    "prepare-check": "npm run typecheck && npm run lint"
+    "prepare-check": "npm run typecheck && npm run lint",
+    "gen:types": "tsx scripts/gen-db-types.ts"
   },
   "dependencies": {
     "@hookform/resolvers": "^5.7.1",
