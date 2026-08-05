@@ -1,574 +1,158 @@
 @import 'tailwindcss';
 
-/* =============================================================================
-   ServisLoop — dizajn sistem
-   -----------------------------------------------------------------------------
-   Jedan izvor istine za boje, tipografiju, razmake, radijuse i sjene.
-   Komponente NIKAD ne pišu sirove hex vrijednosti — koriste semantičke tokene
-   (`bg-surface`, `text-muted`, `border-line` …) da bi tema bila zamjenjiva.
-
-   Dvije teme:
-     :root   → svijetla, koristi je operativna aplikacija (duge smjene, čitljivost)
-     .dark   → tamna, koristi je marketing sajt (premium dojam)
-   ========================================================================== */
+/*
+ * ServisLoop design tokens.
+ *
+ * Tailwind v4 is configured CSS-first: `@theme` entries become both CSS custom
+ * properties and Tailwind utilities, so `--color-brand-600` gives `bg-brand-600`,
+ * `text-brand-600`, and so on. There is no tailwind.config.js.
+ */
 
 @theme {
-  /* ---- Skala: teal (primarna marka) ---------------------------------- */
-  --color-brand-50: #eafbf8;
-  --color-brand-100: #c8f5ee;
-  --color-brand-200: #94ebe0;
-  --color-brand-300: #56dacb;
-  --color-brand-400: #18c7b5; /* jezgro marke */
-  --color-brand-500: #0fab9b;
-  --color-brand-600: #0a897d; /* AA kontrast na bijelom */
-  --color-brand-700: #0b6d65;
-  --color-brand-800: #0d5751;
-  --color-brand-900: #0f4844;
-  --color-brand-950: #032b29;
+  /* Brand — a single blue ramp, light to dark. */
+  --color-brand-50: #eff6ff;
+  --color-brand-100: #dbeafe;
+  --color-brand-200: #bfdbfe;
+  --color-brand-300: #93c5fd;
+  --color-brand-400: #60a5fa;
+  --color-brand-500: #3b82f6;
+  --color-brand-600: #2a78d6;
+  --color-brand-700: #1d4ed8;
+  --color-brand-800: #1e40af;
+  --color-brand-900: #1e3a8a;
+  --color-brand-950: #172554;
 
-  /* ---- Skala: električno plava (sekundarna) --------------------------- */
-  --color-electric-50: #eef3ff;
-  --color-electric-100: #dbe5ff;
-  --color-electric-200: #becfff;
-  --color-electric-300: #93b0ff;
-  --color-electric-400: #5e8bff;
-  --color-electric-500: #3a66f5;
-  --color-electric-600: #2a4ce0;
-  --color-electric-700: #233cb5;
-  --color-electric-800: #23358f;
-  --color-electric-900: #223270;
-  --color-electric-950: #171f45;
+  /* Service-state colours. These carry meaning, so they never double as decoration. */
+  --color-state-ok: #0ca30c;
+  --color-state-soon: #fab219;
+  --color-state-due: #ec835a;
+  --color-state-overdue: #d03b3b;
 
-  /* ---- Skala: servisni akcent (topla narandžasta) --------------------- */
-  --color-service-50: #fff7ed;
-  --color-service-100: #ffedd5;
-  --color-service-200: #fed7aa;
-  --color-service-300: #ffc98a;
-  --color-service-400: #ffb25b;
-  --color-service-500: #f59332;
-  --color-service-600: #dd7314;
-  --color-service-700: #b85610;
-  --color-service-800: #934514;
-  --color-service-900: #783a13;
-
-  /* ---- Skala: tinta (navy pozadine) ----------------------------------- */
-  --color-ink-50: #f6f8fb;
-  --color-ink-100: #eef2f7;
-  --color-ink-200: #dfe6ee;
-  --color-ink-300: #c3cfdd;
-  --color-ink-400: #94a6bd;
-  --color-ink-500: #64748b;
-  --color-ink-600: #45566e;
-  --color-ink-700: #33445c;
-  --color-ink-800: #1c3149;
-  --color-ink-850: #12253c;
-  --color-ink-900: #0c1b2e; /* uzdignuta navy površina */
-  --color-ink-950: #07111f; /* duboka navy pozadina */
-
-  /* ---- Statusne boje --------------------------------------------------- */
-  --color-positive: #35c982;
-  --color-positive-strong: #1f8a58;
-  --color-caution: #f4b740;
-  --color-caution-strong: #a16207;
-  --color-critical: #ef6461;
-  --color-critical-strong: #c0362f;
-
-  /* ---- Tipografija ----------------------------------------------------- */
   --font-sans:
-    var(--font-geist-sans), ui-sans-serif, system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
-  --font-mono: var(--font-geist-mono), ui-monospace, 'SF Mono', Menlo, monospace;
+    ui-sans-serif, system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', Arial,
+    sans-serif;
+  --font-mono: ui-monospace, SFMono-Regular, 'SF Mono', Menlo, Consolas, monospace;
 
-  /* Kompaktna display skala za hero i naslove sekcija. */
-  --text-display-2xl: 4.5rem;
-  --text-display-2xl--line-height: 1.02;
-  --text-display-2xl--letter-spacing: -0.035em;
-  --text-display-2xl--font-weight: 600;
-
-  --text-display-xl: 3.5rem;
-  --text-display-xl--line-height: 1.05;
-  --text-display-xl--letter-spacing: -0.032em;
-  --text-display-xl--font-weight: 600;
-
-  --text-display-lg: 2.75rem;
-  --text-display-lg--line-height: 1.1;
-  --text-display-lg--letter-spacing: -0.028em;
-  --text-display-lg--font-weight: 600;
-
-  --text-display-md: 2.125rem;
-  --text-display-md--line-height: 1.15;
-  --text-display-md--letter-spacing: -0.024em;
-  --text-display-md--font-weight: 600;
-
-  --text-display-sm: 1.625rem;
-  --text-display-sm--line-height: 1.25;
-  --text-display-sm--letter-spacing: -0.018em;
-  --text-display-sm--font-weight: 600;
-
-  /* ---- Radijusi (velike kartice, ali ne pretjerano zaobljene) ---------- */
-  --radius-card: 1rem;
-  --radius-panel: 1.25rem;
-  --radius-hero: 1.75rem;
-
-  /* ---- Sjene: mekane, u tonu marke ------------------------------------ */
-  --shadow-subtle: 0 1px 2px 0 rgb(16 32 51 / 0.05);
-  --shadow-card: 0 1px 3px 0 rgb(16 32 51 / 0.07), 0 1px 2px -1px rgb(16 32 51 / 0.05);
-  --shadow-raised: 0 4px 16px -4px rgb(16 32 51 / 0.1), 0 2px 6px -2px rgb(16 32 51 / 0.06);
-  --shadow-float: 0 16px 40px -12px rgb(16 32 51 / 0.18), 0 4px 12px -4px rgb(16 32 51 / 0.08);
-  --shadow-glow-brand: 0 0 0 1px rgb(24 199 181 / 0.25), 0 8px 32px -8px rgb(24 199 181 / 0.35);
-
-  /* ---- Animacije --------------------------------------------------------*/
-  --ease-out-quint: cubic-bezier(0.22, 1, 0.36, 1);
-  --ease-in-out-quart: cubic-bezier(0.76, 0, 0.24, 1);
-
-  --animate-shimmer: shimmer 1.6s linear infinite;
-  --animate-pulse-ring: pulse-ring 2.4s var(--ease-out-quint) infinite;
-  --animate-float-slow: float-slow 7s ease-in-out infinite;
-  --animate-fade-up: fade-up 0.5s var(--ease-out-quint) both;
-  --animate-marquee: marquee 34s linear infinite;
-
-  /* ---- Kontejneri -------------------------------------------------------*/
-  --container-marketing: 76rem;
+  --radius-card: 0.75rem;
 }
 
-/* Semantički sloj: komponente koriste ISKLJUČIVO ove tokene. */
-@theme inline {
-  --color-canvas: var(--sl-canvas);
-  --color-surface: var(--sl-surface);
-  --color-surface-muted: var(--sl-surface-muted);
-  --color-surface-raised: var(--sl-surface-raised);
-  --color-line: var(--sl-line);
-  --color-line-strong: var(--sl-line-strong);
-  --color-fg: var(--sl-fg);
-  --color-fg-muted: var(--sl-fg-muted);
-  --color-fg-subtle: var(--sl-fg-subtle);
-  --color-primary: var(--sl-primary);
-  --color-primary-fg: var(--sl-primary-fg);
-  --color-primary-soft: var(--sl-primary-soft);
-  --color-accent: var(--sl-accent);
-  --color-accent-fg: var(--sl-accent-fg);
-  --color-ring: var(--sl-ring);
-}
-
-/* ---------------------------------------------------------------------------
-   Svijetla tema — operativna aplikacija
-   ------------------------------------------------------------------------ */
+/*
+ * Semantic surface tokens. Declared for both the OS preference and an explicit
+ * `data-theme` stamp so a user toggle always wins over the system setting.
+ */
 :root {
-  --sl-canvas: #f6f8fb;
-  --sl-surface: #ffffff;
-  --sl-surface-muted: #f1f5f9;
-  --sl-surface-raised: #ffffff;
-  --sl-line: rgb(148 163 184 / 0.24);
-  --sl-line-strong: rgb(100 116 139 / 0.38);
-  --sl-fg: #102033;
-  --sl-fg-muted: #64748b;
-  --sl-fg-subtle: #94a3b8;
-  --sl-primary: #0a897d;
-  --sl-primary-fg: #ffffff;
-  --sl-primary-soft: #eafbf8;
-  --sl-accent: #2a4ce0;
-  --sl-accent-fg: #ffffff;
-  --sl-ring: #0fab9b;
-
   color-scheme: light;
+  --surface: #ffffff;
+  --surface-muted: #f8fafc;
+  --surface-raised: #ffffff;
+  --border: #e2e8f0;
+  --border-strong: #cbd5e1;
+  --ink: #0f172a;
+  --ink-muted: #64748b;
+  --ink-subtle: #94a3b8;
+  --overlay: rgb(15 23 42 / 0.45);
 }
 
-/* ---------------------------------------------------------------------------
-   Tamna tema — marketing sajt
-   ------------------------------------------------------------------------ */
-.dark {
-  --sl-canvas: #07111f;
-  --sl-surface: #0c1b2e;
-  --sl-surface-muted: #0f2036;
-  --sl-surface-raised: #12253c;
-  --sl-line: rgb(148 163 184 / 0.14);
-  --sl-line-strong: rgb(148 163 184 / 0.28);
-  --sl-fg: #f3f7fc;
-  --sl-fg-muted: #94a6bd;
-  --sl-fg-subtle: #64748b;
-  --sl-primary: #18c7b5;
-  --sl-primary-fg: #032b29;
-  --sl-primary-soft: rgb(24 199 181 / 0.12);
-  --sl-accent: #5e8bff;
-  --sl-accent-fg: #0b1533;
-  --sl-ring: #18c7b5;
+@media (prefers-color-scheme: dark) {
+  :root:where(:not([data-theme='light'])) {
+    color-scheme: dark;
+    --surface: #0b1120;
+    --surface-muted: #0f172a;
+    --surface-raised: #131c31;
+    --border: #1e293b;
+    --border-strong: #334155;
+    --ink: #f1f5f9;
+    --ink-muted: #94a3b8;
+    --ink-subtle: #64748b;
+    --overlay: rgb(2 6 23 / 0.7);
+  }
+}
 
+:root[data-theme='dark'] {
   color-scheme: dark;
+  --surface: #0b1120;
+  --surface-muted: #0f172a;
+  --surface-raised: #131c31;
+  --border: #1e293b;
+  --border-strong: #334155;
+  --ink: #f1f5f9;
+  --ink-muted: #94a3b8;
+  --ink-subtle: #64748b;
+  --overlay: rgb(2 6 23 / 0.7);
 }
 
-/* ===========================================================================
-   Osnovni stilovi
-   ======================================================================== */
+@theme inline {
+  --color-surface: var(--surface);
+  --color-surface-muted: var(--surface-muted);
+  --color-surface-raised: var(--surface-raised);
+  --color-border-base: var(--border);
+  --color-border-strong: var(--border-strong);
+  --color-ink: var(--ink);
+  --color-ink-muted: var(--ink-muted);
+  --color-ink-subtle: var(--ink-subtle);
+}
 
 @layer base {
   * {
-    border-color: var(--sl-line);
+    border-color: var(--border);
   }
 
   html {
     -webkit-text-size-adjust: 100%;
     scroll-behavior: smooth;
-    /* Ljepljiva navigacija ne smije prekriti odredište sidra. */
-    scroll-padding-top: 5.5rem;
   }
 
   body {
-    background-color: var(--sl-canvas);
-    color: var(--sl-fg);
+    background-color: var(--surface);
+    color: var(--ink);
     font-family: var(--font-sans);
-    font-feature-settings: 'cv02', 'cv03', 'cv04', 'cv11';
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
-    text-rendering: optimizeLegibility;
   }
 
-  /* Vidljiv fokus je obavezan — nikad ga ne uklanjamo bez zamjene. */
+  /* A visible, consistent focus ring everywhere — keyboard users are first-class. */
   :focus-visible {
-    outline: 2px solid var(--sl-ring);
+    outline: 2px solid var(--color-brand-600);
     outline-offset: 2px;
-    border-radius: 4px;
   }
 
   ::selection {
-    background-color: rgb(24 199 181 / 0.28);
-    color: inherit;
+    background-color: var(--color-brand-200);
+    color: var(--color-brand-950);
   }
 
-  /* Brojevi u tabelama i metrikama moraju biti poravnati. */
-  .tabular,
-  table td.num,
-  table th.num {
+  /* Tabular figures wherever numbers must line up in columns. */
+  table,
+  .tabular {
     font-variant-numeric: tabular-nums;
-    font-feature-settings: 'tnum';
   }
+}
 
-  h1,
-  h2,
-  h3,
-  h4 {
+@layer utilities {
+  .text-balance {
     text-wrap: balance;
   }
 
-  p {
+  .text-pretty {
     text-wrap: pretty;
   }
 
-  /* Diskretan scrollbar unutar panela. */
-  .scroll-slim {
-    scrollbar-width: thin;
-    scrollbar-color: var(--sl-line-strong) transparent;
-  }
-  .scroll-slim::-webkit-scrollbar {
-    width: 8px;
-    height: 8px;
-  }
-  .scroll-slim::-webkit-scrollbar-thumb {
-    background-color: var(--sl-line-strong);
-    border-radius: 999px;
-  }
-  .scroll-slim::-webkit-scrollbar-track {
-    background: transparent;
+  /* Screen-reader-only, still focusable — used by the skip link. */
+  .sr-only-focusable:not(:focus):not(:focus-within) {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    white-space: nowrap;
+    border-width: 0;
   }
 }
 
-/* ===========================================================================
-   Uslužne klase specifične za proizvod
-   ======================================================================== */
-
-@utility container-marketing {
-  width: 100%;
-  margin-inline: auto;
-  max-width: var(--container-marketing);
-  padding-inline: 1.5rem;
-}
-
-/* Suptilno staklo — koristi se SAMO u herou i odabranim overlay-ima. */
-@utility glass {
-  background-color: rgb(12 27 46 / 0.55);
-  backdrop-filter: blur(16px) saturate(140%);
-  -webkit-backdrop-filter: blur(16px) saturate(140%);
-  border: 1px solid rgb(148 163 184 / 0.16);
-}
-
-@utility glass-light {
-  background-color: rgb(255 255 255 / 0.72);
-  backdrop-filter: blur(14px) saturate(140%);
-  -webkit-backdrop-filter: blur(14px) saturate(140%);
-  border: 1px solid rgb(148 163 184 / 0.2);
-}
-
-/* Suzdržan gradijent teksta za jednu ključnu riječ u naslovu. */
-@utility text-gradient-brand {
-  background-image: linear-gradient(100deg, #18c7b5 0%, #5ee0d2 42%, #5e8bff 100%);
-  -webkit-background-clip: text;
-  background-clip: text;
-  color: transparent;
-}
-
-/* Tehnička mreža u pozadini — nosi „infrastrukturni" karakter. */
-@utility grid-backdrop {
-  background-image:
-    linear-gradient(to right, rgb(148 163 184 / 0.07) 1px, transparent 1px),
-    linear-gradient(to bottom, rgb(148 163 184 / 0.07) 1px, transparent 1px);
-  background-size: 56px 56px;
-}
-
-@utility radial-fade {
-  mask-image: radial-gradient(ellipse 70% 60% at 50% 40%, #000 55%, transparent 100%);
-  -webkit-mask-image: radial-gradient(ellipse 70% 60% at 50% 40%, #000 55%, transparent 100%);
-}
-
-/* Tanka linija koja razdvaja sekcije bez tvrdog reza. */
-@utility hairline-top {
-  border-top: 1px solid var(--sl-line);
-}
-
-/* ===========================================================================
-   Animacije
-   ======================================================================== */
-
-@keyframes shimmer {
-  0% {
-    background-position: -200% 0;
-  }
-  100% {
-    background-position: 200% 0;
-  }
-}
-
-@keyframes pulse-ring {
-  0% {
-    transform: scale(0.85);
-    opacity: 0.7;
-  }
-  70% {
-    transform: scale(1.6);
-    opacity: 0;
-  }
-  100% {
-    transform: scale(1.6);
-    opacity: 0;
-  }
-}
-
-@keyframes float-slow {
-  0%,
-  100% {
-    transform: translateY(0);
-  }
-  50% {
-    transform: translateY(-8px);
-  }
-}
-
-@keyframes fade-up {
-  from {
-    opacity: 0;
-    transform: translateY(12px);
-  }
-  to {
-    opacity: 1;
-    transform: none;
-  }
-}
-
-@keyframes marquee {
-  from {
-    transform: translateX(0);
-  }
-  to {
-    transform: translateX(-50%);
-  }
-}
-
-/* ---------------------------------------------------------------------------
-   Animacije za Radix overlay komponente.
-   Pisane ručno umjesto dodavanja `tailwindcss-animate` — jedna ovisnost manje,
-   a kontrola nad trajanjem je potpuna. Vežu se na `data-state` atribut koji
-   Radix sam postavlja.
-   ------------------------------------------------------------------------ */
-
-@keyframes sl-fade-in {
-  from {
-    opacity: 0;
-  }
-  to {
-    opacity: 1;
-  }
-}
-@keyframes sl-fade-out {
-  from {
-    opacity: 1;
-  }
-  to {
-    opacity: 0;
-  }
-}
-@keyframes sl-scale-in {
-  from {
-    opacity: 0;
-    transform: scale(0.96);
-  }
-  to {
-    opacity: 1;
-    transform: scale(1);
-  }
-}
-@keyframes sl-scale-out {
-  from {
-    opacity: 1;
-    transform: scale(1);
-  }
-  to {
-    opacity: 0;
-    transform: scale(0.96);
-  }
-}
-@keyframes sl-slide-in-right {
-  from {
-    transform: translateX(100%);
-  }
-  to {
-    transform: translateX(0);
-  }
-}
-@keyframes sl-slide-out-right {
-  from {
-    transform: translateX(0);
-  }
-  to {
-    transform: translateX(100%);
-  }
-}
-@keyframes sl-slide-in-left {
-  from {
-    transform: translateX(-100%);
-  }
-  to {
-    transform: translateX(0);
-  }
-}
-@keyframes sl-slide-out-left {
-  from {
-    transform: translateX(0);
-  }
-  to {
-    transform: translateX(-100%);
-  }
-}
-@keyframes sl-slide-in-bottom {
-  from {
-    transform: translateY(100%);
-  }
-  to {
-    transform: translateY(0);
-  }
-}
-@keyframes sl-slide-out-bottom {
-  from {
-    transform: translateY(0);
-  }
-  to {
-    transform: translateY(100%);
-  }
-}
-
-.sl-overlay[data-state='open'] {
-  animation: sl-fade-in 180ms var(--ease-out-quint);
-}
-.sl-overlay[data-state='closed'] {
-  animation: sl-fade-out 150ms var(--ease-out-quint);
-}
-
-.sl-pop[data-state='open'] {
-  animation: sl-scale-in 160ms var(--ease-out-quint);
-}
-.sl-pop[data-state='closed'] {
-  animation: sl-scale-out 130ms var(--ease-out-quint);
-}
-/* Popover / dropdown izlaze iz svog okidača. */
-.sl-pop[data-side='top'] {
-  transform-origin: bottom center;
-}
-.sl-pop[data-side='bottom'] {
-  transform-origin: top center;
-}
-.sl-pop[data-side='left'] {
-  transform-origin: right center;
-}
-.sl-pop[data-side='right'] {
-  transform-origin: left center;
-}
-
-.sl-sheet-right[data-state='open'] {
-  animation: sl-slide-in-right 260ms var(--ease-out-quint);
-}
-.sl-sheet-right[data-state='closed'] {
-  animation: sl-slide-out-right 200ms var(--ease-in-out-quart);
-}
-.sl-sheet-left[data-state='open'] {
-  animation: sl-slide-in-left 260ms var(--ease-out-quint);
-}
-.sl-sheet-left[data-state='closed'] {
-  animation: sl-slide-out-left 200ms var(--ease-in-out-quart);
-}
-.sl-sheet-bottom[data-state='open'] {
-  animation: sl-slide-in-bottom 260ms var(--ease-out-quint);
-}
-.sl-sheet-bottom[data-state='closed'] {
-  animation: sl-slide-out-bottom 200ms var(--ease-in-out-quart);
-}
-
-/* Akordeon koristi visinu koju Radix mjeri i izloži kao CSS varijablu. */
-@keyframes sl-accordion-down {
-  from {
-    height: 0;
-    opacity: 0;
-  }
-  to {
-    height: var(--radix-accordion-content-height);
-    opacity: 1;
-  }
-}
-@keyframes sl-accordion-up {
-  from {
-    height: var(--radix-accordion-content-height);
-    opacity: 1;
-  }
-  to {
-    height: 0;
-    opacity: 0;
-  }
-}
-.sl-accordion[data-state='open'] {
-  animation: sl-accordion-down 240ms var(--ease-out-quint);
-}
-.sl-accordion[data-state='closed'] {
-  animation: sl-accordion-up 200ms var(--ease-out-quint);
-}
-
-/* Skeleton za učitavanje — isti ritam kroz cijelu aplikaciju. */
-.skeleton {
-  background-image: linear-gradient(
-    90deg,
-    var(--sl-surface-muted) 25%,
-    color-mix(in oklab, var(--sl-surface-muted) 60%, var(--sl-fg-subtle) 12%) 37%,
-    var(--sl-surface-muted) 63%
-  );
-  background-size: 200% 100%;
-  animation: var(--animate-shimmer);
-  border-radius: 0.5rem;
-}
-
-/* ===========================================================================
-   Poštovanje `prefers-reduced-motion`
-   Sve dekorativne animacije se gase. Funkcionalni prijelazi ostaju kratki.
-   ======================================================================== */
-
+/* Honour the OS reduced-motion setting: no parallax, no long transitions, no 3D drift. */
 @media (prefers-reduced-motion: reduce) {
-  html {
-    scroll-behavior: auto;
-  }
-
   *,
   *::before,
   *::after {
@@ -577,59 +161,4 @@
     transition-duration: 0.01ms !important;
     scroll-behavior: auto !important;
   }
-
-  .skeleton {
-    animation: none;
-    background-position: 0 0;
-  }
-}
-
-/* ===========================================================================
-   Štampa — QR naljepnice, radni nalozi i sažeci izvještaja
-   ======================================================================== */
-
-@media print {
-  :root {
-    --sl-canvas: #ffffff;
-    --sl-surface: #ffffff;
-    --sl-fg: #000000;
-    --sl-fg-muted: #333333;
-    --sl-line: #cccccc;
-  }
-
-  .no-print,
-  nav[data-app-nav],
-  aside[data-app-sidebar],
-  [data-toast-region] {
-    display: none !important;
-  }
-
-  .print-only {
-    display: block !important;
-  }
-
-  body {
-    background: #ffffff !important;
-    color: #000000 !important;
-  }
-
-  a[href]::after {
-    content: '';
-  }
-
-  .print-break-inside-avoid {
-    break-inside: avoid;
-  }
-
-  .print-break-after {
-    break-after: page;
-  }
-
-  @page {
-    margin: 12mm;
-  }
-}
-
-.print-only {
-  display: none;
 }

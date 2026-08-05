@@ -1,71 +1,52 @@
-import Link from 'next/link'
-import { Logo } from '@/components/marketing/logo'
-import { SITE } from '@/lib/site'
+import { ArrowLeft } from 'lucide-react';
+import Link from 'next/link';
+
+import { LoopMark } from '@/components/marketing/logo';
 
 /**
- * Okvir stranica za prijavu i registraciju.
+ * Shell for sign-in and sign-up.
  *
- * Lijeva strana nosi poruku proizvoda (zašto bih ovo koristio), desna obrazac.
- * Na mobitelu ostaje samo obrazac — u tom trenutku korisnik je već odlučio.
+ * Deliberately not the marketing chrome and not the app shell: at this point the visitor
+ * has exactly one job, and a sidebar they cannot use or a nav bar full of pricing links
+ * only gets in the way. One centred column, the wordmark, and a way back to the public
+ * site.
+ *
+ * Owns `<main id="main">` — the skip link in the root layout targets it.
  */
 export default function AuthLayout({ children }: { children: React.ReactNode }) {
   return (
-    <div className="dark bg-canvas text-fg min-h-dvh lg:grid lg:grid-cols-2">
-      {/* Poruka proizvoda */}
-      <div className="border-line relative hidden overflow-hidden border-r lg:flex lg:flex-col lg:justify-between lg:p-12">
-        <div
-          aria-hidden="true"
-          className="pointer-events-none absolute inset-0"
-          style={{
-            background:
-              'radial-gradient(48rem 32rem at 20% 0%, rgba(24,199,181,0.14), transparent 62%),' +
-              'radial-gradient(36rem 24rem at 90% 90%, rgba(94,139,255,0.12), transparent 60%)',
-          }}
-        />
-        <div className="grid-backdrop radial-fade pointer-events-none absolute inset-0 opacity-60" />
-
-        <Link href="/" className="focus-visible:ring-ring relative rounded-lg focus-visible:ring-2">
-          <Logo />
+    <div className="flex min-h-dvh flex-col bg-surface-muted">
+      <header className="px-4 py-6 sm:px-6">
+        <Link
+          href="/"
+          className="mx-auto flex w-fit items-center gap-2 rounded-md text-ink transition-colors hover:text-brand-700"
+        >
+          <LoopMark className="size-8 shrink-0" />
+          <span className="text-lg font-semibold tracking-tight">ServisLoop</span>
         </Link>
+      </header>
 
-        <div className="relative max-w-md">
-          <h2 className="text-display-sm text-fg">{SITE.heroHeadline}</h2>
-          <p className="text-fg-muted mt-4 text-sm leading-relaxed">{SITE.heroSubheadline}</p>
+      <main id="main" className="flex flex-1 items-start justify-center px-4 pb-16 sm:px-6">
+        <div className="w-full max-w-md">{children}</div>
+      </main>
 
-          <ul className="mt-8 space-y-3">
-            {[
-              'Automatski podsjetnici 30, 14 i 3 dana prije roka',
-              'Kupac rezerviše sam, bez naloga i poziva',
-              'PDF izvještaj i novi rok nakon svakog servisa',
-            ].map((item) => (
-              <li key={item} className="text-fg-muted flex items-start gap-2.5 text-sm">
-                <span
-                  aria-hidden="true"
-                  className="bg-primary mt-1.5 size-1.5 shrink-0 rounded-full"
-                />
-                {item}
-              </li>
-            ))}
-          </ul>
-        </div>
-
-        <p className="text-fg-subtle relative text-xs">
-          © {new Date().getFullYear()} ServisLoop · {SITE.tagline}
-        </p>
-      </div>
-
-      {/* Obrazac */}
-      <div className="flex min-h-dvh flex-col justify-center px-5 py-12 sm:px-8 lg:min-h-0 lg:px-12">
-        <div className="mx-auto w-full max-w-sm">
+      <footer className="border-t border-border-base bg-surface px-4 py-5 sm:px-6">
+        <div className="mx-auto flex max-w-md flex-wrap items-center justify-between gap-3 text-sm">
           <Link
             href="/"
-            className="focus-visible:ring-ring mb-10 inline-block rounded-lg focus-visible:ring-2 lg:hidden"
+            className="inline-flex items-center gap-1.5 rounded-md text-ink-muted transition-colors hover:text-ink"
           >
-            <Logo />
+            <ArrowLeft aria-hidden="true" className="size-4" />
+            Back to the ServisLoop site
           </Link>
-          {children}
+          <Link
+            href="/contact"
+            className="rounded-md text-ink-muted transition-colors hover:text-ink"
+          >
+            Need help?
+          </Link>
         </div>
-      </div>
+      </footer>
     </div>
-  )
+  );
 }
