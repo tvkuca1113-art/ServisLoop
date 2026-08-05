@@ -1,49 +1,91 @@
-import * as React from 'react'
-import { cva, type VariantProps } from 'class-variance-authority'
-import { cn } from '@/lib/utils'
+import { cva, type VariantProps } from 'class-variance-authority';
 
+import { cn } from '@/lib/utils';
+
+/**
+ * Badges carry service state, so colour is never the only signal: every state variant
+ * renders a dot *and* the label text, and the label keeps full `text-ink` contrast
+ * rather than being tinted to match the state colour.
+ */
 const badgeVariants = cva(
-  'inline-flex items-center gap-1.5 rounded-md border font-medium whitespace-nowrap',
+  'inline-flex w-fit items-center gap-1.5 rounded-full border px-2 py-0.5 text-xs font-medium whitespace-nowrap',
   {
     variants: {
-      tone: {
-        neutral: 'border-line bg-surface-muted text-fg-muted',
-        brand: 'border-brand-500/25 bg-brand-500/10 text-brand-700 dark:text-brand-300',
-        info: 'border-electric-500/25 bg-electric-500/10 text-electric-700 dark:text-electric-300',
-        success: 'border-positive/30 bg-positive/12 text-positive-strong dark:text-positive',
-        warning: 'border-caution/35 bg-caution/15 text-caution-strong dark:text-caution',
-        danger: 'border-critical/30 bg-critical/12 text-critical-strong dark:text-critical',
-        service: 'border-service-400/35 bg-service-400/15 text-service-700 dark:text-service-300',
-        outline: 'border-line-strong bg-transparent text-fg-muted',
-      },
-      size: {
-        sm: 'px-1.5 py-0.5 text-[0.6875rem]',
-        md: 'px-2 py-0.5 text-xs',
-        lg: 'px-2.5 py-1 text-[0.8125rem]',
+      variant: {
+        neutral: 'border-border-base bg-surface-muted text-ink-muted',
+        outline: 'border-border-strong bg-transparent text-ink',
+        ok: 'border-state-ok/30 bg-state-ok/10 text-ink',
+        soon: 'border-state-soon/40 bg-state-soon/15 text-ink',
+        due: 'border-state-due/40 bg-state-due/15 text-ink',
+        overdue: 'border-state-overdue/40 bg-state-overdue/15 text-ink',
       },
     },
-    defaultVariants: { tone: 'neutral', size: 'md' },
+    defaultVariants: {
+      variant: 'neutral',
+    },
   },
-)
+);
+
+export type BadgeVariant = NonNullable<VariantProps<typeof badgeVariants>['variant']>;
+
+/** Dot colour per state variant. Absent for the non-state variants. */
+const STATE_DOT: Partial<Record<BadgeVariant, string>> = {
+  ok: 'bg-state-ok',
+  soon: 'bg-state-soon',
+  due: 'bg-state-due',
+  overdue: 'bg-state-overdue',
+};
 
 export interface BadgeProps
-  extends React.HTMLAttributes<HTMLSpanElement>, VariantProps<typeof badgeVariants> {
-  /**
-   * Tačka u boji ispred teksta. Status se NIKAD ne prenosi samo bojom —
-   * tekst uvijek nosi značenje (zahtjev pristupačnosti).
-   */
-  dot?: boolean
+  extends React.ComponentProps<'span'>,
+    VariantProps<typeof badgeVariants> {
+  /** Force the leading dot on or off. State variants show it by default. */
+  dot?: boolean;
 }
 
-export function Badge({ className, tone, size, dot = false, children, ...props }: BadgeProps) {
+export function Badge({ className, variant, dot, children, ...props }: BadgeProps) {
+  const resolved: BadgeVariant = variant ?? 'neutral';
+  const stateDot = STATE_DOT[resolved];
+  const showDot = dot ?? stateDot !== undefined;
+
   return (
-    <span className={cn(badgeVariants({ tone, size }), className)} {...props}>
-      {dot ? (
-        <span aria-hidden="true" className="size-1.5 shrink-0 rounded-full bg-current opacity-80" />
+    <span
+      data-slot="badge"
+      data-variant={resolved}
+      className={cn(badgeVariants({ variant: resolved }), className)}
+      {...props}
+    >
+      {showDot ? (
+        <span
+          aria-hidden="true"
+          className={cn('size-1.5 shrink-0 rounded-full', stateDot ?? 'bg-current')}
+        />
       ) : null}
       {children}
     </span>
-  )
+  );
 }
 
-export { badgeVariants }
+/**
+ * Structurally identical to `ServiceState` in `@/domain/service-interval`, restated here
+ * so the primitive library keeps no dependency on the domain layer.
+ */
+export type ServiceStateLike = 'unscheduled' | 'ok' | 'due_soon' | 'due' | 'overdue';
+
+/** Map a domain service state onto its badge variant. */
+export function serviceStateBadgeVariant(state: ServiceStateLike): BadgeVariant {
+  switch (state) {
+    case 'ok':
+      return 'ok';
+    case 'due_soon':
+      return 'soon';
+    case 'due':
+      return 'due';
+    case 'overdue':
+      return 'overdue';
+    case 'unscheduled':
+      return 'neutral';
+  }
+}
+
+export { badgeVariants };

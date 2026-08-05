@@ -1,87 +1,76 @@
-import * as React from 'react'
-import { cn } from '@/lib/utils'
+import { cn } from '@/lib/utils';
 
-/**
- * Kartica — osnovna površina za grupisanje sadržaja.
- * Namjerno bez ugrađenog razmaka: `CardHeader` / `CardBody` / `CardFooter`
- * nose vertikalni ritam da bi ostao dosljedan kroz cijelu aplikaciju.
- */
-export function Card({
-  className,
-  interactive = false,
-  ...props
-}: React.HTMLAttributes<HTMLDivElement> & { interactive?: boolean }) {
+export function Card({ className, ...props }: React.ComponentProps<'div'>) {
   return (
     <div
+      data-slot="card"
       className={cn(
-        'rounded-card border-line bg-surface shadow-card border',
-        interactive &&
-          'hover:shadow-raised focus-within:shadow-raised transition-shadow duration-200',
+        'flex flex-col gap-4 rounded-card border border-border-base bg-surface-raised py-5 text-ink shadow-sm',
         className,
       )}
       {...props}
     />
-  )
+  );
 }
 
-export function CardHeader({ className, ...props }: React.HTMLAttributes<HTMLDivElement>) {
+export function CardHeader({ className, ...props }: React.ComponentProps<'div'>) {
   return (
     <div
-      className={cn('flex flex-col gap-1.5 px-5 pt-5 pb-4 sm:px-6 sm:pt-6', className)}
+      data-slot="card-header"
+      className={cn('flex flex-col gap-1.5 px-5', className)}
       {...props}
     />
-  )
+  );
 }
 
-export function CardTitle({
-  className,
-  as: Comp = 'h3',
-  ...props
-}: React.HTMLAttributes<HTMLHeadingElement> & { as?: 'h2' | 'h3' | 'h4' }) {
+export interface CardTitleProps extends React.ComponentProps<'h3'> {
+  /** Heading level. Pick the one that fits the page outline; defaults to `h3`. */
+  as?: 'h2' | 'h3' | 'h4';
+}
+
+export function CardTitle({ className, as = 'h3', ...props }: CardTitleProps) {
+  const Heading = as;
+
   return (
-    <Comp className={cn('text-fg text-base leading-tight font-semibold', className)} {...props} />
-  )
+    <Heading
+      data-slot="card-title"
+      className={cn('text-base font-semibold leading-tight text-ink', className)}
+      {...props}
+    />
+  );
 }
 
-export function CardDescription({
-  className,
-  ...props
-}: React.HTMLAttributes<HTMLParagraphElement>) {
-  return <p className={cn('text-fg-muted text-sm leading-relaxed', className)} {...props} />
+export function CardDescription({ className, ...props }: React.ComponentProps<'p'>) {
+  return (
+    <p
+      data-slot="card-description"
+      className={cn('text-sm text-ink-muted', className)}
+      {...props}
+    />
+  );
 }
 
-export function CardBody({ className, ...props }: React.HTMLAttributes<HTMLDivElement>) {
-  return <div className={cn('px-5 pb-5 sm:px-6 sm:pb-6', className)} {...props} />
-}
-
-export function CardFooter({ className, ...props }: React.HTMLAttributes<HTMLDivElement>) {
+/** Top-right slot for a header action (menu, link, button). */
+export function CardAction({ className, ...props }: React.ComponentProps<'div'>) {
   return (
     <div
-      className={cn('border-line flex items-center gap-3 border-t px-5 py-4 sm:px-6', className)}
+      data-slot="card-action"
+      className={cn('flex items-center gap-2', className)}
       {...props}
     />
-  )
+  );
 }
 
-/** Zaglavlje s naslovom lijevo i radnjama desno — najčešći raspored u aplikaciji. */
-export function CardHeaderRow({
-  title,
-  description,
-  actions,
-  className,
-}: {
-  title: React.ReactNode
-  description?: React.ReactNode
-  actions?: React.ReactNode
-  className?: string
-}) {
+export function CardContent({ className, ...props }: React.ComponentProps<'div'>) {
+  return <div data-slot="card-content" className={cn('px-5', className)} {...props} />;
+}
+
+export function CardFooter({ className, ...props }: React.ComponentProps<'div'>) {
   return (
-    <CardHeader className={cn('flex-row items-start justify-between gap-4', className)}>
-      <div className="min-w-0 space-y-1.5">
-        <CardTitle>{title}</CardTitle>
-        {description ? <CardDescription>{description}</CardDescription> : null}
-      </div>
-      {actions ? <div className="flex shrink-0 items-center gap-2">{actions}</div> : null}
-    </CardHeader>
-  )
+    <div
+      data-slot="card-footer"
+      className={cn('flex items-center gap-2 border-t border-border-base px-5 pt-4', className)}
+      {...props}
+    />
+  );
 }

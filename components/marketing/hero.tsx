@@ -1,82 +1,82 @@
-import Link from 'next/link'
-import { ArrowRight, PlayCircle } from 'lucide-react'
-import { Button } from '@/components/ui/button'
-import { HeroVisual } from '@/components/three/hero-visual'
-import { SITE } from '@/lib/site'
+/**
+ * Home page hero. Server component: the only client code it mounts is the animated copy
+ * (`Reveal`) and the lifecycle visual, which manages its own loading and fallbacks.
+ */
+
+import { ArrowRight } from 'lucide-react';
+import Link from 'next/link';
+
+import { Button } from '@/components/ui';
+
+import { Reveal } from './reveal';
+import { Container } from './section';
+import { LifecycleHero } from './three/lifecycle-hero';
 
 /**
- * Hero sekcija.
- *
- * Naslov, podnaslov i dugmad su serverski renderovani i vidljivi odmah —
- * ne čekaju JavaScript ni WebGL. 3D scena je odvojena klijentska komponenta
- * koja se dodaje kasnije i nikad ne blokira ovaj tekst.
+ * Note the absence of `overflow-hidden` on the section: the hover labels in the 3D scene
+ * are DOM nodes that can reach past the canvas box, so clipping lives on the decorative
+ * wash wrapper instead, and `<main>` carries `overflow-x-clip` as the outer guard.
  */
 export function Hero() {
   return (
-    <section className="relative overflow-hidden">
-      {/* Pozadinski sjaj */}
+    <section className="relative border-b border-border-base">
+      {/* Two soft brand washes behind the fold. Purely decorative. */}
       <div
         aria-hidden="true"
-        className="pointer-events-none absolute inset-0 -z-10"
-        style={{
-          background:
-            'radial-gradient(70rem 40rem at 15% -10%, rgba(24,199,181,0.16), transparent 60%),' +
-            'radial-gradient(50rem 32rem at 90% 10%, rgba(94,139,255,0.14), transparent 62%)',
-        }}
-      />
+        className="pointer-events-none absolute inset-0 -z-10 overflow-hidden"
+      >
+        <div className="absolute -right-24 -top-40 size-[36rem] rounded-full bg-brand-500/8 blur-3xl" />
+        <div className="absolute -bottom-56 -left-32 size-[32rem] rounded-full bg-brand-600/6 blur-3xl" />
+      </div>
 
-      <div className="container-marketing grid items-center gap-12 py-14 lg:grid-cols-[1.05fr_1fr] lg:gap-14 lg:py-20 xl:py-24">
-        <div className="max-w-2xl">
-          <p className="border-line bg-surface/60 text-fg-muted inline-flex items-center gap-2 rounded-full border px-3 py-1.5 text-xs font-medium">
-            <span className="relative flex size-1.5">
-              <span className="bg-brand-400 absolute inline-flex size-full animate-ping rounded-full opacity-60" />
-              <span className="bg-brand-400 relative inline-flex size-1.5 rounded-full" />
+      <Container className="grid items-center gap-12 py-16 sm:py-20 lg:grid-cols-[1.05fr_1fr] lg:gap-8 lg:py-24">
+        <div className="flex flex-col items-start gap-6">
+          <Reveal>
+            <span className="inline-flex items-center gap-2 rounded-full border border-border-base bg-surface-raised px-3 py-1 text-xs font-medium text-ink-muted">
+              <span aria-hidden="true" className="size-1.5 rounded-full bg-state-ok" />
+              Preventive maintenance, scheduled by the system
             </span>
-            {SITE.tagline}
-          </p>
+          </Reveal>
 
-          <h1 className="text-display-lg text-fg sm:text-display-xl mt-5">
-            Svaki uređaj koji ste ugradili može vam{' '}
-            <span className="text-gradient-brand">ponovo donijeti prihod</span>.
-          </h1>
+          <Reveal delay={0.05}>
+            <h1 className="text-balance text-4xl font-semibold leading-[1.06] tracking-tight text-ink sm:text-5xl lg:text-6xl">
+              Never miss a service date again
+            </h1>
+          </Reveal>
 
-          <p className="text-fg-muted mt-5 max-w-xl text-base leading-relaxed sm:text-lg">
-            {SITE.heroSubheadline}
-          </p>
+          <Reveal delay={0.1}>
+            <p className="max-w-xl text-pretty text-lg leading-relaxed text-ink-muted">
+              ServisLoop keeps every device you maintain on a schedule. It reminds the customer
+              before the date falls due, lets them book from your real availability, walks the
+              technician through the checklist, and issues a signed PDF report. Then it sets the
+              next date on its own.
+            </p>
+          </Reveal>
 
-          <p className="text-fg-muted mt-4 text-sm font-medium">{SITE.hook}</p>
+          <Reveal delay={0.15} className="w-full">
+            <div className="flex flex-col gap-3 sm:flex-row sm:items-center">
+              <Button asChild size="lg">
+                <Link href="/sign-up">
+                  Start free
+                  <ArrowRight aria-hidden="true" />
+                </Link>
+              </Button>
+              <Button asChild size="lg" variant="outline">
+                <Link href="/features">See how it works</Link>
+              </Button>
+            </div>
+          </Reveal>
 
-          <div className="mt-8 flex flex-col gap-3 sm:flex-row sm:items-center">
-            <Button asChild size="lg">
-              <Link href="/demo">
-                {SITE.primaryCta}
-                <ArrowRight className="size-4" aria-hidden="true" />
-              </Link>
-            </Button>
-            <Button asChild size="lg" variant="secondary">
-              <Link href="#kako-radi">
-                <PlayCircle className="size-4" aria-hidden="true" />
-                {SITE.secondaryCta}
-              </Link>
-            </Button>
-          </div>
-
-          <dl className="border-line mt-10 grid max-w-lg grid-cols-3 gap-4 border-t pt-6">
-            {[
-              { term: 'Podsjetnici', detail: '30, 14 i 3 dana prije roka' },
-              { term: 'Rezervacija', detail: 'bez otvaranja naloga' },
-              { term: 'Izvještaj', detail: 'PDF nakon svakog servisa' },
-            ].map((item) => (
-              <div key={item.term}>
-                <dt className="text-fg text-[0.8125rem] font-semibold">{item.term}</dt>
-                <dd className="text-fg-muted mt-1 text-xs leading-relaxed">{item.detail}</dd>
-              </div>
-            ))}
-          </dl>
+          <Reveal delay={0.2}>
+            <p className="text-sm text-ink-subtle">
+              No credit card. Import your devices from CSV or XLSX and print the QR sheet on day
+              one.
+            </p>
+          </Reveal>
         </div>
 
-        <HeroVisual />
-      </div>
+        <LifecycleHero className="mx-auto aspect-square w-full max-w-lg" />
+      </Container>
     </section>
-  )
+  );
 }

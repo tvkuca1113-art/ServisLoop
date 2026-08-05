@@ -1,79 +1,109 @@
-import * as React from 'react'
-import { cn } from '@/lib/utils'
+/**
+ * Layout scaffolding shared by every marketing section.
+ *
+ * `Section` owns the vertical rhythm and the optional full-bleed background; `Container`
+ * owns the horizontal gutter and the measure. Keeping them separate means a section can
+ * paint edge to edge while its content still lines up with the header and the footer.
+ *
+ * Server-renderable. The only client code it reaches for is `Reveal`, which is where the
+ * scroll animation (and its reduced-motion opt-out) lives.
+ */
 
-/** Zajednički okvir za sve sekcije marketing sajta — jedinstven vertikalni ritam. */
-export function Section({
-  id,
-  className,
-  children,
-  tone = 'default',
-}: {
-  id?: string
-  className?: string
-  children: React.ReactNode
-  tone?: 'default' | 'raised' | 'edge'
-}) {
-  return (
-    <section
-      id={id}
-      className={cn(
-        'py-16 sm:py-20 lg:py-24',
-        tone === 'raised' && 'bg-ink-900/40',
-        tone === 'edge' && 'hairline-top border-line',
-        className,
-      )}
-    >
-      <div className="container-marketing">{children}</div>
-    </section>
-  )
+import { cn } from '@/lib/utils';
+
+import { Reveal } from './reveal';
+
+export function Container({ className, ...props }: React.ComponentProps<'div'>) {
+  return <div className={cn('mx-auto w-full max-w-6xl px-4 sm:px-6 lg:px-8', className)} {...props} />;
 }
 
-export function SectionIntro({
+export interface SectionProps extends React.ComponentProps<'section'> {
+  /** `muted` paints the full-bleed band behind the container. */
+  tone?: 'default' | 'muted';
+  spacing?: 'default' | 'compact' | 'none';
+  /** Skip the built-in container when the section lays out its own full-bleed content. */
+  bare?: boolean;
+}
+
+const SPACING: Record<NonNullable<SectionProps['spacing']>, string> = {
+  default: 'py-20 sm:py-24',
+  compact: 'py-12 sm:py-16',
+  none: '',
+};
+
+export function Section({
+  tone = 'default',
+  spacing = 'default',
+  bare = false,
+  className,
+  children,
+  ...props
+}: SectionProps) {
+  return (
+    <section
+      className={cn(
+        'w-full',
+        tone === 'muted' && 'bg-surface-muted',
+        SPACING[spacing],
+        className,
+      )}
+      {...props}
+    >
+      {bare ? children : <Container>{children}</Container>}
+    </section>
+  );
+}
+
+export interface SectionHeaderProps {
+  eyebrow?: string;
+  title: React.ReactNode;
+  description?: React.ReactNode;
+  /** Heading level. Every page has exactly one `h1`, so sections default to `h2`. */
+  as?: 'h1' | 'h2' | 'h3';
+  align?: 'left' | 'center';
+  className?: string;
+  /** Anchor target, so footer and nav links can deep-link to a section. */
+  headingId?: string;
+}
+
+export function SectionHeader({
   eyebrow,
   title,
   description,
+  as: Heading = 'h2',
   align = 'left',
   className,
-  as: Heading = 'h2',
-}: {
-  eyebrow?: string
-  title: React.ReactNode
-  description?: React.ReactNode
-  align?: 'left' | 'center'
-  className?: string
-  as?: 'h2' | 'h3'
-}) {
+  headingId,
+}: SectionHeaderProps) {
   return (
-    <div className={cn('max-w-2xl', align === 'center' && 'mx-auto text-center', className)}>
-      {eyebrow ? (
-        <p className="text-primary text-xs font-semibold tracking-[0.14em] uppercase">{eyebrow}</p>
-      ) : null}
-      <Heading className="text-display-md text-fg sm:text-display-lg mt-3">{title}</Heading>
-      {description ? (
-        <p className="text-fg-muted mt-4 text-base leading-relaxed">{description}</p>
-      ) : null}
-    </div>
-  )
-}
-
-/** Oznaka da je sadržaj primjer, a ne stvarni podatak o kupcu. */
-export function DemoTag({
-  className,
-  label = 'Demo podaci',
-}: {
-  className?: string
-  label?: string
-}) {
-  return (
-    <span
+    <Reveal
       className={cn(
-        'border-service-400/35 bg-service-400/12 inline-flex items-center gap-1.5 rounded-md border',
-        'text-service-300 px-2 py-0.5 text-[0.6875rem] font-semibold tracking-wide uppercase',
+        'flex max-w-2xl flex-col gap-4',
+        align === 'center' && 'mx-auto items-center text-center',
         className,
       )}
     >
-      <span aria-hidden="true" className="bg-service-400 size-1.5 rounded-full" />
-      {label}
-    </span>
-  )
+      {eyebrow ? (
+        <span className="text-xs font-semibold uppercase tracking-[0.14em] text-brand-600">
+          {eyebrow}
+        </span>
+      ) : null}
+      <Heading
+        id={headingId}
+        className={cn(
+          'text-balance font-semibold tracking-tight text-ink',
+          Heading === 'h1'
+            ? 'text-4xl leading-[1.08] sm:text-5xl lg:text-6xl'
+            : 'text-3xl leading-tight sm:text-4xl',
+        )}
+      >
+        {title}
+      </Heading>
+      {description ? (
+        <p className="text-pretty text-base leading-relaxed text-ink-muted sm:text-lg">
+          {description}
+        </p>
+      ) : null}
+    </Reveal>
+  );
 }

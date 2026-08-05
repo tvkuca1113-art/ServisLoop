@@ -1,106 +1,68 @@
-'use client'
+'use client';
 
-import * as React from 'react'
-import { Slot } from '@radix-ui/react-slot'
-import { cva, type VariantProps } from 'class-variance-authority'
-import { Loader2 } from 'lucide-react'
-import { cn } from '@/lib/utils'
+import { Slot } from '@radix-ui/react-slot';
+import { cva, type VariantProps } from 'class-variance-authority';
 
+import { cn } from '@/lib/utils';
+
+/**
+ * The focus ring is declared once, globally, in `globals.css`
+ * (`:focus-visible { outline: 2px solid var(--color-brand-600) }`). Components must not
+ * re-declare it — a utility would sit in Tailwind's `utilities` layer and silently win
+ * over the base rule, which is how focus rings drift apart.
+ */
 const buttonVariants = cva(
   [
-    'inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-lg',
-    'font-medium transition-[background-color,color,box-shadow,border-color,transform] duration-150',
-    'outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2',
-    'focus-visible:ring-offset-canvas',
+    'inline-flex shrink-0 items-center justify-center gap-2 whitespace-nowrap rounded-md',
+    'text-sm font-medium leading-none transition-colors',
     'disabled:pointer-events-none disabled:opacity-50',
-    'active:translate-y-px',
+    'aria-disabled:pointer-events-none aria-disabled:opacity-50',
     "[&_svg]:pointer-events-none [&_svg]:shrink-0 [&_svg:not([class*='size-'])]:size-4",
-  ].join(' '),
+  ],
   {
     variants: {
       variant: {
-        primary:
-          'bg-primary text-primary-fg shadow-subtle hover:bg-brand-500 dark:hover:bg-brand-300',
+        default: 'bg-brand-600 text-white hover:bg-brand-700 active:bg-brand-800',
         secondary:
-          'border border-line bg-surface text-fg shadow-subtle hover:bg-surface-muted hover:border-line-strong',
-        ghost: 'text-fg-muted hover:bg-surface-muted hover:text-fg',
-        danger: 'bg-critical text-white shadow-subtle hover:bg-critical-strong',
-        accent: 'bg-accent text-accent-fg shadow-subtle hover:brightness-110',
-        subtle: 'bg-primary-soft text-primary hover:brightness-95 dark:hover:brightness-125',
-        link: 'text-primary underline-offset-4 hover:underline p-0 h-auto',
-        outlineDanger:
-          'border border-critical/40 text-critical hover:bg-critical/10 hover:border-critical/70',
+          'border border-border-base bg-surface-muted text-ink hover:bg-ink/5 active:bg-ink/10',
+        outline:
+          'border border-border-strong bg-transparent text-ink hover:bg-ink/5 active:bg-ink/10',
+        ghost: 'bg-transparent text-ink hover:bg-ink/5 active:bg-ink/10',
+        destructive:
+          'bg-state-overdue text-white hover:bg-state-overdue/90 active:bg-state-overdue/80',
+        link: 'bg-transparent text-brand-600 underline-offset-4 hover:text-brand-700 hover:underline',
       },
       size: {
-        sm: 'h-8 px-3 text-[0.8125rem]',
-        md: 'h-10 px-4 text-sm',
-        lg: 'h-12 px-6 text-[0.9375rem]',
-        icon: 'size-10 p-0',
-        iconSm: 'size-8 p-0',
-      },
-      block: {
-        true: 'w-full',
-        false: '',
+        sm: 'h-8 gap-1.5 px-3 text-xs',
+        md: 'h-9 px-4',
+        lg: 'h-11 rounded-lg px-6 text-base',
+        icon: 'size-9 p-0',
       },
     },
-    defaultVariants: { variant: 'primary', size: 'md', block: false },
+    defaultVariants: {
+      variant: 'default',
+      size: 'md',
+    },
   },
-)
+);
 
 export interface ButtonProps
-  extends React.ButtonHTMLAttributes<HTMLButtonElement>, VariantProps<typeof buttonVariants> {
-  /** Renderuje stilove na djetetu umjesto na `<button>` (npr. za `<Link>`). */
-  asChild?: boolean
-  /** Prikazuje spinner i onemogućava dugme. */
-  loading?: boolean
-  /** Tekst koji čitač ekrana najavljuje dok traje radnja. */
-  loadingLabel?: string
+  extends React.ComponentProps<'button'>,
+    VariantProps<typeof buttonVariants> {
+  /** Render the child element instead of a `<button>` (e.g. a `next/link` anchor). */
+  asChild?: boolean;
 }
 
-/**
- * Osnovno dugme.
- *
- * Pravilo proizvoda: svako dugme mora obavljati stvarnu radnju. Dugme bez
- * `onClick`, `type="submit"` ili `asChild` linka je greška u implementaciji.
- */
-export const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(function Button(
-  {
-    className,
-    variant,
-    size,
-    block,
-    asChild = false,
-    loading = false,
-    loadingLabel = 'Učitavanje…',
-    disabled,
-    children,
-    type,
-    ...props
-  },
-  ref,
-) {
-  const Comp = asChild ? Slot : 'button'
+export function Button({ className, variant, size, asChild = false, ...props }: ButtonProps) {
+  const Comp: React.ElementType = asChild ? Slot : 'button';
 
   return (
     <Comp
-      ref={ref}
-      className={cn(buttonVariants({ variant, size, block }), className)}
-      disabled={disabled || loading}
-      aria-busy={loading || undefined}
-      type={asChild ? undefined : (type ?? 'button')}
+      data-slot="button"
+      className={cn(buttonVariants({ variant, size }), className)}
       {...props}
-    >
-      {loading ? (
-        <>
-          <Loader2 className="size-4 animate-spin" aria-hidden="true" />
-          <span className="sr-only">{loadingLabel}</span>
-          {children}
-        </>
-      ) : (
-        children
-      )}
-    </Comp>
-  )
-})
+    />
+  );
+}
 
-export { buttonVariants }
+export { buttonVariants };

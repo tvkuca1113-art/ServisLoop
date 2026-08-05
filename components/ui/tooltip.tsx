@@ -1,53 +1,46 @@
-'use client'
+'use client';
 
-import * as React from 'react'
-import * as TooltipPrimitive from '@radix-ui/react-tooltip'
-import { cn } from '@/lib/utils'
+import * as TooltipPrimitive from '@radix-ui/react-tooltip';
 
-export const TooltipProvider = TooltipPrimitive.Provider
+import { cn } from '@/lib/utils';
 
 /**
- * Tooltip za objašnjenje pojmova.
- *
- * Pravilo pristupačnosti: tooltip smije nositi SAMO dopunsku informaciju.
- * Ništa što je neophodno za obavljanje zadatka ne smije biti dostupno jedino
- * preko prelaska mišem — korisnik tastature i dodira to ne bi vidio.
- * Radix zato otvara tooltip i na fokus.
+ * Tooltips are unreachable on touch and easy to miss — never put information here that
+ * is not available elsewhere. Wrap the app (or a subtree) in `<TooltipProvider>` once.
  */
-export function Tooltip({
-  content,
-  children,
-  side = 'top',
-  align = 'center',
+export function TooltipProvider({
   delayDuration = 200,
+  ...props
+}: React.ComponentProps<typeof TooltipPrimitive.Provider>) {
+  return <TooltipPrimitive.Provider delayDuration={delayDuration} {...props} />;
+}
+
+export function Tooltip({ ...props }: React.ComponentProps<typeof TooltipPrimitive.Root>) {
+  return <TooltipPrimitive.Root data-slot="tooltip" {...props} />;
+}
+
+export function TooltipTrigger({
+  ...props
+}: React.ComponentProps<typeof TooltipPrimitive.Trigger>) {
+  return <TooltipPrimitive.Trigger data-slot="tooltip-trigger" {...props} />;
+}
+
+export function TooltipContent({
   className,
-}: {
-  content: React.ReactNode
-  children: React.ReactNode
-  side?: 'top' | 'right' | 'bottom' | 'left'
-  align?: 'start' | 'center' | 'end'
-  delayDuration?: number
-  className?: string
-}) {
+  sideOffset = 6,
+  ...props
+}: React.ComponentProps<typeof TooltipPrimitive.Content>) {
   return (
-    <TooltipPrimitive.Root delayDuration={delayDuration}>
-      <TooltipPrimitive.Trigger asChild>{children}</TooltipPrimitive.Trigger>
-      <TooltipPrimitive.Portal>
-        <TooltipPrimitive.Content
-          side={side}
-          align={align}
-          sideOffset={6}
-          collisionPadding={12}
-          className={cn(
-            'sl-pop border-line-strong bg-ink-900 z-50 max-w-xs rounded-lg border px-3 py-2',
-            'text-ink-50 shadow-float text-xs leading-relaxed',
-            className,
-          )}
-        >
-          {content}
-          <TooltipPrimitive.Arrow className="fill-ink-900" width={10} height={5} />
-        </TooltipPrimitive.Content>
-      </TooltipPrimitive.Portal>
-    </TooltipPrimitive.Root>
-  )
+    <TooltipPrimitive.Portal>
+      <TooltipPrimitive.Content
+        data-slot="tooltip-content"
+        sideOffset={sideOffset}
+        className={cn(
+          'z-50 w-fit max-w-xs text-balance rounded-md border border-border-base bg-surface-raised px-2.5 py-1.5 text-xs text-ink shadow-md',
+          className,
+        )}
+        {...props}
+      />
+    </TooltipPrimitive.Portal>
+  );
 }
