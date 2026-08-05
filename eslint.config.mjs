@@ -1,105 +1,80 @@
-import js from '@eslint/js'
-import tseslint from 'typescript-eslint'
-import nextCoreWebVitals from 'eslint-config-next/core-web-vitals'
-import prettier from 'eslint-config-prettier'
+import { dirname } from 'node:path';
+import { fileURLToPath } from 'node:url';
+import { FlatCompat } from '@eslint/eslintrc';
 
-/**
- * ESLint konfiguracija (flat config).
- *
- * `eslint-config-next` od verzije 16 izvozi flat config direktno, pa nam
- * `FlatCompat` više ne treba.
- */
-export default tseslint.config(
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = dirname(__filename);
+
+const compat = new FlatCompat({ baseDirectory: __dirname });
+
+const config = [
   {
     ignores: [
       '.next/**',
       'node_modules/**',
-      'coverage/**',
-      'playwright-report/**',
-      'test-results/**',
       'out/**',
+      'dist/**',
+      'coverage/**',
+      '.data/**',
       'next-env.d.ts',
-      // Generisano automatski — ne provjeravamo stil generisanog koda.
-      'types/supabase.ts',
     ],
   },
-
-  js.configs.recommended,
-  ...tseslint.configs.recommended,
-  ...nextCoreWebVitals,
-  prettier,
-
+  ...compat.extends('next/core-web-vitals', 'next/typescript'),
   {
     rules: {
-      // `any` je zabranjen — koristi `unknown` + Zod.
-      '@typescript-eslint/no-explicit-any': 'error',
       '@typescript-eslint/no-unused-vars': [
         'error',
         { argsIgnorePattern: '^_', varsIgnorePattern: '^_', caughtErrorsIgnorePattern: '^_' },
       ],
-      // Napomena: `consistent-type-imports` traži tipske informacije, a Next-ov
-      // parser ih ne prosljeđuje. Pravilo je izostavljeno — `verbatimModuleSyntax`
-      // je isključen, pa nepotrebni uvozi tipova ionako ne završe u paketu.
-      // Tihi `catch` blokovi su zabranjeni — greška se mora obraditi ili proslijediti.
-      'no-empty': ['error', { allowEmptyCatch: false }],
-      'no-console': ['warn', { allow: ['warn', 'error', 'info'] }],
-      eqeqeq: ['error', 'smart'],
-      'prefer-const': 'error',
+      '@typescript-eslint/no-explicit-any': 'error',
       'no-restricted-imports': [
         'error',
         {
           patterns: [
             {
-              group: ['**/repositories/*'],
+              group: ['@/server/*'],
+              importNames: ['*'],
               message:
-                'UI komponente ne smiju direktno zvati repozitorije. Koristi sloj `services/`.',
+                'Do not import server modules from the domain layer. The domain layer must stay pure.',
             },
           ],
         },
       ],
     },
   },
-
   {
-    // Serverski moduli smiju koristiti console za strukturirane logove.
-    files: [
-      'lib/**/*.ts',
-      'services/**/*.ts',
-      'repositories/**/*.ts',
-      'scripts/**/*.ts',
-      'app/api/**/*.ts',
-    ],
+    // The domain layer is the deterministic core: no I/O, no ambient time, no randomness.
+    files: ['src/domain/**/*.ts'],
+    ignores: ['src/domain/**/__tests__/**'],
     rules: {
-      'no-console': 'off',
-      'no-restricted-imports': 'off',
+      'no-restricted-globals': [
+        'error',
+        { name: 'fetch', message: 'The domain layer must not perform I/O.' },
+        { name: 'localStorage', message: 'The domain layer must not perform I/O.' },
+      ],
+      'no-restricted-syntax': [
+        'error',
+        {
+          selector: "CallExpression[callee.object.name='Date'][callee.property.name='now']",
+          message: 'Domain functions must receive `now` explicitly to stay deterministic.',
+        },
+        {
+          selector: "CallExpression[callee.object.name='Math'][callee.property.name='random']",
+          message: 'The domain layer must be deterministic; no randomness.',
+        },
+        {
+          selector: "NewExpression[callee.name='Date'][arguments.length=0]",
+          message: 'Domain functions must receive `now` explicitly to stay deterministic.',
+        },
+      ],
     },
   },
-
   {
-    files: ['tests/**/*.{ts,tsx}', 'e2e/**/*.ts', 'scripts/**/*.ts', 'supabase/seed/**/*.ts'],
+    files: ['**/*.test.ts', '**/*.test.tsx', 'scripts/**/*.ts'],
     rules: {
       '@typescript-eslint/no-explicit-any': 'off',
-      'no-console': 'off',
     },
   },
+];
 
-  {
-    /*
-     * Predlošci e-pošte grade kompletan HTML dokument, uključujući `<head>`.
-     * To nisu Next.js stranice, pa pravilo o `next/head` ovdje ne vrijedi.
-     */
-    files: ['components/emails/**/*.tsx'],
-    rules: {
-      '@next/next/no-head-element': 'off',
-      '@next/next/no-img-element': 'off',
-    },
-  },
-
-  {
-    // Three.js JSX elementi (`<mesh>`, `<boxGeometry>` …) nisu poznati React pluginu.
-    files: ['components/three/**/*.tsx'],
-    rules: {
-      'react/no-unknown-property': 'off',
-    },
-  },
-)
+export default config;
