@@ -1,15 +1,9 @@
 {
   "$schema": "https://openapi.vercel.sh/vercel.json",
-  "framework": "nextjs",
-  "regions": ["fra1"],
   "crons": [
     {
-      "path": "/api/cron/podsjetnici",
-      "schedule": "0 6 * * *"
-    },
-    {
-      "path": "/api/cron/odrzavanje",
-      "schedule": "30 2 * * *"
+      "path": "/api/cron/reminders",
+      "schedule": "0 7 * * *"
     }
   ]
 }
