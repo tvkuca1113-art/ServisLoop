@@ -119,6 +119,8 @@ export class JsonRepository implements Repository {
   private readonly filePath: string | undefined;
   /** Serialises writes so two concurrent requests cannot interleave a read-modify-write. */
   private queue: Promise<unknown> = Promise.resolve();
+  /** Flipped when the filesystem refuses a write; the store then lives in memory only. */
+  private persistenceDisabled = false;
 
   constructor(options: JsonRepositoryOptions = {}) {
     this.filePath = options.filePath;
@@ -141,11 +143,32 @@ export class JsonRepository implements Repository {
   /* -- infrastructure ---------------------------------------------- */
 
   private persist(): void {
-    if (!this.filePath) return;
-    mkdirSync(dirname(this.filePath), { recursive: true });
-    const tmp = `${this.filePath}.tmp`;
-    writeFileSync(tmp, JSON.stringify(this.store, null, 2), 'utf8');
-    renameSync(tmp, this.filePath);
+    if (!this.filePath || this.persistenceDisabled) return;
+    try {
+      mkdirSync(dirname(this.filePath), { recursive: true });
+      const tmp = `${this.filePath}.tmp`;
+      writeFileSync(tmp, JSON.stringify(this.store, null, 2), 'utf8');
+      renameSync(tmp, this.filePath);
+    } catch (error) {
+      const code = (error as NodeJS.ErrnoException).code;
+      // A read-only or full filesystem must degrade, not take the site down.
+      //
+      // Serverless platforms (Vercel, Netlify Functions, Lambda) mount the deployment
+      // read-only, so the very first write throws EROFS. Before this guard that happened
+      // inside the constructor — on the *seed* write of a fresh deploy — which meant every
+      // single page returned a 500 the moment the app was deployed without Supabase
+      // configured. Falling back to memory keeps the demo browsable; the data simply does
+      // not survive the instance, which is documented in the README.
+      if (code === 'EROFS' || code === 'EACCES' || code === 'EPERM' || code === 'ENOSPC') {
+        this.persistenceDisabled = true;
+        console.warn(
+          `[servisloop] Cannot write ${this.filePath} (${code}). Continuing in memory only — ` +
+            'changes will be lost when this instance is recycled. Configure Supabase for durable storage.',
+        );
+        return;
+      }
+      throw error;
+    }
   }
 
   /** Run a mutation under the mutex, persisting once it completes. */

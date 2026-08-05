@@ -1,5 +1,8 @@
 import 'server-only';
 
+import { tmpdir } from 'node:os';
+import { join } from 'node:path';
+
 import { civilDateFromUTC } from '@/domain/dates';
 import { isSupabaseConfigured } from '@/lib/env';
 import { newPublicToken } from '@/lib/ids';
@@ -21,9 +24,28 @@ import { SupabaseRepository } from './supabase-repository';
 
 let cached: Repository | null = null;
 
+/**
+ * Where the offline store lives.
+ *
+ * Serverless platforms mount the deployment read-only and give each instance a writable
+ * OS temp directory instead. Writing to `<project>/.data` there fails with EROFS, so on
+ * those platforms the store goes to the temp directory: it survives warm invocations of
+ * the same instance and is rebuilt from the demo seed on a cold start. That is fine for a
+ * demo deployment and is not intended as production storage — configure Supabase for that.
+ */
+function resolveStorePath(): string {
+  const serverless = Boolean(
+    process.env.VERCEL ??
+      process.env.NETLIFY ??
+      process.env.AWS_LAMBDA_FUNCTION_NAME ??
+      process.env.LAMBDA_TASK_ROOT,
+  );
+  return serverless ? join(tmpdir(), 'servisloop', 'store.json') : DEFAULT_STORE_PATH;
+}
+
 function createJsonRepository(): Repository {
   return new JsonRepository({
-    filePath: DEFAULT_STORE_PATH,
+    filePath: resolveStorePath(),
     seed: () => createDemoStore(civilDateFromUTC(new Date()), () => newPublicToken()),
   });
 }
