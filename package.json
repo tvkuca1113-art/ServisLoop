@@ -33,7 +33,7 @@
     "@radix-ui/react-switch": "^1.2.6",
     "@radix-ui/react-tabs": "^1.1.13",
     "@radix-ui/react-tooltip": "^1.2.8",
-    "@react-three/drei": "^10.7.7",
+    "@react-three/drei": "^10.7.8",
     "@react-three/fiber": "^9.7.0",
     "@supabase/ssr": "^0.12.4",
     "@supabase/supabase-js": "^2.111.0",
@@ -51,7 +51,7 @@
     "react-dom": "^19.2.0",
     "server-only": "^0.0.1",
     "tailwind-merge": "^3.3.1",
-    "three": "^0.185.0",
+    "three": "^0.186.0",
     "zod": "^4.4.3"
   },
   "devDependencies": {
@@ -62,7 +62,7 @@
     "@types/qrcode": "^1.5.5",
     "@types/react": "^19.2.0",
     "@types/react-dom": "^19.2.0",
-    "@types/three": "^0.185.0",
+    "@types/three": "^0.186.0",
     "eslint": "^9.39.0",
     "eslint-config-next": "15.5.22",
     "tailwindcss": "^4.3.3",
